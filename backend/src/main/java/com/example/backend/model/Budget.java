@@ -28,7 +28,7 @@ public class Budget {
     BigDecimal amount;
 
     @Column(name = "description", nullable = false)
-    String desciption;
+    String description;
 
     @Column (name = "target_period", nullable = false)
     String targetPeriod;
@@ -40,14 +40,18 @@ public class Budget {
     @Column (name = "category", nullable = false)
     Categories category;
 
+    @ManyToOne
+    @JoinColumn (name = "user_id", nullable = false)
+    User user;
+
     protected Budget() {
     }
 
-    public Budget(BigDecimal amount, String desciption, String targetPeriod, Boolean isEnabled, Categories category) {
+    public Budget(BigDecimal amount, String description, String targetPeriod, Boolean isEnabled, Categories category) {
         // add validation logic here if needed
 
         this.amount = amount;
-        this.desciption = desciption;
+        this.description = description;
         this.targetPeriod = targetPeriod;
         this.isEnabled = isEnabled;
         this.category = category;
@@ -67,12 +71,12 @@ public class Budget {
         this.amount = amount;
     }
 
-    public String getDesciption() {
-        return desciption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getTargetPeriod() {

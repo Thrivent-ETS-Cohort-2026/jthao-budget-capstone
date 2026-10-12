@@ -11,5 +11,6 @@ public enum Categories {
     EDUCATION,
     GIFT_GIVING,
     SAVINGS_INVESTMENTS,
+    INCOME,
     OTHER
 }

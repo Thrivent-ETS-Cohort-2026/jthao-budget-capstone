@@ -40,14 +40,14 @@ public class Transaction {
         User user;
 
         @ManyToOne
-        @JoinColumn(name = "account_id", nullable = false)
-        Account account;
+        @JoinColumn(name = "budget_id", nullable = false)
+        Budget budget;
 
 
         protected Transaction() {
         }
 
-        public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, User user, Account account) {
+        public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, User user, Budget budget) {
             // add validation logic here if needed
 
             this.amount = amount;
@@ -56,7 +56,7 @@ public class Transaction {
             this.accountFrom = accountFrom;
             this.category = category;
             this.user = user;
-            this.account = account;
+            this.budget = budget;
         }
 
         // Getters and setters
@@ -113,12 +113,13 @@ public class Transaction {
             this.user = user;
         }
 
-        public Account getAccount() {
-            return account;
+        public Budget getBudget() {
+            return budget;
         }
 
-        public void setAccount(Account account) {
-            this.account = account;
+        public void setBudget(Budget budget) {
+            this.budget = budget;
         }
+
 
 }

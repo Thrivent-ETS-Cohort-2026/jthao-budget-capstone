@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import com.example.backend.validation.UserValidator;
+
 import jakarta.persistence.Column;
 
 @Entity
@@ -21,7 +24,7 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -30,17 +33,23 @@ public class User {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Column (name = "is_active", nullable = false)
+    private Boolean isActive;
+
     protected User() {
     }
 
     public User(String firstName, String lastName, String email, String password, String phoneNumber) {
         // add validation logic here if needed
-
+        UserValidator.validateUser(firstName, lastName, email, phoneNumber, password);
+        
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.isActive = true; // default to active when creating a new user
+
     }
 
     // Getters and setters
@@ -87,5 +96,13 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 }
