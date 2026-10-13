@@ -8,8 +8,8 @@ public class CreateUserRequest {
     private String phoneNumber;
     private Boolean isActive;
 
-    public CreateUserRequest() {
-    }
+    // public CreateUserRequest() {
+    // }
 
     // public CreateUserRequest(String firstName, String lastName, String email, String password, String phoneNumber, Boolean isActive) {
     //     this.firstName = firstName;

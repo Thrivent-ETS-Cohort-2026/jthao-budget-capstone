@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.backend.dto.request.user.CreateUserRequest;
 import com.example.backend.dto.request.user.LoginRequest;
 import com.example.backend.dto.response.user.UserResponse;
-import com.example.backend.model.User;
 import com.example.backend.service.UserService;
 
 

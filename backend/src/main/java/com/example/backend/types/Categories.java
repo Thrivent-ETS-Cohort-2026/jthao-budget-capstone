@@ -2,7 +2,7 @@ package com.example.backend.types;
 
 public enum Categories {
     HOUSING,
-    FOOD,
+    GROCERIES,
     TRANSPORTATION,
     ENTERTAINMENT,
     UTILITIES,
@@ -10,7 +10,7 @@ public enum Categories {
     PERSONAL_CARE,
     EDUCATION,
     GIFT_GIVING,
+    SHOPPING,
     SAVINGS_INVESTMENTS,
-    INCOME,
     OTHER
 }

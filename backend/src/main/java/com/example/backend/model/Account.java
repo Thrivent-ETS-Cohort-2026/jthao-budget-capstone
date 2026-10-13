@@ -1,73 +1,78 @@
-// package com.example.backend.model;
+package com.example.backend.model;
 
-// import java.math.BigDecimal;
+import java.math.BigDecimal;
 
-// import jakarta.persistence.Entity;
-// import jakarta.persistence.GeneratedValue;
-// import jakarta.persistence.GenerationType;
-// import jakarta.persistence.Id;
-// import jakarta.persistence.Table;
-// import jakarta.persistence.Column;
-// import jakarta.persistence.JoinColumn;
-// import jakarta.persistence.ManyToOne;
+import com.example.backend.types.AccountType;
 
-// @Entity
-// @Table(name = "accounts")
-// public class Account {
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
+@Entity
+@Table(name = "accounts")
+public class Account {
 
-//     @Column(name = "account_number", nullable = false)
-//     String accountNumber;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-//     @Column(name = "balance", nullable = false)
-//     BigDecimal balance;
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "account_type", nullable = false)
+    AccountType accountType;
 
-//     @ManyToOne
-//     @JoinColumn(name = "user_id", nullable = false)
-//     User user;
+    @Column(name = "account_name", nullable = false)
+    String accountName;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
 
 
-//     protected Account() {
-//     }
+    protected Account() {
+    }
 
-//     public Account(String accountNumber, BigDecimal balance, User user) {
-//         // add validation logic here if needed
+    public Account(AccountType accountType, String accountName, User user) {
+        // add validation logic here if needed
 
-//         this.accountNumber = accountNumber;
-//         this.balance = balance;
-//         this.user = user;
-//     }
+        this.accountType = accountType;
+        this.accountName = accountName;
+        this.user = user;
+    }
 
-//     // Getters and setters
+    // Getters and setters
 
-//     public Long getId() {
-//         return id;
-//     }
+    public Long getId() {
+        return id;
+    }
 
-//     public String getAccountNumber() {
-//         return accountNumber;
-//     }
+    public AccountType getAccountType() {
+        return accountType;
+    }
 
-//     public void setAccountNumber(String accountNumber) {
-//         this.accountNumber = accountNumber;
-//     }
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
 
-//     public BigDecimal getBalance() {
-//         return balance;
-//     }
+    public String getAccountName() {
+        return accountName;
+    }
 
-//     public void setBalance(BigDecimal balance) {
-//         this.balance = balance;
-//     }
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
 
-//     public User getUser() {
-//         return user;
-//     }
+    public User getUser() {
+        return user;
+    }
 
-//     public void setUser(User user) {
-//         this.user = user;
-//     }
-// }
+    public void setUser(User user) {
+        this.user = user;
+    }
+}

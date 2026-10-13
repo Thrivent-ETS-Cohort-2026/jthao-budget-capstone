@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -33,6 +32,8 @@ public class UserService {
             request.getPassword(),
             request.getPhoneNumber()
         );
+        userRepository.save(user);
+
         UserResponse response = new UserResponse(
             user.getId(), 
             user.getFirstName(), 
@@ -41,8 +42,7 @@ public class UserService {
             user.getPhoneNumber(), 
             user.getIsActive()
         );
-        userRepository.saveAndFlush(user);
-
+        
         return response;
     }
 
