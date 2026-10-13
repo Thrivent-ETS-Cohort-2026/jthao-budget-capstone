@@ -1,9 +1,13 @@
 package com.example.backend.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import com.example.backend.types.Categories;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,28 +30,39 @@ public class Transaction {
         @Column(name = "description", nullable = false)
         String description;
 
-        @Column(name = "budget_from", nullable = false)
+        @Column(name = "budget_from", nullable = true)
         String budgetFrom;
 
         @Column(name = "account_from", nullable = false)
         String accountFrom;
 
-        
+        @Enumerated(EnumType.STRING)
+        @Column (name = "category", nullable = false)
         Categories category;
+
+        @Column(name = "date", nullable = false)
+        LocalDate date;
+
+        @Column (name = "deleted_at", nullable = true)
+        LocalDate deletedAt;
 
         @ManyToOne
         @JoinColumn(name = "user_id", nullable = false)
         User user;
 
         @ManyToOne
-        @JoinColumn(name = "budget_id", nullable = false)
+        @JoinColumn(name = "budget_id", nullable = true)
         Budget budget;
+
+        @ManyToOne
+        @JoinColumn(name = "account_id", nullable = false)
+        Account account;
 
 
         protected Transaction() {
         }
 
-        public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, User user, Budget budget) {
+        public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, LocalDate date, User user, Budget budget, Account account) {
             // add validation logic here if needed
 
             this.amount = amount;
@@ -55,8 +70,11 @@ public class Transaction {
             this.budgetFrom = budgetFrom;
             this.accountFrom = accountFrom;
             this.category = category;
+            this.date = date;
             this.user = user;
             this.budget = budget;
+            this.account = account;
+            this.deletedAt = null;
         }
 
         // Getters and setters
@@ -105,6 +123,14 @@ public class Transaction {
             this.category = category;
         }
 
+        public LocalDate getDate() {
+            return date;
+        }
+
+        public void setDate(LocalDate date) {
+            this.date = date;
+        }
+
         public User getUser() {
             return user;
         }
@@ -121,5 +147,20 @@ public class Transaction {
             this.budget = budget;
         }
 
+        public Account getAccount() {
+            return account;
+        }
+
+        public void setAccount(Account account) {
+            this.account = account;
+        }
+
+        public LocalDate getDeletedAt() {
+            return deletedAt;
+        }
+
+        public void setDeletedAt(LocalDate deletedAt) {
+            this.deletedAt = deletedAt;
+        }
 
 }

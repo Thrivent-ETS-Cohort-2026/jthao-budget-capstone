@@ -47,7 +47,7 @@ public class Budget {
     protected Budget() {
     }
 
-    public Budget(BigDecimal amount, String description, String targetPeriod, Boolean isEnabled, Categories category) {
+    public Budget(BigDecimal amount, String description, String targetPeriod, Boolean isEnabled, Categories category, User user) {
         // add validation logic here if needed
 
         this.amount = amount;
@@ -55,6 +55,7 @@ public class Budget {
         this.targetPeriod = targetPeriod;
         this.isEnabled = isEnabled;
         this.category = category;
+        this.user = user;
     }
 
     // Getters and setters
@@ -101,6 +102,14 @@ public class Budget {
 
     public void setCategory(Categories category) {
         this.category = category;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }
