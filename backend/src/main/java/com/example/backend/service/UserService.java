@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.dto.request.user.CreateUserRequest;
+import com.example.backend.dto.request.user.LoginRequest;
 import com.example.backend.dto.response.user.UserResponse;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
@@ -32,8 +33,6 @@ public class UserService {
             request.getPassword(),
             request.getPhoneNumber()
         );
-        System.out.println("Creating user: " + user);
-        userRepository.save(user);
         UserResponse response = new UserResponse(
             user.getId(), 
             user.getFirstName(), 
@@ -42,12 +41,14 @@ public class UserService {
             user.getPhoneNumber(), 
             user.getIsActive()
         );
+        userRepository.saveAndFlush(user);
+
         return response;
     }
 
     public UserResponse getUserById(Long id) {
-        if (userRepository.findById(id).isPresent()) {
-            User user = userRepository.findById(id).get();
+            User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
             return new UserResponse(
                 user.getId(),
                 user.getFirstName(),
@@ -56,8 +57,20 @@ public class UserService {
                 user.getPhoneNumber(),
                 user.getIsActive()
             );
-        } else {
-            throw new EntityNotFoundException("User not found with id: " + id);
-        }
     }
+
+    public UserResponse getUserByEmailAndPassword(LoginRequest request) {
+        User user = userRepository.findByEmailAndPassword(request.getEmail(), request.getPassword())
+            .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + request.getEmail() + " and password combination."));
+        return new UserResponse(
+            user.getId(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getEmail(),
+            user.getPhoneNumber(),
+            user.getIsActive()
+        );
+    }
+
+
 }

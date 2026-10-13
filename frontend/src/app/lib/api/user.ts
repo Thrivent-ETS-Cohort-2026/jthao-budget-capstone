@@ -1,15 +1,16 @@
 
 
-import { User } from "../../types/User";
+import { User } from "../../types/user";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function validateCustomerLogin(email: string, password: string): Promise<User> {
     try {
-        const response = await fetch(`${API_BASE_URL}/customer/login`, {
+        const response = await fetch(`${API_BASE_URL}/user/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
+                // TODO: Check if we can use something like Spring Security for the token?
             },
             body: JSON.stringify({ email, password })
     });

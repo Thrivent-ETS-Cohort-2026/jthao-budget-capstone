@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.backend.dto.request.user.CreateUserRequest;
+import com.example.backend.dto.request.user.LoginRequest;
 import com.example.backend.dto.response.user.UserResponse;
 import com.example.backend.model.User;
 import com.example.backend.service.UserService;
@@ -17,7 +18,7 @@ import com.example.backend.service.UserService;
 
 @CrossOrigin (origins = "http://localhost:3000")
 @RestController 
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
@@ -33,6 +34,11 @@ public class UserController {
     @GetMapping("/user/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @PostMapping ("/login")
+    public ResponseEntity<UserResponse> getUserByEmailAndPassword(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(userService.getUserByEmailAndPassword(request));
     }
     
 }
