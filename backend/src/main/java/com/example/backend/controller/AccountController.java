@@ -1,5 +1,7 @@
 package com.example.backend.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +35,11 @@ public class AccountController {
     @GetMapping("/{id}")
     public ResponseEntity<AccountResponse> getAccountById(@PathVariable Long id) {
         return ResponseEntity.ok(accountService.getAccountById(id));
+    }
+
+    @GetMapping("/{id}/all-accounts")
+    public  ResponseEntity<List<AccountResponse>> getAllAccounts(@PathVariable  Long id) {
+        return ResponseEntity.ok(accountService.getAllAccountsByUserId(id));
     }
 
     @DeleteMapping("/{id}")

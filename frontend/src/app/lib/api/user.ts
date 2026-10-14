@@ -1,6 +1,6 @@
 
 
-import { SignUpRequest, User } from "../../types/user";
+import { UserFormRequest, User } from "../../types/user";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -24,15 +24,33 @@ export async function validateUserLogin(email: string, password: string): Promis
     }
 }
 
-export async function createUser(signUpRequest: SignUpRequest): Promise<User> {
+export async function createUser(signUpRequest: UserFormRequest): Promise<User> {
     try {
-        console.log(signUpRequest);
         const response = await fetch(`${API_BASE_URL}/user/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(signUpRequest)
+    });
+        if (!response.ok) {
+            throw new Error("Failed to create user");
+        }
+        const user: User = await response.json();
+        return user;
+    } catch (error) {
+        throw new Error((error as Error).message);
+    }
+}
+
+export async function updateUser(updateUserRequest: UserFormRequest): Promise<User> {
+    try {
+    const response = await fetch(`${API_BASE_URL}/user/register`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updateUserRequest)
     });
         if (!response.ok) {
             throw new Error("Failed to create user");

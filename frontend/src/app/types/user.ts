@@ -9,7 +9,7 @@ export interface User {
     accounts: Account[];
 }
 
-export interface SignUpRequest {
+export interface UserFormRequest {
   email: string;
   password: string;
   firstName: string;

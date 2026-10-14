@@ -1,5 +1,8 @@
 package com.example.backend.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.backend.dto.request.account.CreateAccountRequest;
@@ -32,7 +35,7 @@ public class AccountService {
         AccountResponse response = new AccountResponse(
             account.getId(),
             account.getAccountName(),
-            account.getAccountType().toString(),
+            account.getAccountType(),
             account.getUser().getId()
         );
         return response;
@@ -41,12 +44,27 @@ public class AccountService {
     public AccountResponse getAccountById(Long id) {
         Account account = accountRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + id));
-        return new AccountResponse(
+            return new AccountResponse(
             account.getId(),
             account.getAccountName(),
-            account.getAccountType().toString(),
+            account.getAccountType(),
             account.getUser().getId()
         );
+    }
+
+    public List<AccountResponse> getAllAccountsByUserId(Long userId){
+        List<Account> accountList = accountRepository.findByUserId(userId);
+        List<AccountResponse> responseList = new ArrayList<>();
+        for(Account account: accountList){
+            AccountResponse response = new AccountResponse(
+                account.getId(),
+                account.getAccountName(),
+                account.getAccountType(),
+                userId
+            );
+        responseList.add(response);
+        }
+        return responseList;
     }
 
     public void deleteAccount(Long id) {

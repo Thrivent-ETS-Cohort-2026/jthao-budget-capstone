@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { validateSignUp } from "@/app/lib/userValidation";
 import { useUser } from "@/app/context/UserContext";
 
-import {SignUpRequest, User} from "@/app/types/user";
+import {UserFormRequest, User} from "@/app/types/user";
 
 import { createUser } from "@/app/lib/api/user"
 
@@ -18,7 +18,7 @@ export default function SignUpPage() {
     const [lastName, setLastName] = useState<string>("");
     const [phoneNumber, setPhoneNumber] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [signUpRequest, setSignUpRequest] = useState<SignUpRequest>({
+    const [userFormRequest, setUserFormRequest] = useState<UserFormRequest>({
         email: "",
         password: "",
         firstName: "",
@@ -38,7 +38,7 @@ export default function SignUpPage() {
             setErrorMessage(validationMessage);
             return;
         }
-        setSignUpRequest({
+        setUserFormRequest({
             email: email,
             password: password,
             firstName: firstName,
@@ -46,7 +46,7 @@ export default function SignUpPage() {
             phoneNumber: phoneNumber
         });
         // TODO: check why first sign up isn't working, 2nd time will work.
-        const user: User = await createUser(signUpRequest);
+        const user: User = await createUser(userFormRequest);
         setUser(user);
         setErrorMessage("");
         setEmail("");
@@ -54,7 +54,7 @@ export default function SignUpPage() {
         setFirstName("");
         setLastName("");
         setPhoneNumber("");
-        setSignUpRequest({
+        setUserFormRequest({
             email: "",
             password: "",
             firstName: "",

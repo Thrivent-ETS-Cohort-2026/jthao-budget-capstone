@@ -18,16 +18,16 @@ export function validateSignUp(email: string, password: string, firstName: strin
     if (password.length < 6) {
         return "Password must be at least 6 characters long.";
     }
-    if(!firstName ||firstName.length < 1) {
+    if (!firstName || firstName.length < 1) {
         return "First name must be at least 1 character long.";
     }
-    if(!lastName || lastName.length < 1) {
+    if (!lastName || lastName.length < 1) {
         return "Last name must be at least 1 character long.";
     }
-    if(!phoneNumber || phoneNumber.length < 10) {
+    if (!phoneNumber || phoneNumber.length < 10) {
         return "Phone number must be at least 10 characters long.";
     }
-    if(!containsOnlyDigits(phoneNumber)) {
+    if (!containsOnlyDigits(phoneNumber)) {
         return "Phone number can only contain digits.";
     }
 
@@ -43,5 +43,31 @@ function containsOnlyDigits(phone: string): boolean {
         }
     }
     return true;
+}
+
+export function validateUpdateUser(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string
+): string {
+    if (!password && password.length < 6) {
+        return "Password must be at least 6 characters long.";
+    }
+    if (!firstName && firstName.length < 1) {
+        return "First name must be at least 1 character long.";
+    }
+    if (!lastName && lastName.length < 1) {
+        return "Last name must be at least 1 character long.";
+    }
+    if (!phoneNumber && phoneNumber.length < 10) {
+        return "Phone number must be at least 10 characters long.";
+    }
+    if (!phoneNumber && !containsOnlyDigits(phoneNumber)) {
+        return "Phone number can only contain digits.";
+    }
+
+    return "";
 }
 
