@@ -4,7 +4,7 @@ import { useState } from "react";
 import { validateUser } from "@/app/lib/userValidation";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
-import { validateCustomerLogin } from "@/app/lib/api/user";
+import { validateUserLogin } from "@/app/lib/api/user";
 import { User } from "@/app/types/user";
 
 
@@ -24,14 +24,14 @@ export default function LoginPage() {
             return;
         }
         setErrorMessage("");
-        const user :User = await validateCustomerLogin(email, password);
+        const user :User = await validateUserLogin(email, password);
         if (!user){
             setErrorMessage("Account does not exist.");
             return;
         }
         setUser(user);
         setErrorMessage("");
-        router.push("../account"); // Redirect to customer's profile
+        router.push("../dashboard"); // Redirect to customer's profile
     }
 
     return (

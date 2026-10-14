@@ -3,7 +3,7 @@
 import { useUser } from "@/app/context/UserContext"
 
 
-export default function Account() {
+export default function Dashboard() {
     const {user} = useUser();
 
     if (!user){

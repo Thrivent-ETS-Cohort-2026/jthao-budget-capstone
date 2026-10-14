@@ -4,7 +4,7 @@ import { User } from "../../types/user";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export async function validateCustomerLogin(email: string, password: string): Promise<User> {
+export async function validateUserLogin(email: string, password: string): Promise<User> {
     try {
         const response = await fetch(`${API_BASE_URL}/user/login`, {
             method: "POST",
@@ -23,3 +23,7 @@ export async function validateCustomerLogin(email: string, password: string): Pr
         throw new Error((error as Error).message);
     }
 }
+
+// export async function createUser(email: string, password: string): Promise<User> {
+ 
+// }
