@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.example.backend.types.Categories;
+import com.example.backend.types.TransactionEvent;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,20 +26,24 @@ public class Transaction {
         private Long id;
 
         @Column(name = "amount", nullable = false)
-        BigDecimal amount;
+        private BigDecimal amount;
 
         @Column(name = "description", nullable = false)
-        String description;
+        private String description;
 
         @Column(name = "budget_from", nullable = true)
-        String budgetFrom;
+        private String budgetFrom;
 
         @Column(name = "account_from", nullable = false)
-        String accountFrom;
+        private String accountFrom;
 
         @Enumerated(EnumType.STRING)
         @Column (name = "category", nullable = false)
-        Categories category;
+        private Categories category;
+
+        @Enumerated(EnumType.STRING)
+        @Column (name = "transaction_occurrence", nullable = false)
+        private TransactionEvent transactionOccurrence;
 
         @Column(name = "date", nullable = false)
         LocalDate date;
@@ -62,7 +67,7 @@ public class Transaction {
         protected Transaction() {
         }
 
-        public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, LocalDate date, User user, Budget budget, Account account) {
+        public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, TransactionEvent transactionOccurrence, LocalDate date, User user, Budget budget, Account account) {
             // add validation logic here if needed
 
             this.amount = amount;
@@ -70,6 +75,7 @@ public class Transaction {
             this.budgetFrom = budgetFrom;
             this.accountFrom = accountFrom;
             this.category = category;
+            this.transactionOccurrence = transactionOccurrence;
             this.date = date;
             this.user = user;
             this.budget = budget;
@@ -121,6 +127,14 @@ public class Transaction {
 
         public void setCategory(Categories category) {
             this.category = category;
+        }
+
+        public TransactionEvent getOccurrence(){
+            return transactionOccurrence;
+        }
+
+        public void setOccurrence(TransactionEvent occurrence){
+            this.transactionOccurrence = occurrence;
         }
 
         public LocalDate getDate() {

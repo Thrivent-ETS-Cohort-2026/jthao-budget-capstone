@@ -1,8 +1,10 @@
 package com.example.backend.dto.request.transaction;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import com.example.backend.types.Categories;
+import com.example.backend.types.TransactionEvent;
 
 public class CreateTransactionRequest {
 
@@ -11,7 +13,8 @@ public class CreateTransactionRequest {
     private String budgetFrom;
     private String accountFrom;
     private Categories category;
-    private String date;
+    private TransactionEvent transactionOccurrence;
+    private LocalDate date;
     private Long userId;
     private Long budgetId;
     private Long accountId;
@@ -38,7 +41,11 @@ public class CreateTransactionRequest {
         return category;
     }
 
-    public String getDate() {
+    public TransactionEvent getOccurence() {
+        return transactionOccurrence;
+    }
+
+    public LocalDate getDate() {
         return date;
     }
 

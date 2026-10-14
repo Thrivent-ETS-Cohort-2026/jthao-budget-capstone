@@ -1,6 +1,6 @@
 package com.example.backend.types;
 
-public enum BudgetPeriod {
+public enum TransactionEvent {
     WEEKELY,
     MONTHLY,
     QUARTERLY,

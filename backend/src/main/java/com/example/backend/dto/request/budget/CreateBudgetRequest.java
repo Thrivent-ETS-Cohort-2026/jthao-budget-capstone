@@ -2,14 +2,14 @@ package com.example.backend.dto.request.budget;
 
 import java.math.BigDecimal;
 
-import com.example.backend.types.BudgetPeriod;
+import com.example.backend.types.TransactionEvent;
 import com.example.backend.types.Categories;
 
 public class CreateBudgetRequest {
 
     private BigDecimal amount;
     private String description;
-    private BudgetPeriod targetPeriod;
+    private TransactionEvent targetPeriod;
     private Boolean isEnabled;
     private Categories category;
     private Long userId;
@@ -24,7 +24,7 @@ public class CreateBudgetRequest {
         return description;
     }
 
-    public BudgetPeriod getTargetPeriod() {
+    public TransactionEvent getTargetPeriod() {
         return targetPeriod;
     }
 

@@ -2,7 +2,7 @@ package com.example.backend.model;
 
 import java.math.BigDecimal;
 
-import com.example.backend.types.BudgetPeriod;
+import com.example.backend.types.TransactionEvent;
 import com.example.backend.types.Categories;
 
 import jakarta.persistence.Entity;
@@ -33,7 +33,7 @@ public class Budget {
 
     @Enumerated(EnumType.STRING)
     @Column (name = "target_period", nullable = false)
-    BudgetPeriod targetPeriod;
+    TransactionEvent targetPeriod;
 
     @Column (name = "is_enabled", nullable = false)
     Boolean isEnabled;
@@ -49,7 +49,7 @@ public class Budget {
     protected Budget() {
     }
 
-    public Budget(BigDecimal amount, String description, BudgetPeriod targetPeriod, Boolean isEnabled, Categories category, User user) {
+    public Budget(BigDecimal amount, String description, TransactionEvent targetPeriod, Boolean isEnabled, Categories category, User user) {
         // add validation logic here if needed
 
         this.amount = amount;
@@ -82,11 +82,11 @@ public class Budget {
         this.description = description;
     }
 
-    public BudgetPeriod getTargetPeriod() {
+    public TransactionEvent getTargetPeriod() {
         return targetPeriod;
     }
 
-    public void setTargetPeriod(BudgetPeriod targetPeriod) {
+    public void setTargetPeriod(TransactionEvent targetPeriod) {
         this.targetPeriod = targetPeriod;
     }
 
