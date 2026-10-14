@@ -10,6 +10,6 @@ import com.example.backend.types.Categories;
 
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
 
-    Optional<Budget> findByCategoryAndTargetPeriodAndUser(Categories category, TransactionEvent targetPeriod, Long id);
+    Optional<Budget> findByCategoryAndTargetPeriodAndUserId(Categories category, TransactionEvent targetPeriod, Long id);
 
 }

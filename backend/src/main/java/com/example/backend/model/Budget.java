@@ -49,13 +49,13 @@ public class Budget {
     protected Budget() {
     }
 
-    public Budget(BigDecimal amount, String description, TransactionEvent targetPeriod, Boolean isEnabled, Categories category, User user) {
+    public Budget(BigDecimal amount, String description, TransactionEvent targetPeriod, Categories category, User user) {
         // add validation logic here if needed
 
         this.amount = amount;
         this.description = description;
         this.targetPeriod = targetPeriod;
-        this.isEnabled = isEnabled;
+        this.isEnabled = true;
         this.category = category;
         this.user = user;
     }
