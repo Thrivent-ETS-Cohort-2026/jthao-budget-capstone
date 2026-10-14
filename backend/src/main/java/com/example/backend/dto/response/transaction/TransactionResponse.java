@@ -16,20 +16,20 @@ public class TransactionResponse {
     private String budgetFrom;
     private String accountFrom;
     private Categories category;
-    private TransactionEvent occurrence;
+    private TransactionEvent transactionOccurrence;
     private LocalDate date;
     private Long userId;
     private Long budgetId;
     private Long accountId;
 
-    public TransactionResponse(Long id, BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, TransactionEvent occurrence, LocalDate date, Long userId, Long budgetId, Long accountId) {
+    public TransactionResponse(Long id, BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, TransactionEvent transactionOccurrence, LocalDate date, Long userId, Long budgetId, Long accountId) {
         this.id = id;
         this.amount = amount;
         this.description = description;
         this.budgetFrom = budgetFrom;
         this.accountFrom = accountFrom;
         this.category = category;
-        this.occurrence = occurrence;
+        this.transactionOccurrence = transactionOccurrence;
         this.date = date;
         this.userId = userId;
         this.budgetId = budgetId;
@@ -63,7 +63,7 @@ public class TransactionResponse {
     }
 
     public TransactionEvent getOccurrence(){
-        return occurrence;
+        return transactionOccurrence;
     }
 
     public LocalDate getDate() {

@@ -41,7 +41,7 @@ public class CreateTransactionRequest {
         return category;
     }
 
-    public TransactionEvent getOccurence() {
+    public TransactionEvent getTransactionOccurrence() {
         return transactionOccurrence;
     }
 
