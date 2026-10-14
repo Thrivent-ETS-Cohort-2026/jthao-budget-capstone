@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { validateUser } from "@/app/lib/userValidation";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/app/context/UserContext";
+import { validateCustomerLogin } from "@/app/lib/api/user";
 
 
 export default function LoginPage() {
@@ -11,8 +13,9 @@ export default function LoginPage() {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const router = useRouter();
+    const {setUser} = useUser();
 
-    function handleLogin(event: React.SubmitEvent<HTMLFormElement>) {
+    async function handleLogin(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
         const validationMessage = validateUser(email, password);
         if (validationMessage) {
@@ -21,6 +24,13 @@ export default function LoginPage() {
         }
         setErrorMessage("");
         // TODO: call an API to validate the user's login credentials
+        const user = await validateCustomerLogin(email, password);
+        // const user = users[0];
+
+        if (!user){
+            setErrorMessage("Account does not exist.");
+            return;
+        }
 
         router.push("/dashboard"); // Redirect to customer's profile
     }
