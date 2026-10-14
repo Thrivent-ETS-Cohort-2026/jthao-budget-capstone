@@ -16,6 +16,8 @@ import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.BudgetRepository;
 import com.example.backend.repository.TransactionRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.types.AccountType;
+import com.example.backend.types.Categories;
 
 @Service 
 public class TransactionService {
@@ -167,6 +169,16 @@ public class TransactionService {
         return "";
     }
     return "\"" + value.replace("\"", "\"\"") + "\"";
+    }
+
+    public void getFilteredTransaction(
+        Long userId,
+        LocalDate starDate,
+        LocalDate endDate,
+        Categories category,
+        AccountType accountType
+    ) {
+        transactionRepository.findById(userId);
     }
     
 }
