@@ -10,6 +10,8 @@ export default function Dashboard() {
         return <p>No information to display.</p>
     }
 
+    // 
+
     return (
         <>
         <h1>Welcome, {user.firstName}!</h1>
