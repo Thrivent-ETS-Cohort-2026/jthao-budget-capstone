@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,9 +36,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @PostMapping ("/login")
+    @PostMapping("/login")
     public ResponseEntity<UserResponse> getUserByEmailAndPassword(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.getUserByEmailAndPassword(request));
     }
-    
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody CreateUserRequest request) {
+        return ResponseEntity.ok(userService.updateUser(id, request));
+    }
 }
