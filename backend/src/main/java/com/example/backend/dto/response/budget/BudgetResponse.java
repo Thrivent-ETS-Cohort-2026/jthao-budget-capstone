@@ -2,18 +2,19 @@ package com.example.backend.dto.response.budget;
 
 import java.math.BigDecimal;
 
+import com.example.backend.types.BudgetPeriod;
 import com.example.backend.types.Categories;
 
 public class BudgetResponse {
     private Long id;
     private BigDecimal amount;
     private String description;
-    private String targetPeriod;
+    private BudgetPeriod targetPeriod;
     private Boolean isEnabled;
     private Categories category;
     private Long userId;
 
-    public BudgetResponse(Long id, BigDecimal amount, String description, String targetPeriod, Boolean isEnabled, Categories category, Long userId) {
+    public BudgetResponse(Long id, BigDecimal amount, String description, BudgetPeriod targetPeriod, Boolean isEnabled, Categories category, Long userId) {
         this.id = id;
         this.amount = amount;
         this.description = description;
@@ -37,7 +38,7 @@ public class BudgetResponse {
         return description;
     }
 
-    public String getTargetPeriod() {
+    public BudgetPeriod getTargetPeriod() {
         return targetPeriod;
     }
 

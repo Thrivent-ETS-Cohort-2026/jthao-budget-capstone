@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.dto.request.budget.CreateBudgetRequest;
 import com.example.backend.dto.request.budget.UpdateBudgetRequest;
+import com.example.backend.dto.response.budget.BudgetResponse;
 import com.example.backend.service.BudgetService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -25,9 +26,8 @@ public class BudgetController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createBudget(CreateBudgetRequest request) {
-        budgetService.createBudget(request);
-        return ResponseEntity.status(201).build();
+    public ResponseEntity<BudgetResponse> createBudget(CreateBudgetRequest request) {
+        return ResponseEntity.ok(budgetService.createBudget(request));
     }
 
     @GetMapping("/{id}")
@@ -42,9 +42,8 @@ public class BudgetController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateBudget(@PathVariable Long id, UpdateBudgetRequest request) {
-        // Implementation for updating budget
-        budgetService.updateBudget(id, request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<BudgetResponse> updateBudget(@PathVariable Long id, UpdateBudgetRequest request) {
+        BudgetResponse response = budgetService.updateBudget(id, request);
+        return ResponseEntity.ok(response);
     }
 }

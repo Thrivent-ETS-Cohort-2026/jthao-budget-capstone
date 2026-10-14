@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.backend.dto.request.budget.CreateBudgetRequest;
+import com.example.backend.dto.request.budget.UpdateBudgetRequest;
 import com.example.backend.dto.response.budget.BudgetResponse;
 import com.example.backend.model.Budget;
 import com.example.backend.model.User;
@@ -21,7 +22,7 @@ public class BudgetService {
     }
 
     @Transactional
-    public void createBudget(CreateBudgetRequest request) {
+    public BudgetResponse createBudget(CreateBudgetRequest request) {
         User user = userRepository.findById(request.getUserId())
             .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + request.getUserId()));
         budgetRepository.findByCategoryAndTargetPeriodAndUser(request.getCategory(), request.getTargetPeriod(), user.getId())
@@ -30,14 +31,24 @@ public class BudgetService {
                     existingBudget.setIsEnabled(false);
                 }
             });
-            budgetRepository.save(new Budget(
-            request.getAmount(),
-            request.getDescription(),
-            request.getTargetPeriod(),
-            request.getIsActive(),
-            request.getCategory(),
-            user
-        ));
+        Budget newBudget = new Budget(
+        request.getAmount(),
+        request.getDescription(),
+        request.getTargetPeriod(),
+        request.getIsActive(),
+        request.getCategory(),
+        user
+        );
+        
+        return new BudgetResponse(
+            newBudget.getId(),
+            newBudget.getAmount(),
+            newBudget.getDescription(),
+            newBudget.getTargetPeriod(),
+            newBudget.getIsEnabled(),
+            newBudget.getCategory(),
+            user.getId()
+        );
     }
 
     public BudgetResponse getBudgetById(Long id) {
@@ -62,7 +73,7 @@ public class BudgetService {
     }
 
     // Update budget method
-    public BudgetResponse updateBudget(Long id, CreateBudgetRequest request) {
+    public BudgetResponse updateBudget(Long id, UpdateBudgetRequest request) {
         Budget budget = budgetRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Budget not found with id: " + id));
         
@@ -75,15 +86,14 @@ public class BudgetService {
         if (request.getTargetPeriod() != null) {
             budget.setTargetPeriod(request.getTargetPeriod());
         }
-        if (request.getIsActive() != null) {
-            budget.setIsEnabled(request.getIsActive());
+        if (request.getIsEnabled() != null) {
+            budget.setIsEnabled(request.getIsEnabled());
         }
         if (request.getCategory() != null) {
             budget.setCategory(request.getCategory());
         }
         
-        // Save the updated budget
-        Budget updatedBudget = budgetRepository.saveAndFlush(budget);
+        Budget updatedBudget = budgetRepository.save(budget);
         
         return new BudgetResponse(
             updatedBudget.getId(),
