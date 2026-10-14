@@ -7,7 +7,7 @@ export default function Home() {
       <div className="m-1 p-5 flex flex-col items-center">
         <h1>Welcome to the Budget App</h1>
         <div className="m-3">
-            <Link href="/signup"
+            <Link href="/sign-up"
             className="m-1 p-1 border border-gray-300 rounded bg-gray-200"
             >
               Sign Up
