@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ public class BudgetController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<BudgetResponse> createBudget(CreateBudgetRequest request) {
+    public ResponseEntity<BudgetResponse> createBudget(@RequestBody CreateBudgetRequest request) {
         return ResponseEntity.ok(budgetService.createBudget(request));
     }
 
@@ -42,7 +43,7 @@ public class BudgetController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<BudgetResponse> updateBudget(@PathVariable Long id, UpdateBudgetRequest request) {
+    public ResponseEntity<BudgetResponse> updateBudget(@PathVariable Long id, @RequestBody UpdateBudgetRequest request) {
         BudgetResponse response = budgetService.updateBudget(id, request);
         return ResponseEntity.ok(response);
     }
