@@ -29,7 +29,7 @@ public class TransactionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TransactionResponse> createTransaction(CreateTransactionRequest request) {
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody CreateTransactionRequest request) {
         TransactionResponse response = transactionService.createTransaction(request);
         return ResponseEntity.status(201).body(response);
     }

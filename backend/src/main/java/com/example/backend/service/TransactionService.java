@@ -1,7 +1,6 @@
 package com.example.backend.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -33,7 +32,6 @@ public class TransactionService {
         this.accountRepository = accountRepository;
     }
 
-
     public TransactionResponse createTransaction(CreateTransactionRequest request) {
         User user = userRepository.findById(request.getUserId())
             .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + request.getUserId()));
@@ -47,7 +45,7 @@ public class TransactionService {
             request.getBudgetFrom(),
             request.getAccountFrom(),
             request.getCategory(),
-            request.getOccurence(),
+            request.getTransactionOccurrence(),
             request.getDate(),
             user,
             budget,
@@ -67,13 +65,16 @@ public class TransactionService {
             transaction.getBudget().getId(),
             transaction.getAccount().getId()
         );
-
         return response;
     }
 
     public TransactionResponse getTransaction(Long id) {
         Transaction transaction = transactionRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + id));
+        Long budgetId = null;
+        if (transaction.getBudget() != null) {
+            budgetId = transaction.getBudget().getId();
+        }
         TransactionResponse response = new TransactionResponse(
             transaction.getId(),
             transaction.getAmount(),
@@ -84,7 +85,7 @@ public class TransactionService {
             transaction.getOccurrence(),
             transaction.getDate(),
             transaction.getUser().getId(),
-            transaction.getBudget().getId(),
+            budgetId,
             transaction.getAccount().getId()
         );
         return response;
@@ -108,13 +109,17 @@ public class TransactionService {
         if (request.getCategory() != null) {
             transaction.setCategory(request.getCategory());
         }
-        if (request.getOccurence() != null) {
-            transaction.setOccurrence(request.getOccurence());
+        if (request.getTransactionOccurrence() != null) {
+            transaction.setOccurrence(request.getTransactionOccurrence());
         }
         if (request.getDate() != null) {
             transaction.setDate(request.getDate());
         }
         transactionRepository.save(transaction);
+        Long budgetId = null;
+        if (transaction.getBudget() != null) {
+            budgetId = transaction.getBudget().getId();
+        }
 
         TransactionResponse response = new TransactionResponse(
             transaction.getId(),
@@ -126,7 +131,7 @@ public class TransactionService {
             transaction.getOccurrence(),
             transaction.getDate(),
             transaction.getUser().getId(),
-            transaction.getBudget().getId(),
+            budgetId,
             transaction.getAccount().getId()
         );
         return response;
@@ -142,11 +147,8 @@ public class TransactionService {
 
     @Transactional(readOnly = true)
     public String exportTransactions(Long id){
-
         List<Transaction> transactionsList = transactionRepository.findByUserIdAndDeletedAtIsNullOrderByDateDesc(id);
-
         StringBuilder csv = new StringBuilder();
-
         csv.append("Date,Amount,Description,Budget_From, Account_From,Category, Transaction_Occurrence\n");
 
         for (Transaction transaction : transactionsList) {
@@ -164,8 +166,7 @@ public class TransactionService {
     if (value == null) {
         return "";
     }
-
     return "\"" + value.replace("\"", "\"\"") + "\"";
-}
+    }
     
 }

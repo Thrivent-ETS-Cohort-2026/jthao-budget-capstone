@@ -133,8 +133,8 @@ public class Transaction {
             return transactionOccurrence;
         }
 
-        public void setOccurrence(TransactionEvent occurrence){
-            this.transactionOccurrence = occurrence;
+        public void setOccurrence(TransactionEvent transactionOccurrence){
+            this.transactionOccurrence = transactionOccurrence;
         }
 
         public LocalDate getDate() {
