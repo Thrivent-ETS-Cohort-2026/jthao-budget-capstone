@@ -31,6 +31,8 @@ export default function LoginPage() {
         }
         setUser(user);
         setErrorMessage("");
+        setEmail("");
+        setPassword("");
         router.push("../dashboard"); // Redirect to customer's profile
     }
 

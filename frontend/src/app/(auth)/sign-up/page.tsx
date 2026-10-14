@@ -49,6 +49,19 @@ export default function SignUpPage() {
         const user: User = await createUser(signUpRequest);
         setUser(user);
         setErrorMessage("");
+        setEmail("");
+        setPassword("");
+        setFirstName("");
+        setLastName("");
+        setPhoneNumber("");
+        setSignUpRequest({
+            email: "",
+            password: "",
+            firstName: "",
+            lastName:"",
+            phoneNumber: ""
+        });
+
         router.push("../dashboard");
 
     }
