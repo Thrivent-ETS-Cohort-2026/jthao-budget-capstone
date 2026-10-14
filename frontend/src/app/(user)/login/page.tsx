@@ -5,6 +5,7 @@ import { validateUser } from "@/app/lib/userValidation";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 import { validateCustomerLogin } from "@/app/lib/api/user";
+import { User } from "@/app/types/user";
 
 
 export default function LoginPage() {
@@ -17,22 +18,20 @@ export default function LoginPage() {
 
     async function handleLogin(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
-        const validationMessage = validateUser(email, password);
+        const validationMessage: string = validateUser(email, password);
         if (validationMessage) {
             setErrorMessage(validationMessage);
             return;
         }
         setErrorMessage("");
-        // TODO: call an API to validate the user's login credentials
-        const user = await validateCustomerLogin(email, password);
-        // const user = users[0];
-
+        const user :User = await validateCustomerLogin(email, password);
         if (!user){
             setErrorMessage("Account does not exist.");
             return;
         }
-
-        router.push("/dashboard"); // Redirect to customer's profile
+        setUser(user);
+        setErrorMessage("");
+        router.push("../account"); // Redirect to customer's profile
     }
 
     return (
