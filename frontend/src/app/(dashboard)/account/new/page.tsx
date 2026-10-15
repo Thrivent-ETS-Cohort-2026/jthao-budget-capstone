@@ -90,7 +90,7 @@ export default function NewAccount() {
         </div>
         <button
           type="submit"
-          className="bg-blue-600 text-white p-2 rounded"
+          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
         >
           Save Account
         </button>

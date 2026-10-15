@@ -18,15 +18,15 @@ export default function NewTransaction() {
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [budgets, setBudgets] = useState<Budget[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [description, setDescription] = useState("");
-    const [amount, setAmount] = useState("");
+    const [description, setDescription] = useState<string>("");
+    const [amount, setAmount] = useState<string>("");
     const [accountId, setAccountId] = useState<number | "">("");
     const [budgetId, setBudgetId] = useState<number | "">("");
-    const [accountFrom, setAccountFrom] = useState("");
+    const [accountFrom, setAccountFrom] = useState<string>("");
     const [category, setCategory] = useState<Categories>("GROCERIES");
     const [transactionOccurrence, setTransactionOccurrence] = useState<TransactionEvent>("ONCE");
-    const [date, setDate] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+    const [date, setDate] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
     useEffect(() => {
         async function loadFormData() {
