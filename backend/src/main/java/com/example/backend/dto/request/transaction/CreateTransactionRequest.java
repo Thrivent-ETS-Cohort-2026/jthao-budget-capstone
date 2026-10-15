@@ -8,7 +8,7 @@ import com.example.backend.types.TransactionEvent;
 
 public class CreateTransactionRequest {
 
-    private BigDecimal transactionAmount;
+    private BigDecimal amount;
     private String description;
     private String budgetFrom;
     private String accountFrom;
@@ -21,8 +21,8 @@ public class CreateTransactionRequest {
 
     // Getters
 
-    public BigDecimal getTransactionAmount() {
-        return transactionAmount;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
     public String getDescription() {
@@ -52,6 +52,7 @@ public class CreateTransactionRequest {
     public Long getUserId() {
         return userId;
     }
+
     public Long getBudgetId() {
         return budgetId;
     }
@@ -59,5 +60,5 @@ public class CreateTransactionRequest {
     public Long getAccountId() {
         return accountId;
     }
-    
+
 }

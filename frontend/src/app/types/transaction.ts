@@ -1,6 +1,6 @@
 export interface Transaction {
     id: number;
-    transactionAmount: number;
+    amount: number;
     description: string;
     budgetFrom: string | null;
     accountFrom: string;
@@ -13,7 +13,7 @@ export interface Transaction {
 }
 
 export interface CreateTransactionRequest {
-    transactionAmount: number;
+    amount: number;
     description: string;
     budgetFrom: string | null;
     accountFrom: string;
