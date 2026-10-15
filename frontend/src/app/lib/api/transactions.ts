@@ -22,7 +22,7 @@ export async function  exportTransactions(): Promise<void> {
 
 export async function getTransactions(id: number): Promise<Transaction[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/transaction/user/${id}`);
+        const response = await fetch(`${API_BASE_URL}/transaction/${id}/all`);
         if (!response.ok) {
             throw new Error("Failed to get transactions");
         }
