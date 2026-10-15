@@ -1,5 +1,7 @@
 package com.example.backend.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,4 +49,11 @@ public class BudgetController {
         BudgetResponse response = budgetService.updateBudget(id, request);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}/all")
+    public ResponseEntity<List<BudgetResponse>> getBudgetByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(budgetService.getBudgetByUserId(id));
+    }
+
+    
 }

@@ -12,4 +12,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByUserIdAndDeletedAtIsNullOrderByDateDesc(Long id);
 
     List<Transaction> findByUserIdAndBudgetId(Long userId, Long budgetId);
+
+    List<Transaction> findbyUserId(Long id);
 }

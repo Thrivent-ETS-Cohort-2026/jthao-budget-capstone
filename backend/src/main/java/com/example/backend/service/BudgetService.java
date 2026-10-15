@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -59,6 +60,7 @@ public class BudgetService {
         );
     }
 
+    // Get budget
     public BudgetResponse getBudgetById(Long id) {
         Budget budget = budgetRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Budget not found with id: " + id));
@@ -119,6 +121,23 @@ public class BudgetService {
         );
     }
 
+    public List<BudgetResponse> getBudgetByUserId(Long userId) {
+        List<Budget> budgetList = budgetRepository.findByUserId(userId);
+        List<BudgetResponse> budgetResponseList = new ArrayList<>();
+        for (Budget b : budgetList) {
+            BudgetResponse response = new BudgetResponse(
+                b.getId(),
+                b.getAmount(),
+                b.getDescription(),
+                b.getTargetPeriod(),
+                b.getIsEnabled(),
+                b.getCategory(),
+                userId
+            );
+            budgetResponseList.add(response);
+        }
+        return budgetResponseList;
+    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -179,6 +180,28 @@ public class TransactionService {
         AccountType accountType
     ) {
         transactionRepository.findById(userId);
+    }
+
+    public List<TransactionResponse> getTransactionsByUserId(Long userId){
+        List<Transaction> transactionList = transactionRepository.findbyUserId(userId);
+        List<TransactionResponse> transactionResponseList = new ArrayList<>();
+        for (Transaction t : transactionList){
+            TransactionResponse response = new TransactionResponse(
+                t.getId(),
+                t.getAmount(),
+                t.getDescription(),
+                t.getBudgetFrom(),
+                t.getAccountFrom(),
+                t.getCategory(), 
+                t.getOccurrence(), 
+                t.getDate(),
+                t.getUser().getId(),
+                t.getBudget().getId(),
+                t.getAccount().getId()
+            );
+            transactionResponseList.add(response);
+        }
+        return transactionResponseList;
     }
     
 }
