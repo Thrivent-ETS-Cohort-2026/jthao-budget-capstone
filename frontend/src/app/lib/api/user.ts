@@ -26,6 +26,7 @@ export async function validateUserLogin(email: string, password: string): Promis
 
 export async function createUser(signUpRequest: UserFormRequest): Promise<User> {
     try {
+        console.log("signUpRequest from api call: " + signUpRequest);
         const response = await fetch(`${API_BASE_URL}/user/register`, {
             method: "POST",
             headers: {
@@ -39,7 +40,7 @@ export async function createUser(signUpRequest: UserFormRequest): Promise<User> 
         const user: User = await response.json();
         return user;
     } catch (error) {
-        throw new Error((error as Error).message);
+        throw new Error((error as Error).message); // TODO: figure out why it's breaking here
     }
 }
 

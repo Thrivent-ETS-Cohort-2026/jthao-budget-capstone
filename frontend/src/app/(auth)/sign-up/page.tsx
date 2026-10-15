@@ -22,12 +22,12 @@ export default function SignUpPage() {
         email: "",
         password: "",
         firstName: "",
-        lastName:"",
+        lastName: "",
         phoneNumber: ""
     });
 
     const router = useRouter();
-    const {setUser} = useUser();
+    const { setUser } = useUser();
 
 
     async function handleSignUp(event: React.SubmitEvent<HTMLFormElement>) {
@@ -45,6 +45,7 @@ export default function SignUpPage() {
             lastName: lastName,
             phoneNumber: phoneNumber
         });
+        console.log("From sign up page" + signUpRequest);
         // TODO: check why first sign up isn't working, 2nd time will work.
         const user: User = await createUser(userFormRequest);
         setUser(user);
@@ -58,7 +59,7 @@ export default function SignUpPage() {
             email: "",
             password: "",
             firstName: "",
-            lastName:"",
+            lastName: "",
             phoneNumber: ""
         });
 
@@ -70,8 +71,8 @@ export default function SignUpPage() {
             <div className="m-1 p-5 flex flex-col items-center">
                 {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                 <form
-                onSubmit={handleSignUp}
-                className="m-1 p-5 border border-blue-500 rounded shadow-blue-800 flex flex-col items-center"
+                    onSubmit={handleSignUp}
+                    className="m-1 p-5 border border-blue-500 rounded shadow-blue-800 flex flex-col items-center"
                 >
                     <h1>Sign Up</h1>
                     <label htmlFor="email-text">Email:</label>
