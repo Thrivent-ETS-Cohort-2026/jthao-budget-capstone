@@ -183,7 +183,7 @@ public class TransactionService {
     }
 
     public List<TransactionResponse> getTransactionsByUserId(Long userId){
-        List<Transaction> transactionList = transactionRepository.findbyUserId(userId);
+        List<Transaction> transactionList = transactionRepository.findByUserId(userId);
         List<TransactionResponse> transactionResponseList = new ArrayList<>();
         for (Transaction t : transactionList){
             TransactionResponse response = new TransactionResponse(
