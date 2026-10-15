@@ -16,7 +16,7 @@ import com.example.backend.dto.request.account.CreateAccountRequest;
 import com.example.backend.dto.response.account.AccountResponse;
 import com.example.backend.service.AccountService;
 
-@CrossOrigin (origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/account")
 public class AccountController {
@@ -27,7 +27,7 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<AccountResponse> createAccount(@RequestBody  CreateAccountRequest request) {
+    public ResponseEntity<AccountResponse> createAccount(@RequestBody CreateAccountRequest request) {
         AccountResponse response = accountService.createAccount(request);
         return ResponseEntity.status(201).body(response);
     }
@@ -37,8 +37,8 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccountById(id));
     }
 
-    @GetMapping("/{id}/all-accounts")
-    public  ResponseEntity<List<AccountResponse>> getAllAccounts(@PathVariable  Long id) {
+    @GetMapping("/{id}/all")
+    public ResponseEntity<List<AccountResponse>> getAllAccounts(@PathVariable Long id) {
         return ResponseEntity.ok(accountService.getAllAccountsByUserId(id));
     }
 

@@ -45,7 +45,7 @@ export default function SignUpPage() {
             lastName: lastName,
             phoneNumber: phoneNumber
         });
-        console.log("From sign up page" + signUpRequest);
+        console.log("From sign up page" + userFormRequest);
         // TODO: check why first sign up isn't working, 2nd time will work.
         const user: User = await createUser(userFormRequest);
         setUser(user);

@@ -6,3 +6,9 @@ export interface Account {
     userId: number;
     
 }
+
+export interface CreateAccountRequest {
+    accountType: string;
+    accountName: string;
+    userId: number;
+}
