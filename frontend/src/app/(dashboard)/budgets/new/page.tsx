@@ -8,7 +8,6 @@ import { Categories } from "@/app/types/categories";
 import { CreateBudgetRequest } from "@/app/types/budget";
 import { TransactionEvent } from "@/app/types/transaction";
 import { createBudget} from "@/app/lib/api/budgets";
-import { User } from "@/app/types/user";
 
 export default function NewBudget() {
     const router = useRouter();
@@ -135,9 +134,15 @@ export default function NewBudget() {
                     </div>
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                        className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
                     >
                         Save Budget
+                    </button>
+                    <button
+                        onClick={() => router.push("/dashboard")}
+                        className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+                    >
+                        Back to the Dashboard
                     </button>
                 </form>
             </div>

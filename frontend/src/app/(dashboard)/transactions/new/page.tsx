@@ -72,7 +72,7 @@ export default function NewTransaction() {
     if (!user) {
         return (
             <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
-                <p className="text-gray-600 mb-4">Please log in to log transactions.</p>
+                <p className="text-gray-600 mb-4">Please log in to add transactions.</p>
                 <button
                     onClick={() => router.push("/")}
                     className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
@@ -102,7 +102,7 @@ export default function NewTransaction() {
         if (budgetId !== "") {
             const selectedBudget = budgets.find((b) => b.id === Number(budgetId));
             if (selectedBudget) {
-                budgetFromValue = selectedBudget.category;
+                budgetFromValue = selectedBudget.description;
             }
         }
 
@@ -121,7 +121,22 @@ export default function NewTransaction() {
 
         try {
             await createTransaction(requestData);
-            router.push("/dashboard");
+
+            setDescription("");
+            setAmount("");
+            setBudgetId("");
+            setErrorMessage("");
+            setAccountFrom("");
+            setAccountId("");
+            setAccounts([]);
+            setBudgets([]);
+            setAccountId("");
+            setBudgetId("");
+            setCategory("GROCERIES");
+            setTransactionOccurrence("ONCE");
+            setDate("");
+
+            router.push("/transactions");
         } catch (error) {
             setErrorMessage((error as Error).message || "Failed to create transaction.");
         }
@@ -129,7 +144,7 @@ export default function NewTransaction() {
 
     return (
         <div className="mx-auto p-5 mt-10 border border-gray-300 rounded">
-            <h1 className="text-xl font-bold text-gray-800 mb-4">Log New Transaction</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-4">Add New Transaction</h1>
 
             {errorMessage && (
                 <p className="text-red-500 mb-4">{errorMessage}</p>
@@ -176,9 +191,9 @@ export default function NewTransaction() {
                         className="w-full p-2 border border-gray-300 rounded"
                         required
                     >
-                        {accounts.map((acc) => (
-                            <option key={acc.id} value={acc.id}>
-                                {acc.accountName} ({acc.accountType})
+                        {accounts.map((account) => (
+                            <option key={account.id} value={account.id}>
+                                {account.accountName} ({account.accountType})
                             </option>
                         ))}
                     </select>
@@ -272,10 +287,16 @@ export default function NewTransaction() {
                 </div>
                 <button
                     type="submit"
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
                 >
                     Save Transaction
                 </button>
+                <button
+                        onClick={() => router.push("/transactions")}
+                        className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+                    >
+                        Back to Transactions
+                    </button>
             </form>
         </div>
     );

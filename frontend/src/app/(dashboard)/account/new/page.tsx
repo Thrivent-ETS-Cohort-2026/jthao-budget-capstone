@@ -90,9 +90,15 @@ export default function NewAccount() {
         </div>
         <button
           type="submit"
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
         >
           Save Account
+        </button>
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+        >
+          Back to the Dashboard
         </button>
       </form>
     </div>
