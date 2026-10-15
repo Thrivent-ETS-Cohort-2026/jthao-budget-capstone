@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 import { createAccount } from "@/app/lib/api/accounts";
-import { CreateAccountRequest } from "@/app/types/account";
+import { AccountType, CreateAccountRequest } from "@/app/types/account";
 
 export default function NewAccount() {
   const router = useRouter();
   const { user } = useUser();
 
   const [accountName, setAccountName] = useState("");
-  const [accountType, setAccountType] = useState("CHECKING");
+  const [accountType, setAccountType] = useState<AccountType>("CHECKING");
   const [errorMessage, setErrorMessage] = useState("");
 
   if (!user) {
@@ -22,7 +22,7 @@ export default function NewAccount() {
           onClick={() => router.push("/")}
           className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
         >
-          Go to Login
+          Go to home page
         </button>
       </div>
     );
@@ -66,7 +66,7 @@ export default function NewAccount() {
             type="text"
             value={accountName}
             onChange={(e) => setAccountName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded text-sm"
+            className="w-full p-2 border border-gray-300 rounded"
             placeholder="e.g., Checking"
             required
           />
@@ -78,14 +78,14 @@ export default function NewAccount() {
           <select
             id="accountType"
             value={accountType}
-            onChange={(e) => setAccountType(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded text-sm"
+            onChange={(e) => setAccountType(e.target.value as AccountType)}
+            className="w-full p-2 border border-gray-300 rounded"
           >
-            {["CHECKING", "SAVINGS", "CREDIT", "INVESTMENT", "OTHER"].map((type, index) => (
-              <option key={index} value={type}>
-                {type}
-              </option>
-            ))}
+            <option value="CHECKING">Checking</option>
+            <option value="SAVINGS">Savings</option>
+            <option value="CREDIT">Credit</option>
+            <option value="INVESTMENT">Investment</option>
+            <option value="OTHER">Other</option>
           </select>
         </div>
         <button

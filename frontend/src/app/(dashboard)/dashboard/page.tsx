@@ -70,7 +70,7 @@ export default function Dashboard() {
                     onClick={() => router.push("/")}
                     className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
                 >
-                    Go to Login
+                    Go to home page
                 </button>
             </div>
         );

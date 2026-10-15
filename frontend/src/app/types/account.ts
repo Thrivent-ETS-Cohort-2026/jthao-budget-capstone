@@ -1,14 +1,21 @@
 
 export interface Account {
     id: number;
-    accountType: string;
+    accountType: AccountType;
     accountName: string;
     userId: number;
-    
+
 }
 
 export interface CreateAccountRequest {
-    accountType: string;
+    accountType: AccountType;
     accountName: string;
     userId: number;
 }
+
+export type AccountType =
+    "CHECKING" |
+    "SAVINGS" |
+    "CREDIT" |
+    "INVESTMENT" |
+    "OTHER";
