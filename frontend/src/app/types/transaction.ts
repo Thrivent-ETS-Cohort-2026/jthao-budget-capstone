@@ -1,11 +1,13 @@
+import { Categories } from "./categories";
+
 export interface Transaction {
     id: number;
     amount: number;
     description: string;
     budgetFrom: string | null;
     accountFrom: string;
-    category: string;
-    transactionOccurrence: string;
+    category: Categories;
+    transactionOccurrence: TransactionEvent;
     date: string;
     userId: number;
     budgetId: number | null;
@@ -17,10 +19,18 @@ export interface CreateTransactionRequest {
     description: string;
     budgetFrom: string | null;
     accountFrom: string;
-    category: string;
-    transactionOccurrence: string;
+    category: Categories;
+    transactionOccurrence: TransactionEvent;
     date: string;
     userId: number;
     budgetId: number | null;
     accountId: number;
 }
+
+export type TransactionEvent =
+    "ONCE" |
+    "DAILY" |
+    "WEEKLY" |
+    "MONTHLY" |
+    "QUARTERLY" |
+    "YEARLY";

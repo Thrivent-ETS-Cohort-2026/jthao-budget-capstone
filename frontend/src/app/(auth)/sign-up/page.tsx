@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { validateSignUp } from "@/app/lib/userValidation";
 import { useUser } from "@/app/context/UserContext";
 
-import {UserFormRequest, User} from "@/app/types/user";
+import { UserFormRequest, User } from "@/app/types/user";
 
 import { createUser } from "@/app/lib/api/user"
 
@@ -72,14 +72,14 @@ export default function SignUpPage() {
                 {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                 <form
                     onSubmit={handleSignUp}
-                    className="m-1 p-5 border border-blue-500 rounded shadow-blue-800 flex flex-col items-center"
+                    className="m-1 p-5 border border-gray-500 rounded flex flex-col items-center"
                 >
                     <h1>Sign Up</h1>
                     <label htmlFor="email-text">Email:</label>
                     <input
                         id="email-text"
                         type="email"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded"
+                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded w-full"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -88,7 +88,7 @@ export default function SignUpPage() {
                     <input
                         id="password-text"
                         type="password"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded"
+                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded w-full"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -97,7 +97,7 @@ export default function SignUpPage() {
                     <input
                         id="first-name-text"
                         type="text"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded"
+                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded w-full"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                     />
@@ -106,7 +106,7 @@ export default function SignUpPage() {
                     <input
                         id="last-name-text"
                         type="text"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded"
+                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounde w-fulld"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
@@ -115,17 +115,16 @@ export default function SignUpPage() {
                     <input
                         id="phone-number-text"
                         type="text"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded"
+                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded w-full"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                     <br />
                     <button
                         type="submit"
-                        className="m-1 p-1 border border-gray-300 rounded bg-gray-200 shadow-md"
+                        className="m-1 p-1 border border-gray-300 rounded bg-gray-200"
                     >Sign Up</button>
                 </form>
-
             </div>
         </>
     );

@@ -1,10 +1,12 @@
+import { Categories } from "./categories";
+
 export interface Budget {
     id: number;
     amount: number;
     description: string;
     targetPeriod: string;
     isEnabled: boolean;
-    category: string;
+    category: Categories;
     userId: number;
 }
 
@@ -13,6 +15,6 @@ export interface CreateBudgetRequest {
     description: string;
     targetPeriod: string;
     isEnabled: boolean | null;
-    category: string;
+    category: Categories;
     userId: number;
 }

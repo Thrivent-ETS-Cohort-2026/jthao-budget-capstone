@@ -14,7 +14,7 @@ export default function LoginPage() {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const router = useRouter();
-    const {setUser} = useUser();
+    const { setUser } = useUser();
 
     async function handleLogin(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -24,8 +24,8 @@ export default function LoginPage() {
             return;
         }
         setErrorMessage("");
-        const user :User = await validateUserLogin(email, password);
-        if (!user){
+        const user: User = await validateUserLogin(email, password);
+        if (!user) {
             setErrorMessage("Account does not exist.");
             return;
         }
@@ -46,7 +46,7 @@ export default function LoginPage() {
                     <input
                         id="email-text"
                         type="email"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded"
+                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded w-full"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -55,14 +55,14 @@ export default function LoginPage() {
                     <input
                         id="password-text"
                         type="password"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded"
+                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded w-full"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <br />
                     <button
                         type="submit"
-                        className="m-1 p-1 border border-gray-300 rounded bg-gray-200 shadow-md"
+                        className="m-1 p-1 border border-gray-300 rounded bg-gray-200"
                     >Log In</button>
                 </form>
             </div>
