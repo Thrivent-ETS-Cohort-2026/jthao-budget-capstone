@@ -4,7 +4,7 @@ import { Transaction, CreateTransactionRequest } from "@/app/types/transaction";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function  exportTransactions(): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/transactions/export`);
+    const response: Response = await fetch(`${API_BASE_URL}/transactions/export`);
     if (!response.ok) {
         throw new Error("Failed to export transactons");
     }
@@ -22,7 +22,7 @@ export async function  exportTransactions(): Promise<void> {
 
 export async function getTransactions(id: number): Promise<Transaction[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/transaction/${id}/all`);
+        const response: Response = await fetch(`${API_BASE_URL}/transaction/${id}/all`);
         if (!response.ok) {
             throw new Error("Failed to get transactions");
         }
@@ -35,9 +35,9 @@ export async function getTransactions(id: number): Promise<Transaction[]> {
 
 export async function createTransaction(request: CreateTransactionRequest): Promise<Transaction> {
     try {
-        const response = await fetch(`${API_BASE_URL}/transaction/create`, {
+        const response: Response = await fetch(`${API_BASE_URL}/transaction/create`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(request),
         });
         if (!response.ok) {

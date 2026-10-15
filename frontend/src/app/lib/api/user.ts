@@ -29,9 +29,7 @@ export async function createUser(signUpRequest: UserFormRequest): Promise<User> 
         console.log("signUpRequest from api call: " + signUpRequest);
         const response = await fetch(`${API_BASE_URL}/user/register`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(signUpRequest)
     });
         if (!response.ok) {

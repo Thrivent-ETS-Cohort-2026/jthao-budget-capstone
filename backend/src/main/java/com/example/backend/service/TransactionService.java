@@ -38,8 +38,13 @@ public class TransactionService {
     public TransactionResponse createTransaction(CreateTransactionRequest request) {
         User user = userRepository.findById(request.getUserId())
             .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + request.getUserId()));
-        Budget budget = budgetRepository.findById(request.getBudgetId())
-            .orElseThrow(() -> new IllegalArgumentException("Budget not found with id: " + request.getBudgetId()));
+        
+        Budget budget = null;
+        if(request.getBudgetId() != null){
+            budget = budgetRepository.findById(request.getBudgetId())
+                .orElseThrow(() -> new IllegalArgumentException("Budget not found with id: " + request.getBudgetId()));
+        }
+
         Account account = accountRepository.findById(request.getAccountId())
             .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + request.getAccountId()));
         Transaction transaction = new Transaction(
@@ -65,7 +70,7 @@ public class TransactionService {
             transaction.getOccurrence(),
             transaction.getDate(),
             transaction.getUser().getId(),
-            transaction.getBudget().getId(),
+            transaction.getBudget() != null ? transaction.getBudget().getId() : null,
             transaction.getAccount().getId()
         );
         return response;

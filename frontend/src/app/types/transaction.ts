@@ -1,8 +1,8 @@
 export interface Transaction {
     id: number;
-    amount: number;
+    transactionAmount: number;
     description: string;
-    budgetFrom?: string;
+    budgetFrom: string | null;
     accountFrom: string;
     category: string;
     transactionOccurrence: string;
@@ -15,7 +15,7 @@ export interface Transaction {
 export interface CreateTransactionRequest {
     transactionAmount: number;
     description: string;
-    budgetFrom?: string;
+    budgetFrom: string | null;
     accountFrom: string;
     category: string;
     transactionOccurrence: string;
