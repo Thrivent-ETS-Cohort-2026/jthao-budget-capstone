@@ -8,8 +8,8 @@ import { getBudgets } from "@/app/lib/api/budgets";
 import { createTransaction } from "@/app/lib/api/transactions";
 import { Account } from "@/app/types/account";
 import { Budget } from "@/app/types/budget";
-import { CreateTransactionRequest, TransactionEvent } from "@/app/types/transaction";
-import { Categories } from "@/app/types/categories"
+import { CreateTransactionRequest, TransactionEvents } from "@/app/types/transaction";
+import { CATEGORIES, Categories } from "@/app/types/categories"
 
 export default function NewTransaction() {
     const router = useRouter();
@@ -24,7 +24,7 @@ export default function NewTransaction() {
     const [budgetId, setBudgetId] = useState<number | "">("");
     const [accountFrom, setAccountFrom] = useState<string>("");
     const [category, setCategory] = useState<Categories>("GROCERIES");
-    const [transactionOccurrence, setTransactionOccurrence] = useState<TransactionEvent>("ONCE");
+    const [transactionOccurrence, setTransactionOccurrence] = useState<TransactionEvents>("ONCE");
     const [date, setDate] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -230,28 +230,19 @@ export default function NewTransaction() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="category" className="text-gray-700">
-                        Category
-                    </label>
+                    <label className="text-gray-700 mb-1">Category</label>
                     <select
-                        id="category"
                         value={category}
                         onChange={(e) => setCategory(e.target.value as Categories)}
                         className="w-full p-2 border border-gray-300 rounded"
                         required
                     >
-                        <option value="HOUSING">Housing</option>
-                        <option value="GROCERIES">Groceries</option>
-                        <option value="TRANSPORTATION">Transportation</option>
-                        <option value="ENTERTAINMENT">Entertainment</option>
-                        <option value="UTILITIES">Utilities</option>
-                        <option value="HEALTHCARE">Healthcare</option>
-                        <option value="PERSONAL_CARE">Personal Care</option>
-                        <option value="EDUCATION">Education</option>
-                        <option value="GIFT_GIVING">Gift shopping</option>
-                        <option value="SHOPPING">Shopping</option>
-                        <option value="SAVINGS_INVESTMENTS">Savings Investments</option>
-                        <option value="OTHER">Other</option>
+                        <option value="">Select Category</option>
+                        {CATEGORIES.map((cat) => (
+                            <option key={cat} value={cat}>
+                                {cat.replace(/_/g, " ")}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div>
@@ -261,7 +252,7 @@ export default function NewTransaction() {
                     <select
                         id="transactionOccurrence"
                         value={transactionOccurrence}
-                        onChange={(e) => setTransactionOccurrence(e.target.value as TransactionEvent)}
+                        onChange={(e) => setTransactionOccurrence(e.target.value as TransactionEvents)}
                         className="w-full p-2 border border-gray-300 rounded"
                     >
                         <option value="ONCE">Once</option>
@@ -292,11 +283,11 @@ export default function NewTransaction() {
                     Save Transaction
                 </button>
                 <button
-                        onClick={() => router.push("/transactions")}
-                        className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
-                    >
-                        Back to Transactions
-                    </button>
+                    onClick={() => router.push("/transactions")}
+                    className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+                >
+                    Back to Transactions
+                </button>
             </form>
         </div>
     );

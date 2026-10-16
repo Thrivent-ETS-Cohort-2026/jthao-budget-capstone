@@ -17,7 +17,6 @@ export default function Dashboard() {
 
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [budgets, setBudgets] = useState<Budget[]>([]);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -35,10 +34,6 @@ export default function Dashboard() {
 
                 const budgetRes = await getBudgets(user.id);
                 setBudgets(budgetRes);
-
-                const transactionRes = await getTransactions(user.id);
-                setTransactions(transactionRes);
-
             } catch (error) {
                 console.error("Failed to fetch dashboard data:", error);
             } finally {

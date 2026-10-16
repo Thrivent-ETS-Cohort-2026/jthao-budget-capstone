@@ -6,15 +6,15 @@ import { useUser } from "@/app/context/UserContext";
 import { useState } from "react";
 import { Categories } from "@/app/types/categories";
 import { CreateBudgetRequest } from "@/app/types/budget";
-import { TransactionEvent } from "@/app/types/transaction";
-import { createBudget} from "@/app/lib/api/budgets";
+import { TRANSACTIONEVENTS, TransactionEvents } from "@/app/types/transaction";
+import { createBudget } from "@/app/lib/api/budgets";
 
 export default function NewBudget() {
     const router = useRouter();
     const { user } = useUser();
 
     const [category, setCategory] = useState<Categories>("GROCERIES");
-    const [targetPeriod, setTargetPeriod] = useState<TransactionEvent>("ONCE");
+    const [targetPeriod, setTargetPeriod] = useState<TransactionEvents>("ONCE");
     const [description, setDescription] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -90,21 +90,19 @@ export default function NewBudget() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="targetPeriod" className="text-gray-700">
-                            Target Period:
-                        </label>
+                        <label className="text-gray-700 mb-1">Target Period:</label>
                         <select
-                            id="targetPeriod"
                             value={targetPeriod}
-                            onChange={(e) => setTargetPeriod(e.target.value as TransactionEvent)}
+                            onChange={(e) => setTargetPeriod(e.target.value as TransactionEvents)}
                             className="w-full p-2 border border-gray-300 rounded"
+                            required
                         >
-                            <option value="ONCE">Once</option>
-                            <option value="DAILY">Daily</option>
-                            <option value="WEEKLY">Weekly</option>
-                            <option value="MONTHLY">Monthly</option>
-                            <option value="QUARTERLY">Quarterly</option>
-                            <option value="YEARLY">Yearly</option>
+                            <option value="">Select Target Period</option>
+                            {TRANSACTIONEVENTS.map((tEvents) => (
+                                <option key={tEvents} value={tEvents}>
+                                    {tEvents}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div>

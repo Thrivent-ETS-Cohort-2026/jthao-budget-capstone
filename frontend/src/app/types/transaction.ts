@@ -7,8 +7,9 @@ export interface Transaction {
     budgetFrom: string | null;
     accountFrom: string;
     category: Categories;
-    transactionOccurrence: TransactionEvent;
+    transactionOccurrence: TransactionEvents;
     date: string;
+    deletedAt: string | null;
     userId: number;
     budgetId: number | null;
     accountId: number;
@@ -20,17 +21,39 @@ export interface CreateTransactionRequest {
     budgetFrom: string | null;
     accountFrom: string;
     category: Categories;
-    transactionOccurrence: TransactionEvent;
+    transactionOccurrence: TransactionEvents;
     date: string;
     userId: number;
     budgetId: number | null;
     accountId: number;
 }
 
-export type TransactionEvent =
+export type TransactionEvents =
     "ONCE" |
     "DAILY" |
     "WEEKLY" |
     "MONTHLY" |
     "QUARTERLY" |
     "YEARLY";
+
+export const TRANSACTIONEVENTS: TransactionEvents[] = [
+    "ONCE",
+    "DAILY",
+    "WEEKLY",
+    "MONTHLY",
+    "QUARTERLY",
+    "YEARLY",
+];
+
+export interface UpdateTransactionRequest {
+    amount: number;
+    description: string;
+    budgetFrom: string | null;
+    accountFrom: string;
+    category: Categories;
+    transactionOccurrence: TransactionEvents;
+    date: string;
+    userId: number;
+    budgetId: number | null;
+    accountId: number;
+}
