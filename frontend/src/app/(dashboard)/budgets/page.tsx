@@ -196,11 +196,11 @@ export default function BudgetsPage() {
                             <tbody>
                                 {budgets.map((budget) => {
                                     const actualSpend = calculateActualSpend(budget.category);
-                                    const budgetLimit = Number(budget.amount);
-                                    const percentage = budgetLimit > 0 ? (actualSpend / budgetLimit) * 100 : 0;
+                                    const budgetLimit: number = Number(budget.amount);
+                                    const percentage: number = budgetLimit > 0 ? (actualSpend / budgetLimit) * 100 : 0;
 
-                                    const isOverspent = percentage >= 100;
-                                    const isWarning = percentage >= 75 && percentage < 100;
+                                    const isOverspent: boolean = percentage >= 100;
+                                    const isWarning: boolean = percentage >= 75 && percentage < 100;
 
                                     return (
                                         <tr key={budget.id} className="border-b border-gray-200 hover:bg-gray-50">
