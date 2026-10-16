@@ -8,7 +8,7 @@ export default function EmptyStateDashboard({
 }: DashboardEmptyStateProps) {
 
   return (
-    <div className="bg-gray-50 rounded-2xl border border-gray-200 p-5 text-center mx-auto">
+    <div className="bg-white rounded-2xl border border-gray-200 p-5 text-center mx-auto">
       <h2 className="text-2xl font-semibold text-gray-800 m-2">
         No Accounts Found
       </h2>
