@@ -67,7 +67,7 @@ public class TransactionService {
                 transaction.getBudgetFrom(),
                 transaction.getAccountFrom(),
                 transaction.getCategory(),
-                transaction.getOccurrence(),
+                transaction.getTransactionOccurrence(),
                 transaction.getDate(),
                 transaction.getUser().getId(),
                 transaction.getBudget() != null ? transaction.getBudget().getId() : null,
@@ -89,7 +89,7 @@ public class TransactionService {
                 transaction.getBudgetFrom(),
                 transaction.getAccountFrom(),
                 transaction.getCategory(),
-                transaction.getOccurrence(),
+                transaction.getTransactionOccurrence(),
                 transaction.getDate(),
                 transaction.getUser().getId(),
                 budgetId,
@@ -116,7 +116,7 @@ public class TransactionService {
             transaction.setCategory(request.getCategory());
         }
         if (request.getTransactionOccurrence() != null) {
-            transaction.setOccurrence(request.getTransactionOccurrence());
+            transaction.setTransactionOccurrence(request.getTransactionOccurrence());
         }
         if (request.getDate() != null) {
             transaction.setDate(request.getDate());
@@ -151,7 +151,7 @@ public class TransactionService {
                 transaction.getBudgetFrom(),
                 transaction.getAccountFrom(),
                 transaction.getCategory(),
-                transaction.getOccurrence(),
+                transaction.getTransactionOccurrence(),
                 transaction.getDate(),
                 transaction.getUser().getId(),
                 budgetId,
@@ -182,7 +182,7 @@ public class TransactionService {
                     t.getBudgetFrom(),
                     t.getAccountFrom(),
                     t.getCategory(),
-                    t.getOccurrence(),
+                    t.getTransactionOccurrence(),
                     t.getDate(),
                     t.getUser().getId(),
                     t.getBudget() != null ? t.getBudget().getId() : null,

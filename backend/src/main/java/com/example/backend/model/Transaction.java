@@ -20,161 +20,162 @@ import jakarta.persistence.ManyToOne;
 @Entity
 @Table(name = "transactions")
 public class Transaction {
-    
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
 
-        @Column(name = "amount", nullable = false)
-        private BigDecimal amount;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Column(name = "description", nullable = false)
-        private String description;
+    @Column(name = "amount", nullable = false)
+    private BigDecimal amount;
 
-        @Column(name = "budget_from", nullable = true)
-        private String budgetFrom;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-        @Column(name = "account_from", nullable = false)
-        private String accountFrom;
+    @Column(name = "budget_from", nullable = true)
+    private String budgetFrom;
 
-        @Enumerated(EnumType.STRING)
-        @Column (name = "category", nullable = false)
-        private Categories category;
+    @Column(name = "account_from", nullable = false)
+    private String accountFrom;
 
-        @Enumerated(EnumType.STRING)
-        @Column (name = "transaction_occurrence", nullable = false)
-        private TransactionEvent transactionOccurrence;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private Categories category;
 
-        @Column(name = "date", nullable = false)
-        LocalDate date;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_occurrence", nullable = false)
+    private TransactionEvent transactionOccurrence;
 
-        @Column (name = "deleted_at", nullable = true)
-        LocalDate deletedAt;
+    @Column(name = "date", nullable = false)
+    LocalDate date;
 
-        @ManyToOne
-        @JoinColumn(name = "user_id", nullable = false)
-        User user;
+    @Column(name = "deleted_at", nullable = true)
+    LocalDate deletedAt;
 
-        @ManyToOne
-        @JoinColumn(name = "budget_id", nullable = true)
-        Budget budget;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
 
-        @ManyToOne
-        @JoinColumn(name = "account_id", nullable = false)
-        Account account;
+    @ManyToOne
+    @JoinColumn(name = "budget_id", nullable = true)
+    Budget budget;
 
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    Account account;
 
-        protected Transaction() {
-        }
+    protected Transaction() {
+    }
 
-        public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, TransactionEvent transactionOccurrence, LocalDate date, User user, Budget budget, Account account) {
-            // add validation logic here if needed
+    public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom,
+            Categories category, TransactionEvent transactionOccurrence, LocalDate date, User user, Budget budget,
+            Account account) {
+        // add validation logic here if needed
 
-            this.amount = amount;
-            this.description = description;
-            this.budgetFrom = budgetFrom;
-            this.accountFrom = accountFrom;
-            this.category = category;
-            this.transactionOccurrence = transactionOccurrence;
-            this.date = date;
-            this.user = user;
-            this.budget = budget;
-            this.account = account;
-            this.deletedAt = null;
-        }
+        this.amount = amount;
+        this.description = description;
+        this.budgetFrom = budgetFrom;
+        this.accountFrom = accountFrom;
+        this.category = category;
+        this.transactionOccurrence = transactionOccurrence;
+        this.date = date;
+        this.user = user;
+        this.budget = budget;
+        this.account = account;
+        this.deletedAt = null;
+    }
 
-        // Getters and setters
+    // Getters and setters
 
-        public Long getId() {
-            return id;
-        }
+    public Long getId() {
+        return id;
+    }
 
-        public BigDecimal getAmount() {
-            return amount;
-        }
+    public BigDecimal getAmount() {
+        return amount;
+    }
 
-        public void setAmount(BigDecimal amount) {
-            this.amount = amount;
-        }
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 
-        public String getDescription() {
-            return description;
-        }
+    public String getDescription() {
+        return description;
+    }
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-        public String getBudgetFrom() {
-            return budgetFrom;
-        }
+    public String getBudgetFrom() {
+        return budgetFrom;
+    }
 
-        public void setBudgetFrom(String budgetFrom) {
-            this.budgetFrom = budgetFrom;
-        }
+    public void setBudgetFrom(String budgetFrom) {
+        this.budgetFrom = budgetFrom;
+    }
 
-        public String getAccountFrom() {
-            return accountFrom;
-        }
+    public String getAccountFrom() {
+        return accountFrom;
+    }
 
-        public void setAccountFrom(String accountFrom) {
-            this.accountFrom = accountFrom;
-        }
+    public void setAccountFrom(String accountFrom) {
+        this.accountFrom = accountFrom;
+    }
 
-        public Categories getCategory() {
-            return category;
-        }
+    public Categories getCategory() {
+        return category;
+    }
 
-        public void setCategory(Categories category) {
-            this.category = category;
-        }
+    public void setCategory(Categories category) {
+        this.category = category;
+    }
 
-        public TransactionEvent getOccurrence(){
-            return transactionOccurrence;
-        }
+    public TransactionEvent getTransactionOccurrence() {
+        return transactionOccurrence;
+    }
 
-        public void setOccurrence(TransactionEvent transactionOccurrence){
-            this.transactionOccurrence = transactionOccurrence;
-        }
+    public void setTransactionOccurrence(TransactionEvent transactionOccurrence) {
+        this.transactionOccurrence = transactionOccurrence;
+    }
 
-        public LocalDate getDate() {
-            return date;
-        }
+    public LocalDate getDate() {
+        return date;
+    }
 
-        public void setDate(LocalDate date) {
-            this.date = date;
-        }
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 
-        public User getUser() {
-            return user;
-        }
+    public User getUser() {
+        return user;
+    }
 
-        public void setUser(User user) {
-            this.user = user;
-        }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-        public Budget getBudget() {
-            return budget;
-        }
+    public Budget getBudget() {
+        return budget;
+    }
 
-        public void setBudget(Budget budget) {
-            this.budget = budget;
-        }
+    public void setBudget(Budget budget) {
+        this.budget = budget;
+    }
 
-        public Account getAccount() {
-            return account;
-        }
+    public Account getAccount() {
+        return account;
+    }
 
-        public void setAccount(Account account) {
-            this.account = account;
-        }
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
-        public LocalDate getDeletedAt() {
-            return deletedAt;
-        }
+    public LocalDate getDeletedAt() {
+        return deletedAt;
+    }
 
-        public void setDeletedAt(LocalDate deletedAt) {
-            this.deletedAt = deletedAt;
-        }
+    public void setDeletedAt(LocalDate deletedAt) {
+        this.deletedAt = deletedAt;
+    }
 
 }

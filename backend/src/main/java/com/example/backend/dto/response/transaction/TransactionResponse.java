@@ -62,7 +62,7 @@ public class TransactionResponse {
         return category;
     }
 
-    public TransactionEvent getOccurrence(){
+    public TransactionEvent getTransactionOccurrence(){
         return transactionOccurrence;
     }
 
