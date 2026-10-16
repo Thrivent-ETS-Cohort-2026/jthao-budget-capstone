@@ -6,10 +6,8 @@ import { useUser } from "@/app/context/UserContext";
 import EmptyStateDashboard from "@/app/components/EmptyStateDashboard";
 import { Account } from "@/app/types/account";
 import { Budget } from "@/app/types/budget";
-import { Transaction } from "@/app/types/transaction";
-import { getAccounts } from "@/app/lib/api/accounts";
+import { getAccounts, deleteAccount } from "@/app/lib/api/accounts";
 import { getBudgets } from "@/app/lib/api/budgets";
-import { getTransactions } from "@/app/lib/api/transactions";
 
 export default function Dashboard() {
     const router = useRouter();
@@ -18,6 +16,7 @@ export default function Dashboard() {
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [budgets, setBudgets] = useState<Budget[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
     useEffect(() => {
         async function fetchDashboardData() {
@@ -43,6 +42,22 @@ export default function Dashboard() {
         fetchDashboardData();
     }, [user?.id]);
 
+    const handleDeleteAccount = async (id: number) => {
+        if (!confirm("Are you sure you want to delete this account?")) {
+            return;
+        }
+
+        setErrorMessage("");
+
+        try {
+            await deleteAccount(id);
+            setAccounts((prevAccounts) => prevAccounts.filter((account) => account.id !== id));
+        } catch (error) {
+            console.error("Error deleting account:", error);
+            setErrorMessage((error as Error).message || "Failed to delete account.");
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen bg-gray-50">
@@ -51,27 +66,27 @@ export default function Dashboard() {
         );
     }
 
-    // if (!user) {
-    //     return (
-    //         <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
-    //             <p className="text-gray-600 mb-4">Please log in to view your dashboard.</p>
-    //             <button
-    //                 onClick={() => router.push("/")}
-    //                 className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-    //             >
-    //                 Go to home page
-    //             </button>
-    //         </div>
-    //     );
-    // }
+    if (!user) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+                <p className="text-gray-600 mb-4">Please log in to view your dashboard.</p>
+                <button
+                    onClick={() => router.push("/")}
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                >
+                    Go to home page
+                </button>
+            </div>
+        );
+    }
 
-    // if (accounts.length === 0) {
-    //     return (
-    //         <div className="mx-auto m-5">
-    //             <EmptyStateDashboard onCreateAccount={() => router.push("/account/new")} />
-    //         </div>
-    //     );
-    // }
+    if (accounts.length === 0) {
+        return (
+            <div className="mx-auto m-5">
+                <EmptyStateDashboard onCreateAccount={() => router.push("/account/new")} />
+            </div>
+        );
+    }
 
     return (
         <div className="mx-auto p-6 space-y-6">
@@ -98,6 +113,13 @@ export default function Dashboard() {
                     </button>
                 </div>
             </div>
+
+            {errorMessage && (
+                <div className="px-5">
+                    <p className="text-red-500 text-sm">{errorMessage}</p>
+                </div>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
                 <div className="border border-gray-300 p-4 rounded">
                     <div className="flex justify-between items-center mb-3 border-b pb-2">
@@ -108,9 +130,25 @@ export default function Dashboard() {
                     </div>
                     <ul className="space-y-2 text-sm text-gray-600">
                         {accounts.map((account) => (
-                            <li key={account.id} className="flex justify-between">
-                                <span>{account.accountName}</span>
-                                <span className="text-gray-400">({account.accountType})</span>
+                            <li key={account.id} className="flex justify-between items-center">
+                                <div>
+                                    <span>{account.accountName}</span>{" "}
+                                    <span className="text-gray-400">({account.accountType})</span>
+                                </div>
+                                <div className="space-x-2">
+                                    <button
+                                        onClick={() => router.push(`/account/${account.id}/update`)}
+                                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteAccount(account.id)}
+                                        className="bg-red-600 text-white p-2 rounded hover:bg-red-700"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </li>
                         ))}
                     </ul>
