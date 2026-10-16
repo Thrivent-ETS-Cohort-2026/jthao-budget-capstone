@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import com.example.backend.types.Categories;
 import com.example.backend.types.TransactionEvent;
+import com.example.backend.validation.TransactionValidation;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -69,7 +70,7 @@ public class Transaction {
     public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom,
             Categories category, TransactionEvent transactionOccurrence, LocalDate date, User user, Budget budget,
             Account account) {
-        // add validation logic here if needed
+        TransactionValidation.validate(amount, category, transactionOccurrence, date, user, account);
 
         this.amount = amount;
         this.description = description;

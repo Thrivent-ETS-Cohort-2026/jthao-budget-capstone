@@ -40,7 +40,6 @@ public class User {
     }
 
     public User(String firstName, String lastName, String email, String password, String phoneNumber) {
-        // add validation logic here if needed
         UserValidator.validateUser(firstName, lastName, email, phoneNumber, password);
         
         this.firstName = firstName;

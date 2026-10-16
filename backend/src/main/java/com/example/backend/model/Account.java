@@ -1,6 +1,7 @@
 package com.example.backend.model;
 
 import com.example.backend.types.AccountType;
+import com.example.backend.validation.AccountValidation;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,13 +33,11 @@ public class Account {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-
     protected Account() {
     }
 
     public Account(AccountType accountType, String accountName, User user) {
-        // add validation logic here if needed
-
+       AccountValidation.validateAccount(accountType, accountName, user);
         this.accountType = accountType;
         this.accountName = accountName;
         this.user = user;

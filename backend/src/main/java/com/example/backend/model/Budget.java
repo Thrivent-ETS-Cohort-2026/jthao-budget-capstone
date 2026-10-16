@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.example.backend.types.TransactionEvent;
 import com.example.backend.types.Categories;
+import com.example.backend.validation.BudgetValidation;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 
 
 @Entity
@@ -50,8 +52,7 @@ public class Budget {
     }
 
     public Budget(BigDecimal amount, String description, TransactionEvent targetPeriod, Categories category, User user) {
-        // add validation logic here if needed
-
+        BudgetValidation.validate(amount, targetPeriod, category, user);
         this.amount = amount;
         this.description = description;
         this.targetPeriod = targetPeriod;
