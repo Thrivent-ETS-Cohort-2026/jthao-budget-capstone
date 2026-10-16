@@ -2,14 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
 import { validateSignUp } from "@/app/lib/userValidation";
 import { useUser } from "@/app/context/UserContext";
-
 import { UserFormRequest, User } from "@/app/types/user";
-
-import { createUser } from "@/app/lib/api/user"
-
+import { createUser } from "@/app/lib/api/user";
 
 export default function SignUpPage() {
     const [email, setEmail] = useState<string>("");
@@ -18,18 +14,11 @@ export default function SignUpPage() {
     const [lastName, setLastName] = useState<string>("");
     const [phoneNumber, setPhoneNumber] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [userFormRequest, setUserFormRequest] = useState<UserFormRequest>({
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        phoneNumber: ""
-    });
 
     const router = useRouter();
     const { setUser } = useUser();
 
-    async function handleSignUp(event: React.SubmitEvent<HTMLFormElement>) {
+    async function handleSignUp(event: React.SyntheticEvent) {
         event.preventDefault();
 
         const validationMessage = validateSignUp(email, password, firstName, lastName, phoneNumber);
@@ -37,31 +26,28 @@ export default function SignUpPage() {
             setErrorMessage(validationMessage);
             return;
         }
-        setUserFormRequest({
-            email: email,
-            password: password,
-            firstName: firstName,
-            lastName: lastName,
-            phoneNumber: phoneNumber
-        });
-        console.log("From sign up page" + userFormRequest);
-        // TODO: check why first sign up isn't working, 2nd time will work.
-        const user: User = await createUser(userFormRequest);
-        setUser(user);
-        setErrorMessage("");
-        setEmail("");
-        setPassword("");
-        setFirstName("");
-        setLastName("");
-        setPhoneNumber("");
-        setUserFormRequest({
-            email: "",
-            password: "",
-            firstName: "",
-            lastName: "",
-            phoneNumber: ""
-        });
-        router.push("../dashboard");
+
+        const requestData: UserFormRequest = {
+            email,
+            password,
+            firstName,
+            lastName,
+            phoneNumber
+        };
+
+        try {
+            const user: User = await createUser(requestData);
+            setUser(user);
+            setErrorMessage("");
+            setEmail("");
+            setPassword("");
+            setFirstName("");
+            setLastName("");
+            setPhoneNumber("");
+            router.push("/dashboard");
+        } catch (error) {
+            setErrorMessage((error as Error).message || "Failed to create account.");
+        }
     }
 
     return (
@@ -86,6 +72,7 @@ export default function SignUpPage() {
                         className="w-full p-2 border border-gray-300 rounded"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                 </div>
                 <div>
@@ -96,6 +83,7 @@ export default function SignUpPage() {
                         className="w-full p-2 border border-gray-300 rounded"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                 </div>
                 <div>
@@ -106,6 +94,7 @@ export default function SignUpPage() {
                         className="w-full p-2 border border-gray-300 rounded"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
+                        required
                     />
                 </div>
                 <div>
@@ -116,6 +105,7 @@ export default function SignUpPage() {
                         className="w-full p-2 border border-gray-300 rounded"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
+                        required
                     />
                 </div>
                 <div>
@@ -126,6 +116,7 @@ export default function SignUpPage() {
                         className="w-full p-2 border border-gray-300 rounded"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200">

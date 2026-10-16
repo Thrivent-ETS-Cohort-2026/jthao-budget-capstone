@@ -32,7 +32,7 @@ export default function LoginPage() {
         setErrorMessage("");
         setEmail("");
         setPassword("");
-        router.push("../dashboard");
+        router.push("/dashboard");
     }
 
     return (
