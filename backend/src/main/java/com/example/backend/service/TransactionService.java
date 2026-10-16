@@ -122,7 +122,25 @@ public class TransactionService {
         if (request.getDate() != null) {
             transaction.setDate(request.getDate());
         }
+        if (request.getAccountId() != null) {
+            Account account = accountRepository.findById(request.getAccountId())
+                    .orElseThrow(
+                            () -> new IllegalArgumentException("Account not found with id: " + request.getAccountId()));
+            transaction.setAccount(account);
+        }
+        if (request.getBudgetId() != null) {
+            Budget budget = budgetRepository.findById(request.getBudgetId())
+                    .orElseThrow(
+                            () -> new IllegalArgumentException("Budget not found with id: " + request.getBudgetId()));
+            transaction.setBudget(budget);
+            transaction.setBudgetFrom(request.getBudgetFrom());
+        } else {
+            transaction.setBudget(null);
+            transaction.setBudgetFrom(null);
+        }
+
         transactionRepository.save(transaction);
+
         Long budgetId = null;
         if (transaction.getBudget() != null) {
             budgetId = transaction.getBudget().getId();
@@ -149,39 +167,6 @@ public class TransactionService {
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + id));
         LocalDate deletedDate = LocalDate.now();
         transaction.setDeletedAt(deletedDate);
-    }
-
-    @Transactional(readOnly = true)
-    public String exportTransactions(Long id) {
-        List<Transaction> transactionsList = transactionRepository.findByUserIdAndDeletedAtIsNullOrderByDateDesc(id);
-        StringBuilder csv = new StringBuilder();
-        csv.append("Date,Amount,Description,Budget_From, Account_From,Category, Transaction_Occurrence\n");
-
-        for (Transaction transaction : transactionsList) {
-            csv.append(transaction.getDate()).append(",");
-            csv.append(transaction.getAmount()).append(",");
-            csv.append(escapeCsv(transaction.getDescription())).append(",");
-            csv.append(transaction.getBudgetFrom()).append(",");
-            csv.append(transaction.getAccountFrom()).append(",");
-            csv.append(transaction.getCategory()).append("\n");
-        }
-        return csv.toString();
-    }
-
-    private String escapeCsv(String value) {
-        if (value == null) {
-            return "";
-        }
-        return "\"" + value.replace("\"", "\"\"") + "\"";
-    }
-
-    public void getFilteredTransaction(
-            Long userId,
-            LocalDate starDate,
-            LocalDate endDate,
-            Categories category,
-            AccountType accountType) {
-        transactionRepository.findById(userId);
     }
 
     public List<TransactionResponse> getTransactionsByUserId(Long userId) {

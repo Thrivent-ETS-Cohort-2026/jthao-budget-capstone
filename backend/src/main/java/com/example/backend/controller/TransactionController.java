@@ -55,18 +55,6 @@ public class TransactionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/export")
-    public ResponseEntity<byte[]> exportTransactions(Long userId) {
-        byte[] csv = transactionService.exportTransactions(userId)
-                .getBytes(StandardCharsets.UTF_8);
-        return ResponseEntity.ok()
-                .header(
-                        HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"transactions.csv\"")
-                .contentType(MediaType.parseMediaType("text/csv"))
-                .body(csv);
-    }
-
     @GetMapping("/{id}/all")
     public ResponseEntity<List<TransactionResponse>> getTransactionsByUserId(@PathVariable Long id) {
         return ResponseEntity.ok(transactionService.getTransactionsByUserId(id));
