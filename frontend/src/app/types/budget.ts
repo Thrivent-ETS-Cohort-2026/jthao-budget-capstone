@@ -11,11 +11,4 @@ export interface Budget {
     userId: number;
 }
 
-export interface CreateBudgetRequest {
-    amount: number;
-    description: string;
-    targetPeriod: TransactionEvents;
-    isEnabled: boolean | null;
-    category: Categories;
-    userId: number;
-}
+export type BudgetRequest = Partial<Omit<Budget, "id">>;

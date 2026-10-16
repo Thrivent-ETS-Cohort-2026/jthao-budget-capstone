@@ -34,12 +34,12 @@ public class BudgetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBudgetById(@PathVariable Long id) {
+    public ResponseEntity<BudgetResponse> getBudgetById(@PathVariable Long id) {
         return ResponseEntity.ok(budgetService.getBudgetById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBudget(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBudget(@PathVariable Long id) {
         budgetService.deleteBudget(id);
         return ResponseEntity.noContent().build();
     }
