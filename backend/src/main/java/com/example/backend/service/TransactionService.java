@@ -24,16 +24,27 @@ public class TransactionService {
     private final UserRepository userRepository;
     private final BudgetRepository budgetRepository;
     private final AccountRepository accountRepository;
+    private final SessionService sessionService;
 
     public TransactionService(TransactionRepository transactionRepository, UserRepository userRepository,
-            BudgetRepository budgetRepository, AccountRepository accountRepository) {
+            BudgetRepository budgetRepository, AccountRepository accountRepository, SessionService sessionService) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.budgetRepository = budgetRepository;
         this.accountRepository = accountRepository;
+        this.sessionService = sessionService;
     }
 
-    public TransactionResponse createTransaction(CreateTransactionRequest request) {
+    private void validateSession(String sessionUuid, Long expectedUserId) {
+        Long tokenUserId = sessionService.getUserIdBySession(sessionUuid);
+        if (tokenUserId == null || !tokenUserId.equals(expectedUserId)) {
+            throw new SecurityException("Invalid or expired session token.");
+        }
+    }
+
+    public TransactionResponse createTransaction(String sessionUuid, CreateTransactionRequest request) {
+        validateSession(sessionUuid, request.getUserId());
+
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + request.getUserId()));
 
@@ -75,9 +86,12 @@ public class TransactionService {
                 transaction.getDeletedAt());
     }
 
-    public TransactionResponse getTransaction(Long id) {
+    public TransactionResponse getTransaction(Long id, String sessionUuid) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + id));
+        
+        validateSession(sessionUuid, transaction.getUser().getId());
+
         Long budgetId = null;
         if (transaction.getBudget() != null) {
             budgetId = transaction.getBudget().getId();
@@ -97,9 +111,12 @@ public class TransactionService {
                 transaction.getDeletedAt());
     }
 
-    public TransactionResponse updateTransaction(Long id, CreateTransactionRequest request) {
+    public TransactionResponse updateTransaction(Long id, String sessionUuid, CreateTransactionRequest request) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + id));
+
+        validateSession(sessionUuid, transaction.getUser().getId());
+
         if (request.getAmount() != null) {
             transaction.setAmount(request.getAmount());
         }
@@ -160,14 +177,19 @@ public class TransactionService {
     }
 
     @Transactional
-    public void softDeleteTransaction(Long id) {
+    public void softDeleteTransaction(Long id, String sessionUuid) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + id));
+
+        validateSession(sessionUuid, transaction.getUser().getId());
+
         LocalDate deletedDate = LocalDate.now();
         transaction.setDeletedAt(deletedDate);
     }
 
-    public List<TransactionResponse> getTransactionsByUserId(Long userId) {
+    public List<TransactionResponse> getTransactionsByUserId(Long userId, String sessionUuid) {
+        validateSession(sessionUuid, userId);
+
         List<Transaction> transactionList = transactionRepository.findByUserId(userId);
         List<TransactionResponse> transactionResponseList = new ArrayList<>();
 

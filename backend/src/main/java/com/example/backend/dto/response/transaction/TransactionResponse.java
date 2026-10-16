@@ -20,7 +20,6 @@ public class TransactionResponse {
     private Long accountId;
     private LocalDate deletedAt;
 
-
     public TransactionResponse(Long id, BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, TransactionEvent transactionOccurrence, LocalDate date, Long userId, Long budgetId, Long accountId, LocalDate deletedAt) {
         this.id = id;
         this.amount = amount;
@@ -81,5 +80,8 @@ public class TransactionResponse {
     public Long getAccountId() {
         return accountId;
     }
-    
+
+    public LocalDate getDeletedAt() {
+        return deletedAt;
+    }
 }

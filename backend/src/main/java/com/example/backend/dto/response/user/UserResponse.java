@@ -7,14 +7,16 @@ public class UserResponse {
     private String email;
     private String phoneNumber;
     private Boolean isActive;
+    private String sessionUuid;
 
-    public UserResponse(Long id, String firstName, String lastName, String email, String phoneNumber, Boolean isActive) {
+    public UserResponse(Long id, String firstName, String lastName, String email, String phoneNumber, Boolean isActive, String sessionUuid) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.isActive = isActive;
+        this.sessionUuid = sessionUuid;
     }
 
     // Getters
@@ -41,5 +43,10 @@ public class UserResponse {
 
     public Boolean getIsActive() {
         return isActive;
-     }
+    }
+
+    public String getSessionUuid() {
+        return sessionUuid;
+    }
+    
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.example.backend.dto.request.user.CreateUserRequest;
 import com.example.backend.dto.request.user.LoginRequest;
@@ -31,10 +32,10 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(request));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
-    }
+    // @GetMapping("/{id}")
+    // public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+    //     return ResponseEntity.ok(userService.getUserById(id));
+    // }
 
     @PostMapping("/login")
     public ResponseEntity<UserResponse> getUserByEmailAndPassword(@RequestBody LoginRequest request) {
@@ -42,7 +43,11 @@ public class UserController {
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody CreateUserRequest request) {
-        return ResponseEntity.ok(userService.updateUser(id, request));
+    public ResponseEntity<UserResponse> updateUser(
+        @PathVariable Long id, 
+        @RequestHeader("X-Session-Token") String sessionUuid,
+        @RequestBody CreateUserRequest request
+    ) {
+        return ResponseEntity.ok(userService.updateUser(id, sessionUuid, request));
     }
 }

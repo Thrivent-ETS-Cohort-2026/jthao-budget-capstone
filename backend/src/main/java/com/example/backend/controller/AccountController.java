@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,30 +30,40 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<AccountResponse> createAccount(@RequestBody CreateAccountRequest request) {
-        AccountResponse response = accountService.createAccount(request);
+    public ResponseEntity<AccountResponse> createAccount(
+            @RequestHeader("X-Session-Token") String sessionUuid,
+            @RequestBody CreateAccountRequest request) {
+        AccountResponse response = accountService.createAccount(sessionUuid, request);
         return ResponseEntity.status(201).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountResponse> getAccountById(@PathVariable Long id) {
-        return ResponseEntity.ok(accountService.getAccountById(id));
+    public ResponseEntity<AccountResponse> getAccountById(
+            @PathVariable Long id,
+            @RequestHeader("X-Session-Token") String sessionUuid) {
+        return ResponseEntity.ok(accountService.getAccountById(id, sessionUuid));
     }
 
     @GetMapping("/{id}/all")
-    public ResponseEntity<List<AccountResponse>> getAccountsByUserId(@PathVariable Long id) {
-        return ResponseEntity.ok(accountService.getAllAccountsByUserId(id));
+    public ResponseEntity<List<AccountResponse>> getAccountsByUserId(
+            @PathVariable Long id,
+            @RequestHeader("X-Session-Token") String sessionUuid) {
+        return ResponseEntity.ok(accountService.getAllAccountsByUserId(id, sessionUuid));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
-        accountService.deleteAccount(id);
+    public ResponseEntity<Void> deleteAccount(
+            @PathVariable Long id,
+            @RequestHeader("X-Session-Token") String sessionUuid) {
+        accountService.deleteAccount(id, sessionUuid);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AccountResponse> updateAccount(@PathVariable Long id, @RequestBody UpdateAccountRequest request) {
-        return ResponseEntity.ok(accountService.updateAccount(id, request));
+    public ResponseEntity<AccountResponse> updateAccount(
+            @PathVariable Long id,
+            @RequestHeader("X-Session-Token") String sessionUuid,
+            @RequestBody UpdateAccountRequest request) {
+        return ResponseEntity.ok(accountService.updateAccount(id, sessionUuid, request));
     }
-
 }

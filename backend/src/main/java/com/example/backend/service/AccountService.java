@@ -19,15 +19,26 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
+    private final SessionService sessionService;
 
     public AccountService(AccountRepository accountRepository, UserRepository userRepository,
-            TransactionRepository transactionRepository) {
+            TransactionRepository transactionRepository, SessionService sessionService) {
         this.accountRepository = accountRepository;
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
+        this.sessionService = sessionService;
     }
 
-    public AccountResponse createAccount(CreateAccountRequest request) {
+    private void validateSession(String sessionUuid, Long expectedUserId) {
+        Long tokenUserId = sessionService.getUserIdBySession(sessionUuid);
+        if (tokenUserId == null || !tokenUserId.equals(expectedUserId)) {
+            throw new SecurityException("Invalid or expired session token.");
+        }
+    }
+
+    public AccountResponse createAccount(String sessionUuid, CreateAccountRequest request) {
+        validateSession(sessionUuid, request.getUserId());
+
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + request.getUserId()));
         Account account = new Account(
@@ -44,9 +55,12 @@ public class AccountService {
         return response;
     }
 
-    public AccountResponse getAccountById(Long id) {
+    public AccountResponse getAccountById(Long id, String sessionUuid) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + id));
+
+        validateSession(sessionUuid, account.getUser().getId());
+
         return new AccountResponse(
                 account.getId(),
                 account.getAccountName(),
@@ -54,7 +68,9 @@ public class AccountService {
                 account.getUser().getId());
     }
 
-    public List<AccountResponse> getAllAccountsByUserId(Long userId) {
+    public List<AccountResponse> getAllAccountsByUserId(Long userId, String sessionUuid) {
+        validateSession(sessionUuid, userId);
+
         List<Account> accountList = accountRepository.findByUserId(userId);
         List<AccountResponse> responseList = new ArrayList<>();
         for (Account account : accountList) {
@@ -68,9 +84,12 @@ public class AccountService {
         return responseList;
     }
 
-    public void deleteAccount(Long id) {
+    public void deleteAccount(Long id, String sessionUuid) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + id));
+
+        validateSession(sessionUuid, account.getUser().getId());
+
         boolean hasTransactions = transactionRepository.existsByAccountId(id);
 
         if (hasTransactions) {
@@ -79,9 +98,12 @@ public class AccountService {
         accountRepository.delete(account);
     }
 
-    public AccountResponse updateAccount(Long id, UpdateAccountRequest request) {
+    public AccountResponse updateAccount(Long id, String sessionUuid, UpdateAccountRequest request) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + id));
+
+        validateSession(sessionUuid, account.getUser().getId());
+
         if (request.getAccountName() != null) {
             account.setAccountName(request.getAccountName());
         }
@@ -97,5 +119,4 @@ public class AccountService {
 
         return response;
     }
-
 }

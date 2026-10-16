@@ -21,31 +21,43 @@ public class BudgetService {
     private final BudgetRepository budgetRepository;
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
+    private final SessionService sessionService;
 
-    public BudgetService(BudgetRepository budgetRepository, UserRepository userRepository, TransactionRepository transactionRepository) {
+    public BudgetService(BudgetRepository budgetRepository, UserRepository userRepository, 
+            TransactionRepository transactionRepository, SessionService sessionService) {
         this.budgetRepository = budgetRepository;
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
+        this.sessionService = sessionService;
+    }
+
+    private void validateSession(String sessionUuid, Long expectedUserId) {
+        Long tokenUserId = sessionService.getUserIdBySession(sessionUuid);
+        if (tokenUserId == null || !tokenUserId.equals(expectedUserId)) {
+            throw new SecurityException("Invalid or expired session token.");
+        }
     }
 
     @Transactional
-    public BudgetResponse createBudget(CreateBudgetRequest request) {
+    public BudgetResponse createBudget(String sessionUuid, CreateBudgetRequest request) {
+        validateSession(sessionUuid, request.getUserId());
+
         User user = userRepository.findById(request.getUserId())
             .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + request.getUserId()));
+            
         budgetRepository.findByCategoryAndTargetPeriodAndUserId(request.getCategory(), request.getTargetPeriod(), user.getId())
-        .ifPresent(existingBudget -> {
-            if (existingBudget.getIsEnabled() == true) {
-                existingBudget.setIsEnabled(false);
-            }
-        });
+            .ifPresent(existingBudget -> {
+                if (existingBudget.getIsEnabled() == true) {
+                    existingBudget.setIsEnabled(false);
+                }
+            });
         
         Budget newBudget = new Budget(
-        request.getAmount(),
-        request.getDescription(),
-        request.getTargetPeriod(),
-        // request.getIsActive(),
-        request.getCategory(),
-        user
+            request.getAmount(),
+            request.getDescription(),
+            request.getTargetPeriod(),
+            request.getCategory(),
+            user
         );
         budgetRepository.save(newBudget);
 
@@ -60,10 +72,12 @@ public class BudgetService {
         );
     }
 
-    // Get budget
-    public BudgetResponse getBudgetById(Long id) {
+    public BudgetResponse getBudgetById(Long id, String sessionUuid) {
         Budget budget = budgetRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Budget not found with id: " + id));
+            
+        validateSession(sessionUuid, budget.getUser().getId());
+
         return new BudgetResponse(
             budget.getId(),
             budget.getAmount(),
@@ -75,11 +89,13 @@ public class BudgetService {
         );
     }
 
-    // Delete budget method
     @Transactional
-    public void deleteBudget(Long id) {
+    public void deleteBudget(Long id, String sessionUuid) {
         Budget budget = budgetRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Budget not found with id: " + id));
+            
+        validateSession(sessionUuid, budget.getUser().getId());
+
         List<Transaction> transactionList = transactionRepository.findByUserIdAndBudgetId(budget.getUser().getId(), budget.getId());
         for (Transaction transaction : transactionList) {
             transaction.setBudget(null);
@@ -87,10 +103,11 @@ public class BudgetService {
         budgetRepository.delete(budget);
     }
 
-    // Update budget method
-    public BudgetResponse updateBudget(Long id, UpdateBudgetRequest request) {
+    public BudgetResponse updateBudget(Long id, String sessionUuid, UpdateBudgetRequest request) {
         Budget budget = budgetRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Budget not found with id: " + id));
+            
+        validateSession(sessionUuid, budget.getUser().getId());
         
         if (request.getAmount() != null) {
             budget.setAmount(request.getAmount());
@@ -121,7 +138,9 @@ public class BudgetService {
         );
     }
 
-    public List<BudgetResponse> getBudgetByUserId(Long userId) {
+    public List<BudgetResponse> getBudgetByUserId(Long userId, String sessionUuid) {
+        validateSession(sessionUuid, userId);
+
         List<Budget> budgetList = budgetRepository.findByUserId(userId);
         List<BudgetResponse> budgetResponseList = new ArrayList<>();
         for (Budget b : budgetList) {
@@ -138,6 +157,4 @@ public class BudgetService {
         }
         return budgetResponseList;
     }
-
-
 }
