@@ -24,3 +24,11 @@ export type AccountType =
     "CREDIT" |
     "INVESTMENT" |
     "OTHER";
+
+    export const ACCOUNT_TYPES: AccountType[] = [
+    "CHECKING",
+    "SAVINGS",
+    "CREDIT",
+    "INVESTMENT",
+    "OTHER",
+];
