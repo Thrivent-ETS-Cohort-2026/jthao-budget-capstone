@@ -104,6 +104,15 @@ function UpdateTransactionForm() {
 
         try {
             await updateTransaction(transactionId, requestData);
+            
+            setDescription("");
+            setAmount("");
+            setDate("");
+            setCategory("GROCERIES");
+            setTransactionOccurrence("ONCE");
+            setAccountId("");
+            setAccountFrom("");
+            setBudgetId("");
             router.push("/transactions");
         } catch (error) {
             console.error("Error updating transaction:", error);
