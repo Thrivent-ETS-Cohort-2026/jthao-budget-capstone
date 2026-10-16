@@ -17,8 +17,6 @@ import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.BudgetRepository;
 import com.example.backend.repository.TransactionRepository;
 import com.example.backend.repository.UserRepository;
-import com.example.backend.types.AccountType;
-import com.example.backend.types.Categories;
 
 @Service
 public class TransactionService {
@@ -61,7 +59,8 @@ public class TransactionService {
                 budget,
                 account);
         transactionRepository.save(transaction);
-        TransactionResponse response = new TransactionResponse(
+
+        return new TransactionResponse(
                 transaction.getId(),
                 transaction.getAmount(),
                 transaction.getDescription(),
@@ -72,8 +71,8 @@ public class TransactionService {
                 transaction.getDate(),
                 transaction.getUser().getId(),
                 transaction.getBudget() != null ? transaction.getBudget().getId() : null,
-                transaction.getAccount().getId());
-        return response;
+                transaction.getAccount().getId(),
+                transaction.getDeletedAt());
     }
 
     public TransactionResponse getTransaction(Long id) {
@@ -83,7 +82,7 @@ public class TransactionService {
         if (transaction.getBudget() != null) {
             budgetId = transaction.getBudget().getId();
         }
-        TransactionResponse response = new TransactionResponse(
+        return new TransactionResponse(
                 transaction.getId(),
                 transaction.getAmount(),
                 transaction.getDescription(),
@@ -94,8 +93,8 @@ public class TransactionService {
                 transaction.getDate(),
                 transaction.getUser().getId(),
                 budgetId,
-                transaction.getAccount().getId());
-        return response;
+                transaction.getAccount().getId(),
+                transaction.getDeletedAt());
     }
 
     public TransactionResponse updateTransaction(Long id, CreateTransactionRequest request) {
@@ -145,8 +144,7 @@ public class TransactionService {
         if (transaction.getBudget() != null) {
             budgetId = transaction.getBudget().getId();
         }
-
-        TransactionResponse response = new TransactionResponse(
+        return new TransactionResponse(
                 transaction.getId(),
                 transaction.getAmount(),
                 transaction.getDescription(),
@@ -157,8 +155,8 @@ public class TransactionService {
                 transaction.getDate(),
                 transaction.getUser().getId(),
                 budgetId,
-                transaction.getAccount().getId());
-        return response;
+                transaction.getAccount().getId(),
+                transaction.getDeletedAt());
     }
 
     @Transactional
@@ -172,7 +170,11 @@ public class TransactionService {
     public List<TransactionResponse> getTransactionsByUserId(Long userId) {
         List<Transaction> transactionList = transactionRepository.findByUserId(userId);
         List<TransactionResponse> transactionResponseList = new ArrayList<>();
+
         for (Transaction t : transactionList) {
+            if (t.getDeletedAt() != null) {
+                continue;
+            }
             TransactionResponse response = new TransactionResponse(
                     t.getId(),
                     t.getAmount(),
@@ -184,10 +186,10 @@ public class TransactionService {
                     t.getDate(),
                     t.getUser().getId(),
                     t.getBudget() != null ? t.getBudget().getId() : null,
-                    t.getAccount().getId());
+                    t.getAccount().getId(),
+                    t.getDeletedAt());
             transactionResponseList.add(response);
         }
         return transactionResponseList;
     }
-
 }

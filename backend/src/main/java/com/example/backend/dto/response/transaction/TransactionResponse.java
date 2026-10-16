@@ -6,9 +6,6 @@ import java.time.LocalDate;
 import com.example.backend.types.Categories;
 import com.example.backend.types.TransactionEvent;
 
-/**
- * TransactionResponse
- */
 public class TransactionResponse {
     private Long id;
     private BigDecimal amount;
@@ -21,8 +18,10 @@ public class TransactionResponse {
     private Long userId;
     private Long budgetId;
     private Long accountId;
+    private LocalDate deletedAt;
 
-    public TransactionResponse(Long id, BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, TransactionEvent transactionOccurrence, LocalDate date, Long userId, Long budgetId, Long accountId) {
+
+    public TransactionResponse(Long id, BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, TransactionEvent transactionOccurrence, LocalDate date, Long userId, Long budgetId, Long accountId, LocalDate deletedAt) {
         this.id = id;
         this.amount = amount;
         this.description = description;
@@ -34,6 +33,7 @@ public class TransactionResponse {
         this.userId = userId;
         this.budgetId = budgetId;
         this.accountId = accountId;
+        this.deletedAt = deletedAt;
     }
 
     // Getters
