@@ -68,7 +68,6 @@ export async function getTransaction(id: number): Promise<Transaction> {
         if (!response.ok) {
             throw new Error("Failed to get transactions");
         }
-        console.log("got a transaction")
         const transaction: Transaction = await response.json();
         return transaction;
     } catch (error) {

@@ -9,7 +9,7 @@ import { getAccount, updateAccount } from "@/app/lib/api/accounts";
 function UpdateAccountForm() {
     const router = useRouter();
     const params = useParams();
-    const accountId: number = Number(params.id);
+    const accountId: number = Number(params.accountId);
     const { user } = useUser();
 
     const [accountName, setAccountName] = useState<string>("");

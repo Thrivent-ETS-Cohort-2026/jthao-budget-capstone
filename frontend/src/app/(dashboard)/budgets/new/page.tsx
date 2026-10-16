@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 import { BudgetRequest } from "@/app/types/budget";
-import { getBudget, updateBudget } from "@/app/lib/api/budgets";
+import { getBudget, createBudget } from "@/app/lib/api/budgets";
 import { CATEGORIES, Categories } from "@/app/types/categories";
 import { TRANSACTIONEVENTS, TransactionEvents } from "@/app/types/transaction";
 
@@ -69,7 +69,7 @@ function UpdateBudgetForm() {
         );
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
         setErrorMessage("");
 
@@ -83,7 +83,7 @@ function UpdateBudgetForm() {
         };
 
         try {
-            await updateBudget(budgetId, requestData);
+            await createBudget(requestData);
             router.push("/budgets");
         } catch (error) {
             setErrorMessage((error as Error).message || "Failed to update budget.");
@@ -92,7 +92,7 @@ function UpdateBudgetForm() {
 
     return (
         <div className="mx-auto p-6 mt-10 border border-gray-300 rounded max-w-xl">
-            <h1 className="text-xl font-bold text-gray-800 mb-4">Edit Budget</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-4">Create Budget</h1>
             {errorMessage && (
                 <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
             )}
