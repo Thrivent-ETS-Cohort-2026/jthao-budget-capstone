@@ -25,7 +25,7 @@ function UpdateTransactionForm() {
     const [accountId, setAccountId] = useState<number | "">("");
     const [accountFrom, setAccountFrom] = useState<string>("");
     const [budgetId, setBudgetId] = useState<number | "">("");
-    const [transaction, setTransaction] = useState<Transaction>();
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [budgets, setBudgets] = useState<Budget[]>([]);
@@ -46,19 +46,19 @@ function UpdateTransactionForm() {
                 const budgetRes: Budget[] = await getBudgets(user.id);
                 setBudgets(budgetRes);
 
-                const txRes: Transaction = await getTransaction(transactionId);
-                setTransaction(txRes);
+                const transactionResp: Transaction = await getTransaction(transactionId);
 
-                setDescription(txRes.description);
-                setAmount(txRes.amount.toString());
-                setDate(txRes.date);
-                setCategory(txRes.category);
-                setTransactionOccurrence(txRes.transactionOccurrence);
-                setAccountId(txRes.accountId);
-                setAccountFrom(txRes.accountFrom);
-                setBudgetId(txRes.budgetId ?? "");
+                setDescription(transactionResp.description);
+                setAmount(transactionResp.amount.toString());
+                setDate(transactionResp.date);
+                setCategory(transactionResp.category);
+                setTransactionOccurrence(transactionResp.transactionOccurrence);
+                setAccountId(transactionResp.accountId);
+                setAccountFrom(transactionResp.accountFrom);
+                setBudgetId(transactionResp.budgetId ?? "");
             } catch (error) {
                 console.error("Failed to fetch update data:", error);
+                setErrorMessage((error as Error).message || "Failed to load transaction data.");
             } finally {
                 setLoading(false);
             }
@@ -79,6 +79,7 @@ function UpdateTransactionForm() {
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
+        setErrorMessage("");
 
         let budgetFromValue: string | null = null;
         if (budgetId !== "") {
@@ -106,7 +107,7 @@ function UpdateTransactionForm() {
             router.push("/transactions");
         } catch (error) {
             console.error("Error updating transaction:", error);
-            alert("Failed to update transaction.");
+            setErrorMessage((error as Error).message || "Failed to update transaction.");
         }
     };
 
@@ -130,7 +131,11 @@ function UpdateTransactionForm() {
                     Back to Transactions
                 </button>
             </div>
-
+            {errorMessage && (
+                <div className="px-6">
+                    <p className="text-red-500 text-sm">{errorMessage}</p>
+                </div>
+            )}
             <form onSubmit={handleSubmit} className="border border-gray-300 p-6 rounded space-y-4">
                 <div>
                     <label className="text-gray-700 mb-1">Description</label>
@@ -142,7 +147,6 @@ function UpdateTransactionForm() {
                         required
                     />
                 </div>
-
                 <div>
                     <label className="text-gray-700 mb-1">Amount</label>
                     <input
@@ -154,7 +158,6 @@ function UpdateTransactionForm() {
                         required
                     />
                 </div>
-
                 <div>
                     <label className="text-gray-700 mb-1">Date</label>
                     <input
@@ -197,7 +200,6 @@ function UpdateTransactionForm() {
                         ))}
                     </select>
                 </div>
-
                 <div>
                     <label className="text-gray-700 mb-1">Budget (Optional)</label>
                     <select
@@ -213,7 +215,6 @@ function UpdateTransactionForm() {
                         ))}
                     </select>
                 </div>
-
                 <div>
                     <label className="text-gray-700 mb-1">Category</label>
                     <select
