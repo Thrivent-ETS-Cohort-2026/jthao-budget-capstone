@@ -1,11 +1,8 @@
 package com.example.backend.controller;
 
-import java.nio.charset.StandardCharsets;
 
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +47,7 @@ public class TransactionController {
     }
 
     @PatchMapping("/remove/{id}")
-    public ResponseEntity<?> softDelete(@PathVariable Long id) {
+    public ResponseEntity<Void> softDelete(@PathVariable Long id) {
         transactionService.softDeleteTransaction(id);
         return ResponseEntity.noContent().build();
     }

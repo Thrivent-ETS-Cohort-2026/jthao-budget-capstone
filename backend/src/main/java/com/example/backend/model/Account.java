@@ -1,7 +1,5 @@
 package com.example.backend.model;
 
-import java.math.BigDecimal;
-
 import com.example.backend.types.AccountType;
 
 import jakarta.persistence.Entity;

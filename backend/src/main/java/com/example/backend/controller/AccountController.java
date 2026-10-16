@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.dto.request.account.CreateAccountRequest;
+import com.example.backend.dto.request.account.UpdateAccountRequest;
 import com.example.backend.dto.response.account.AccountResponse;
 import com.example.backend.service.AccountService;
 
@@ -46,6 +48,11 @@ public class AccountController {
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AccountResponse> updateAccount(@PathVariable Long id, @RequestBody UpdateAccountRequest request) {
+        return ResponseEntity.ok(accountService.updateAccount(id, request));
     }
 
 }

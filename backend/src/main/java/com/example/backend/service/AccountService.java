@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.dto.request.account.CreateAccountRequest;
+import com.example.backend.dto.request.account.UpdateAccountRequest;
 import com.example.backend.dto.response.account.AccountResponse;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
@@ -74,8 +75,27 @@ public class AccountService {
 
         if (hasTransactions) {
             throw new IllegalStateException("Cannot delete account because it has active transactions.");
-    }
+        }
         accountRepository.delete(account);
+    }
+
+    public AccountResponse updateAccount(Long id, UpdateAccountRequest request) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + id));
+        if (request.getAccountName() != null) {
+            account.setAccountName(request.getAccountName());
+        }
+        if (request.getAccountType() != null) {
+            account.setAccountType(request.getAccountType());
+        }
+        accountRepository.save(account);
+        AccountResponse response = new AccountResponse(
+                account.getId(),
+                account.getAccountName(),
+                account.getAccountType(),
+                account.getUser().getId());
+
+        return response;
     }
 
 }
