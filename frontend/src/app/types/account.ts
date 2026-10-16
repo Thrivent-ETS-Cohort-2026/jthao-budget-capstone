@@ -13,6 +13,11 @@ export interface CreateAccountRequest {
     userId: number;
 }
 
+export interface UpdateAccountRequest {
+    accountName?: string;
+    accountType?: string;
+}
+
 export type AccountType =
     "CHECKING" |
     "SAVINGS" |
