@@ -94,8 +94,8 @@ function UpdateTransactionForm() {
             description,
             budgetFrom: budgetFromValue,
             accountFrom,
-            category: category as Categories,
-            transactionOccurrence: transactionOccurrence as TransactionEvents,
+            category,
+            transactionOccurrence,
             date,
             userId: user?.id as number,
             budgetId: budgetId === "" ? null : Number(budgetId),
@@ -104,7 +104,7 @@ function UpdateTransactionForm() {
 
         try {
             await updateTransaction(transactionId, requestData);
-            
+
             setDescription("");
             setAmount("");
             setDate("");
@@ -120,6 +120,20 @@ function UpdateTransactionForm() {
         }
     };
 
+    if (!user) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+                <p className="text-gray-600 mb-4">Please log in to update a transaction.</p>
+                <button
+                    onClick={() => router.push("/")}
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                >
+                    Go to home page
+                </button>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen bg-gray-50">
@@ -132,13 +146,6 @@ function UpdateTransactionForm() {
         <div className="mx-auto p-6 space-y-6 max-w-xl">
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
                 <h1 className="text-2xl font-bold text-gray-800">Edit Transaction</h1>
-                <button
-                    type="button"
-                    onClick={() => router.push("/transactions")}
-                    className="bg-gray-200 text-gray-700 p-2 rounded hover:bg-gray-300"
-                >
-                    Back to Transactions
-                </button>
             </div>
             {errorMessage && (
                 <div className="px-6">
@@ -185,7 +192,7 @@ function UpdateTransactionForm() {
                         className="w-full p-2 border border-gray-300 rounded"
                         required
                     >
-                        <option value="">Select Occurrence</option>
+                        <option value="">Select Reoccurrence</option>
                         {TRANSACTIONEVENTS.map((tEvents) => (
                             <option key={tEvents} value={tEvents}>
                                 {tEvents}

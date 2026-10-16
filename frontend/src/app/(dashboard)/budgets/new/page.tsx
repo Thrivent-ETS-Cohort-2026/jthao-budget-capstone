@@ -50,7 +50,7 @@ function UpdateBudgetForm() {
     if (!user) {
         return (
             <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
-                <p className="text-gray-600 mb-4">Please log in to update a budget.</p>
+                <p className="text-gray-600 mb-4">Please log in to create a budget.</p>
                 <button
                     onClick={() => router.push("/")}
                     className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
@@ -160,17 +160,17 @@ function UpdateBudgetForm() {
                 </div>
                 <div className="flex gap-2 pt-2">
                     <button
-                        type="submit"
-                        className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
-                    >
-                        Save Changes
-                    </button>
-                    <button
                         type="button"
                         onClick={() => router.push("/budgets")}
                         className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
                     >
                         Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
+                    >
+                        Save Budget
                     </button>
                 </div>
             </form>

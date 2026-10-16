@@ -60,6 +60,20 @@ function UpdateAccountForm() {
         }
     };
 
+    if (!user) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+                <p className="text-gray-600 mb-4">Please log in to update an account.</p>
+                <button
+                    onClick={() => router.push("/")}
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                >
+                    Go to home page
+                </button>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen bg-gray-50">
@@ -110,17 +124,17 @@ function UpdateAccountForm() {
 
                 <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
                     <button
-                        type="submit"
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-                    >
-                        Save Changes
-                    </button>
-                    <button
                         type="button"
                         onClick={() => router.push("/dashboard")}
                         className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
                     >
                         Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    >
+                        Save Changes
                     </button>
                 </div>
             </form>

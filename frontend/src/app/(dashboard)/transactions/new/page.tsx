@@ -276,19 +276,21 @@ export default function NewTransaction() {
                         required
                     />
                 </div>
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
-                >
-                    Save Transaction
-                </button>
-                <button
-                    onClick={() => router.push("/transactions")}
-                    className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
-                >
-                    Cancel
-                </button>
-            </form>
-        </div>
+                <div className="flex gap-2 pt-2">
+                    <button
+                        onClick={() => router.push("/transactions")}
+                        className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
+                    >
+                        Save Transaction
+                    </button>
+                </div>
+            </form >
+        </div >
     );
 }

@@ -88,18 +88,20 @@ export default function NewAccount() {
             <option value="OTHER">Other</option>
           </select>
         </div>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
-        >
-          Save Account
-        </button>
-        <button
-          onClick={() => router.push("/dashboard")}
-          className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
-        >
-          Cancel
-        </button>
+        <div className="flex gap-2 pt-2">
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
+          >
+            Save Account
+          </button>
+        </div>
       </form>
     </div>
   );

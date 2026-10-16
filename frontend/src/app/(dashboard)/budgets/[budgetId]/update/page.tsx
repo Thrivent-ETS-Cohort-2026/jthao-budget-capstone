@@ -67,6 +67,20 @@ function UpdateBudgetForm() {
         }
     };
 
+    if (!user) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+                <p className="text-gray-600 mb-4">Please log in to update a budget.</p>
+                <button
+                    onClick={() => router.push("/")}
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                >
+                    Go to home page
+                </button>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen bg-gray-50">
