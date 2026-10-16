@@ -7,7 +7,6 @@ import { useUser } from "@/app/context/UserContext";
 import { validateUserLogin } from "@/app/lib/api/user";
 import { User } from "@/app/types/user";
 
-
 export default function LoginPage() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -33,39 +32,56 @@ export default function LoginPage() {
         setErrorMessage("");
         setEmail("");
         setPassword("");
-        router.push("../dashboard"); // Redirect to customer's profile
+        router.push("../dashboard");
     }
 
     return (
-        <>
-            <div className="m-1 p-5 flex flex-col items-center">
-                <h1>Log In</h1>
-                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-                <form onSubmit={handleLogin}>
-                    <label htmlFor="email-text">Email:</label>
+        <div className="mx-auto p-6 space-y-6 max-w-xl mt-10">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                <h1 className="text-2xl font-bold text-gray-800">Log In</h1>
+            </div>
+            {errorMessage && (
+                <div className="px-6">
+                    <p className="text-red-500 text-sm">{errorMessage}</p>
+                </div>
+            )}
+            <form onSubmit={handleLogin} className="border border-gray-300 p-6 rounded space-y-4">
+                <div>
+                    <label htmlFor="email-text" className="text-gray-700 mb-1 block">Email:</label>
                     <input
                         id="email-text"
                         type="email"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded w-full"
+                        className="w-full p-2 border border-gray-300 rounded"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    <br />
-                    <label htmlFor="password-text">Password:</label>
+                </div>
+                <div>
+                    <label htmlFor="password-text" className="text-gray-700 mb-1 block">Password:</label>
                     <input
                         id="password-text"
                         type="password"
-                        className="m-1 bg-gray-50 p-1 border border-gray-300 rounded w-full"
+                        className="w-full p-2 border border-gray-300 rounded"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <br />
+                </div>
+                <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200">
+                    <button
+                        type="button"
+                        onClick={() => router.push("/")}
+                        className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
+                    >
+                        Cancel
+                    </button>
                     <button
                         type="submit"
-                        className="m-1 p-1 border border-gray-300 rounded bg-gray-200"
-                    >Log In</button>
-                </form>
-            </div>
-        </>
+                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    >
+                        Log In
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 }
