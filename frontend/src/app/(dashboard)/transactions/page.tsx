@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 import { Transaction } from "@/app/types/transaction";
 import { Account } from "@/app/types/account";
-import { getTransactions } from "@/app/lib/api/transactions";
+import { deleteTransaction, getTransactions } from "@/app/lib/api/transactions";
 import { getAccounts } from "@/app/lib/api/accounts";
+import Link from "next/link";
 
 export default function TransactionsPage() {
     const router = useRouter();
@@ -32,8 +33,8 @@ export default function TransactionsPage() {
 
             try {
                 setLoading(true);
-                const transactionRes: Transaction[] = await getTransactions(user.id);
-                setTransactions(transactionRes);
+                const transactionList: Transaction[] = await getTransactions(user.id);
+                setTransactions(transactionList);
 
                 const accountRes: Account[] = await getAccounts(user.id);
                 setAccounts(accountRes);
@@ -48,12 +49,16 @@ export default function TransactionsPage() {
 
     const filteredTransactions: Transaction[] = transactions
         .filter((transaction) => {
-            if (startDate && transaction.date < startDate) return false;
-            if (endDate && transaction.date > endDate) return false;
-            if (
-                categoryFilter.trim() &&
-                !transaction.category.toLowerCase().includes(categoryFilter.toLowerCase())
-            ) {
+            if (transaction.deletedAt) {
+                return false;
+            }
+            if (startDate && transaction.date < startDate) {
+                return false;
+            }
+            if (endDate && transaction.date > endDate) {
+                return false;
+            }
+            if (categoryFilter.trim() && !transaction.category.toLowerCase().includes(categoryFilter.toLowerCase())) {
                 return false;
             }
             if (accountFilter !== "ALL" && transaction.accountFrom !== accountFilter) {
@@ -113,6 +118,26 @@ export default function TransactionsPage() {
             </div>
         );
     }
+
+    const handleDelete = async (id: number) => {
+        const confirmed = window.confirm("Are you sure you want to delete this transaction?");
+        if (!confirmed) {
+            return;
+        }
+        try {
+            deleteTransaction(id);
+            setTransactions((previousTransactions: Transaction[]) => {
+                const updatedTransactions: Transaction[] = previousTransactions.filter((transaction: Transaction) => {
+                    const isNotDeletedItem: boolean = transaction.id !== id;
+                    return isNotDeletedItem;
+                });
+                return updatedTransactions;
+            });
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+            alert("Failed to delete transaction.");
+        }
+    };
 
     return (
         <div className="mx-auto p-6 space-y-6">
@@ -221,6 +246,7 @@ export default function TransactionsPage() {
                                         <th className="p-3 border-x border-gray-200">Account From</th>
                                         <th className="p-3 border-x border-gray-200">Budget From</th>
                                         <th className="p-3 border-x border-gray-200">Category</th>
+                                        <th className="p-3 border-x border-gray-200 text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -235,6 +261,20 @@ export default function TransactionsPage() {
                                                 <span className="bg-gray-100 text-gray-800 p-1 rounded">
                                                     {transaction.category}
                                                 </span>
+                                            </td>
+                                            <td className="p-3 text-center space-x-2">
+                                                <Link
+                                                    href={`/transactions/${transaction.id}/update`}
+                                                    className="text-blue-600 hover:underline text-xs"
+                                                >
+                                                    Edit
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleDelete(transaction.id)}
+                                                    className="text-red-600 hover:underline text-xs"
+                                                >
+                                                    Delete
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
