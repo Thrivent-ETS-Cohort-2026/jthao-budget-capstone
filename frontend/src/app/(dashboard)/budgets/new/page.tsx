@@ -1,51 +1,22 @@
-"use client";
+"use client"
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
-import { BudgetRequest } from "@/app/types/budget";
-import { getBudget, createBudget } from "@/app/lib/api/budgets";
+import { useState } from "react";
 import { CATEGORIES, Categories } from "@/app/types/categories";
+import { BudgetRequest } from "@/app/types/budget";
 import { TRANSACTIONEVENTS, TransactionEvents } from "@/app/types/transaction";
+import { createBudget } from "@/app/lib/api/budgets";
 
-function UpdateBudgetForm() {
+export default function NewBudget() {
     const router = useRouter();
-    const params = useParams();
-    const budgetId: number = Number(params.budgetId);
     const { user } = useUser();
 
     const [category, setCategory] = useState<Categories>("GROCERIES");
-    const [targetPeriod, setTargetPeriod] = useState<TransactionEvents>("ONCE");
+    const [targetPeriod, setTargetPeriod] = useState<TransactionEvents>("MONTHLY");
     const [description, setDescription] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
-    const [isEnabled, setIsEnabled] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        async function fetchData() {
-            if (!user?.id || !budgetId) {
-                setLoading(false);
-                return;
-            }
-            try {
-                setLoading(true);
-                const budgetResp = await getBudget(budgetId);
-
-                setDescription(budgetResp.description);
-                setAmount(budgetResp.amount.toString());
-                setTargetPeriod(budgetResp.targetPeriod);
-                setCategory(budgetResp.category);
-                setIsEnabled(budgetResp.isEnabled ?? true);
-            } catch (error) {
-                console.error("Failed to fetch budget data:", error);
-                setErrorMessage((error as Error).message || "Failed to load budget data.");
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchData();
-    }, [user?.id, budgetId]);
 
     if (!user) {
         return (
@@ -61,15 +32,7 @@ function UpdateBudgetForm() {
         );
     }
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen bg-gray-50">
-                <p className="text-gray-600 text-base">Loading budget...</p>
-            </div>
-        );
-    }
-
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         setErrorMessage("");
 
@@ -77,28 +40,37 @@ function UpdateBudgetForm() {
             amount: parseFloat(amount),
             description,
             targetPeriod,
-            isEnabled,
+            isEnabled: true,
             category,
-            userId: user.id,
+            userId: user!.id,
         };
-
         try {
-            await createBudget(requestData);
-            router.push("/budgets");
+            await createBudget(requestData, user.sessionUuid || "");
+
+            setDescription("");
+            setAmount("");
+            setTargetPeriod("MONTHLY");
+            setCategory("GROCERIES");
+
+            router.push("/dashboard");
         } catch (error) {
-            setErrorMessage((error as Error).message || "Failed to update budget.");
+            setErrorMessage((error as Error).message || "Failed to create budget.");
         }
     };
 
     return (
-        <div className="mx-auto p-6 mt-10 border border-gray-300 rounded max-w-xl">
-            <h1 className="text-xl font-bold text-gray-800 mb-4">Create Budget</h1>
+        <div className="mx-auto p-6 space-y-6 max-w-xl">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                <h1 className="text-2xl font-bold text-gray-800">Create New Budget</h1>
+            </div>
             {errorMessage && (
-                <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
+                <div className="px-6">
+                    <p className="text-red-500 text-sm">{errorMessage}</p>
+                </div>
             )}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="border border-gray-300 p-6 rounded space-y-4">
                 <div>
-                    <label htmlFor="description" className="text-gray-700">
+                    <label htmlFor="description" className="text-gray-700 mb-1 block">
                         Description:
                     </label>
                     <input
@@ -112,7 +84,7 @@ function UpdateBudgetForm() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="amount" className="text-gray-700">
+                    <label htmlFor="amount" className="text-gray-700 mb-1 block">
                         Amount ($)
                     </label>
                     <input
@@ -127,8 +99,11 @@ function UpdateBudgetForm() {
                     />
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1">Target Period:</label>
+                    <label htmlFor="targetPeriod" className="text-gray-700 mb-1 block">
+                        Target Period:
+                    </label>
                     <select
+                        id="targetPeriod"
                         value={targetPeriod}
                         onChange={(e) => setTargetPeriod(e.target.value as TransactionEvents)}
                         className="w-full p-2 border border-gray-300 rounded"
@@ -143,8 +118,11 @@ function UpdateBudgetForm() {
                     </select>
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1 block">Category</label>
+                    <label htmlFor="category" className="text-gray-700 mb-1 block">
+                        Category:
+                    </label>
                     <select
+                        id="category"
                         value={category}
                         onChange={(e) => setCategory(e.target.value as Categories)}
                         className="w-full p-2 border border-gray-300 rounded"
@@ -158,34 +136,22 @@ function UpdateBudgetForm() {
                         ))}
                     </select>
                 </div>
-                <div className="flex gap-2 pt-2">
+                <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
                     <button
                         type="button"
-                        onClick={() => router.push("/budgets")}
-                        className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+                        onClick={() => router.push("/dashboard")}
+                        className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
+                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
                     >
                         Save Budget
                     </button>
                 </div>
             </form>
         </div>
-    );
-}
-
-export default function UpdateBudgetPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex justify-center items-center h-screen bg-gray-50">
-                <p className="text-gray-600 text-base">Loading...</p>
-            </div>
-        }>
-            <UpdateBudgetForm />
-        </Suspense>
     );
 }

@@ -40,13 +40,13 @@ function UpdateTransactionForm() {
             try {
                 setLoading(true);
 
-                const accountRes: Account[] = await getAccounts(user.id);
+                const accountRes: Account[] = await getAccounts(user.id, user.sessionUuid || "");
                 setAccounts(accountRes);
 
-                const budgetRes: Budget[] = await getBudgets(user.id);
+                const budgetRes: Budget[] = await getBudgets(user.id, user.sessionUuid || "");
                 setBudgets(budgetRes);
 
-                const transactionResp: Transaction = await getTransaction(transactionId);
+                const transactionResp: Transaction = await getTransaction(transactionId, user.sessionUuid || "");
 
                 setDescription(transactionResp.description);
                 setAmount(transactionResp.amount.toString());
@@ -64,7 +64,21 @@ function UpdateTransactionForm() {
             }
         }
         fetchData();
-    }, [user?.id, transactionId]);
+    }, [user?.id, user?.sessionUuid, transactionId]);
+
+        if (!user) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+                <p className="text-gray-600 mb-4">Please log in to update a transaction.</p>
+                <button
+                    onClick={() => router.push("/")}
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                >
+                    Go to home page
+                </button>
+            </div>
+        );
+    }
 
     const handleAccountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedId = e.target.value ? Number(e.target.value) : "";
@@ -77,7 +91,7 @@ function UpdateTransactionForm() {
         }
     };
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         setErrorMessage("");
 
@@ -103,7 +117,7 @@ function UpdateTransactionForm() {
         };
 
         try {
-            await updateTransaction(transactionId, requestData);
+            await updateTransaction(transactionId, requestData, user.sessionUuid || "");
 
             setDescription("");
             setAmount("");
@@ -120,19 +134,7 @@ function UpdateTransactionForm() {
         }
     };
 
-    if (!user) {
-        return (
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
-                <p className="text-gray-600 mb-4">Please log in to update a transaction.</p>
-                <button
-                    onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-                >
-                    Go to home page
-                </button>
-            </div>
-        );
-    }
+
 
     if (loading) {
         return (

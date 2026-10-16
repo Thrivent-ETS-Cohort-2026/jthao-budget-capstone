@@ -25,7 +25,7 @@ function UpdateAccountForm() {
             }
             try {
                 setLoading(true);
-                const accountResponse: Account = await getAccount(accountId);
+                const accountResponse: Account = await getAccount(accountId, user.sessionUuid || "");
                 setAccountName(accountResponse.accountName);
                 setAccountType(accountResponse.accountType);
             } catch (error) {
@@ -36,10 +36,13 @@ function UpdateAccountForm() {
             }
         }
         fetchData();
-    }, [user?.id, accountId]);
+    }, [user?.id, user?.sessionUuid, accountId]);
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
+        if (!user) {
+            return;
+        }
         setErrorMessage("");
 
         const requestData = {
@@ -49,7 +52,7 @@ function UpdateAccountForm() {
         };
 
         try {
-            await updateAccount(accountId, requestData);
+            await updateAccount(accountId, requestData, user.sessionUuid || "");
 
             setAccountName("");
             setAccountType("");

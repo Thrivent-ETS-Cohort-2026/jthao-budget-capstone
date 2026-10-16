@@ -31,10 +31,10 @@ export default function BudgetsPage() {
                 setLoading(true);
                 setErrorMessage("");
 
-                const budgetList: Budget[] = await getBudgets(user.id);
+                const budgetList: Budget[] = await getBudgets(user.id, user.sessionUuid || "");
                 setBudgets(budgetList);
 
-                const transactionList: Transaction[] = await getTransactions(user.id);
+                const transactionList: Transaction[] = await getTransactions(user.id, user.sessionUuid || "");
                 setTransactions(transactionList);
 
                 const d: Date = new Date();
@@ -50,7 +50,7 @@ export default function BudgetsPage() {
             }
         }
         fetchData();
-    }, [user?.id]);
+    }, [user?.id, user?.sessionUuid]);
 
     function calculateActualSpend(budgetCategory: string): number {
         const start: Date = new Date(startDate);
@@ -87,13 +87,16 @@ export default function BudgetsPage() {
     }
 
     async function handleDelete(id: number): Promise<void> {
+        if (!user) {
+            return
+        }
         const confirmed = window.confirm("Are you sure you want to delete this budget?");
         if (!confirmed) {
             return;
         }
         try {
             setErrorMessage("");
-            await deleteBudget(id);
+            await deleteBudget(id, user.sessionUuid || "");
             setBudgets((prevBudgets: Budget[]) => prevBudgets.filter((b: Budget) => b.id !== id));
         } catch (error: unknown) {
             console.error("Error deleting budget:", error);
@@ -185,6 +188,7 @@ export default function BudgetsPage() {
                         <table className="w-full text-left">
                             <thead>
                                 <tr className="bg-gray-50 border-b border-gray-200 text-gray-700">
+                                    <th className="p-3 border-x border-gray-200">Description</th>
                                     <th className="p-3 border-x border-gray-200">Category</th>
                                     <th className="p-3 border-x border-gray-200">Budget Amount</th>
                                     <th className="p-3 border-x border-gray-200">Target Period</th>
@@ -204,7 +208,8 @@ export default function BudgetsPage() {
 
                                     return (
                                         <tr key={budget.id} className="border-b border-gray-200 hover:bg-gray-50">
-                                            <td className="p-3 font-medium text-gray-800">{budget.category}</td>
+                                            <td className="p-3 font-medium text-gray-800">{budget.description || "—"}</td>
+                                            <td className="p-3 text-gray-700">{budget.category}</td>
                                             <td className="p-3 text-gray-700">${budgetLimit.toFixed(2)}</td>
                                             <td className="p-3 text-gray-700 capitalize">{budget.targetPeriod}</td>
                                             <td className={`p-3 font-semibold ${isOverspent ? "text-red-600" : isWarning ? "text-yellow-600" : "text-gray-700"}`}>

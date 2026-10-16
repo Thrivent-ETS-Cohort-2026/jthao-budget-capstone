@@ -29,7 +29,7 @@ function UpdateBudgetForm() {
             }
             try {
                 setLoading(true);
-                const budgetResp: Budget = await getBudget(budgetId);
+                const budgetResp: Budget = await getBudget(budgetId, user.sessionUuid || "");
 
                 setCategory(budgetResp.category as Categories);
                 setAmount(budgetResp.amount.toString());
@@ -43,10 +43,13 @@ function UpdateBudgetForm() {
             }
         }
         fetchData();
-    }, [user?.id, budgetId]);
+    }, [user?.id, user?.sessionUuid, budgetId]);
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
+        if(!user){
+            return;
+        }
         setErrorMessage("");
 
         const requestData: BudgetRequest = {
@@ -59,7 +62,14 @@ function UpdateBudgetForm() {
         };
 
         try {
-            await updateBudget(budgetId, requestData);
+            await updateBudget(budgetId, requestData, user.sessionUuid || "");
+
+            setCategory("GROCERIES");
+            setAmount("");
+            setTargetPeriod("MONTHLY");
+            setDescription("");
+            setErrorMessage("");
+
             router.push("/budgets");
         } catch (error) {
             console.error("Error updating budget:", error);
@@ -91,7 +101,7 @@ function UpdateBudgetForm() {
 
     return (
         <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-content items-center p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
                 <h1 className="text-2xl font-bold text-gray-800">Edit Budget</h1>
             </div>
             {errorMessage && (
@@ -138,7 +148,7 @@ function UpdateBudgetForm() {
                     />
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1">Target Period:</label>
+                    <label className="text-gray-700 mb-1 block">Target Period:</label>
                     <select
                         value={targetPeriod}
                         onChange={(e) => setTargetPeriod(e.target.value as TransactionEvents)}

@@ -27,10 +27,10 @@ export default function Dashboard() {
             try {
                 setLoading(true);
 
-                const accountRes = await getAccounts(user.id);
+                const accountRes = await getAccounts(user.id, user.sessionUuid || "");
                 setAccounts(accountRes);
 
-                const budgetRes = await getBudgets(user.id);
+                const budgetRes = await getBudgets(user.id, user.sessionUuid || "");
                 setBudgets(budgetRes);
             } catch (error) {
                 console.error("Failed to fetch dashboard data:", error);
@@ -39,31 +39,7 @@ export default function Dashboard() {
             }
         }
         fetchDashboardData();
-    }, [user?.id]);
-
-    const handleDeleteAccount = async (id: number) => {
-        if (!confirm("Are you sure you want to delete this account?")) {
-            return;
-        }
-
-        setErrorMessage("");
-
-        try {
-            await deleteAccount(id);
-            setAccounts((prevAccounts) => prevAccounts.filter((account) => account.id !== id));
-        } catch (error) {
-            console.error("Error deleting account:", error);
-            setErrorMessage((error as Error).message || "Failed to delete account.");
-        }
-    };
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen bg-gray-50">
-                <p className="text-gray-600 text-base">Loading dashboard...</p>
-            </div>
-        );
-    }
+    }, [user?.id, user?.sessionUuid]);
 
     if (!user) {
         return (
@@ -79,6 +55,30 @@ export default function Dashboard() {
         );
     }
 
+    const handleDeleteAccount = async (id: number) => {
+        if (!confirm("Are you sure you want to delete this account?")) {
+            return;
+        }
+
+        setErrorMessage("");
+
+        try {
+            await deleteAccount(id, user.sessionUuid || "");
+            setAccounts((prevAccounts) => prevAccounts.filter((account) => account.id !== id));
+        } catch (error) {
+            console.error("Error deleting account:", error);
+            setErrorMessage((error as Error).message || "Failed to delete account.");
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen bg-gray-50">
+                <p className="text-gray-600 text-base">Loading dashboard...</p>
+            </div>
+        );
+    }
+
     if (accounts.length === 0) {
         return (
             <div className="mx-auto m-5">
@@ -88,9 +88,9 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="mx-auto p-6 space-y-6">
-            <div className="flex justify-between items-center p-6">
-                <h1 className="text-2xl font-bold text-gray-800 px-5">Financial Dashboard</h1>
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold text-gray-800">Financial Dashboard</h1>
                 <div className="flex gap-2">
                     <button
                         onClick={() => router.push("/account/new")}
@@ -104,46 +104,40 @@ export default function Dashboard() {
                     >
                         Add Budget
                     </button>
-                    <button
-                        onClick={() => router.push("/transactions")}
-                        className="bg-indigo-600 text-white p-2 rounded text-sm hover:bg-indigo-700"
-                    >
-                        View Transactions
-                    </button>
                 </div>
             </div>
 
             {errorMessage && (
-                <div className="px-5">
+                <div>
                     <p className="text-red-500 text-sm">{errorMessage}</p>
                 </div>
             )}
 
             <div className="grid grid-cols-2 gap-4">
-                <div className="border border-gray-300 p-4 rounded">
+                <div className="border border-gray-300 p-4 rounded bg-white shadow-sm">
                     <div className="flex justify-between items-center mb-3 border-b pb-2">
                         <h2 className="font-semibold text-gray-700">Accounts</h2>
-                        <span className="bg-gray-100 text-gray-600 p-1 rounded">
+                        <span className="bg-gray-100 text-gray-600 px-2 py-1 text-xs rounded">
                             {accounts.length}
                         </span>
                     </div>
-                    <ul className="space-y-2 text-sm text-gray-600">
+                    <ul className="space-y-3 text-sm text-gray-600">
                         {accounts.map((account) => (
-                            <li key={account.id} className="flex justify-between items-center">
+                            <li key={account.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0">
                                 <div>
-                                    <span>{account.accountName}</span>{" "}
-                                    <span className="text-gray-400">({account.accountType})</span>
+                                    <span className="font-medium text-gray-800">{account.accountName}</span>{" "}
+                                    <span className="text-gray-400 text-xs">({account.accountType})</span>
                                 </div>
                                 <div className="space-x-2">
                                     <button
                                         onClick={() => router.push(`/account/${account.id}/update`)}
-                                        className="bg-blue-600 text-white text-sm p-2 rounded hover:bg-blue-700"
+                                        className="bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded hover:bg-blue-700"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => handleDeleteAccount(account.id)}
-                                        className="bg-red-600 text-white text-sm p-2 rounded hover:bg-red-700"
+                                        className="bg-red-600 text-white text-xs px-2.5 py-1.5 rounded hover:bg-red-700"
                                     >
                                         Delete
                                     </button>
@@ -152,27 +146,24 @@ export default function Dashboard() {
                         ))}
                     </ul>
                 </div>
-                <div className="border border-gray-300 p-4 rounded">
+
+                <div className="border border-gray-300 p-4 rounded bg-white shadow-sm">
                     <div className="flex justify-between items-center mb-3 border-b pb-2">
-                        <h2 className="font-semibold text-gray-700">Budgets</h2>
-                        <button
-                            onClick={() => router.push("/budgets")}
-                            className="bg-green-600 text-white p-2 rounded text-xs hover:bg-green-700"
-                        >
-                            View Budgets
-                        </button>
-                        <span className="bg-gray-100 text-gray-600 p-1 rounded">
+                        <div className="flex items-center space-x-3">
+                            <h2 className="font-semibold text-gray-700">Budgets</h2>
+                        </div>
+                        <span className="bg-gray-100 text-gray-600 px-2 py-1 text-xs rounded">
                             {budgets.length}
                         </span>
                     </div>
                     {budgets.length === 0 ? (
                         <p className="text-sm text-gray-400">No budgets created yet.</p>
                     ) : (
-                        <ul className="space-y-2 text-sm text-gray-600">
+                        <ul className="space-y-3 text-sm text-gray-600">
                             {budgets.map((budget) => (
-                                <li key={budget.id} className="flex justify-between">
-                                    <span>{budget.category}</span>
-                                    <span>${budget.amount}</span>
+                                <li key={budget.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0">
+                                    <span className="font-medium text-gray-800">{budget.category}</span>
+                                    <span className="text-gray-700 font-semibold">${budget.amount}</span>
                                 </li>
                             ))}
                         </ul>

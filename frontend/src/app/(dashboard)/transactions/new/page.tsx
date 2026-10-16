@@ -36,8 +36,8 @@ export default function NewTransaction() {
             }
 
             try {
-                const fetchedAccounts = await getAccounts(user.id);
-                const fetchedBudgets = await getBudgets(user.id);
+                const fetchedAccounts = await getAccounts(user.id, user.sessionUuid || "");
+                const fetchedBudgets = await getBudgets(user.id, user.sessionUuid || "");
 
                 setAccounts(fetchedAccounts);
                 setBudgets(fetchedBudgets);
@@ -55,7 +55,7 @@ export default function NewTransaction() {
             }
         }
         loadFormData();
-    }, [user?.id]);
+    }, [user?.id, user?.sessionUuid]);
 
     const handleAccountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedId = e.target.value ? Number(e.target.value) : "";
@@ -91,7 +91,7 @@ export default function NewTransaction() {
         );
     }
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
         if (!description.trim() || !amount || accountId === "") {
@@ -120,8 +120,7 @@ export default function NewTransaction() {
         };
 
         try {
-            await createTransaction(requestData);
-
+            await createTransaction(requestData, user.sessionUuid || "");
             setDescription("");
             setAmount("");
             setBudgetId("");
@@ -278,6 +277,7 @@ export default function NewTransaction() {
                 </div>
                 <div className="flex gap-2 pt-2">
                     <button
+                        type="button"
                         onClick={() => router.push("/transactions")}
                         className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
                     >
@@ -290,7 +290,7 @@ export default function NewTransaction() {
                         Save Transaction
                     </button>
                 </div>
-            </form >
-        </div >
+            </form>
+        </div>
     );
 }

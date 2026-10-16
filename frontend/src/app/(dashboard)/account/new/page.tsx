@@ -28,7 +28,7 @@ export default function NewAccount() {
     );
   }
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     if (!accountName.trim()) {
@@ -43,7 +43,12 @@ export default function NewAccount() {
     };
 
     try {
-      await createAccount(requestData);
+      await createAccount(requestData, user.sessionUuid || "");
+
+      setAccountName("");
+      setAccountType("CHECKING");
+      setErrorMessage("");
+
       router.push("/dashboard");
     } catch (error) {
       setErrorMessage((error as Error).message || "Failed to create account.");
@@ -90,6 +95,7 @@ export default function NewAccount() {
         </div>
         <div className="flex gap-2 pt-2">
           <button
+            type="button"
             onClick={() => router.push("/dashboard")}
             className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
           >

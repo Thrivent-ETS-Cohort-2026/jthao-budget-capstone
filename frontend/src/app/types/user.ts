@@ -7,6 +7,7 @@ export interface User {
     email: string;
     phoneNumber: string;
     accounts: Account[];
+    sessionUuid?: string;
 }
 
 export interface UserFormRequest {

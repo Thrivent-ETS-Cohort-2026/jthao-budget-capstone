@@ -33,10 +33,10 @@ export default function TransactionsPage() {
 
             try {
                 setLoading(true);
-                const transactionList: Transaction[] = await getTransactions(user.id);
+                const transactionList: Transaction[] = await getTransactions(user.id, user.sessionUuid || "");
                 setTransactions(transactionList);
 
-                const accountRes: Account[] = await getAccounts(user.id);
+                const accountRes: Account[] = await getAccounts(user.id, user.sessionUuid || "");
                 setAccounts(accountRes);
             } catch (error) {
                 console.error("Failed to fetch transactions:", error);
@@ -45,7 +45,7 @@ export default function TransactionsPage() {
             }
         }
         fetchData();
-    }, [user?.id]);
+    }, [user?.id, user?.sessionUuid]);
 
     const filteredTransactions: Transaction[] = transactions
         .filter((transaction: Transaction) => {
@@ -74,15 +74,15 @@ export default function TransactionsPage() {
 
     const handleExportCSV: () => void = () => {
         if (filteredTransactions.length === 0) return;
-        const headers: string[] = ["ID", "Date", "Description", "Amount", "Account From", "Budget From", "Category"];
+        const headers: string[] = ["Date", "Description", "Amount", "Account From", "Budget From", "Category", "Recurrence"];
         const rows: (string | number)[][] = filteredTransactions.map(transaction => [
-            transaction.id,
             transaction.date,
             `"${transaction.description.replace(/"/g, '""')}"`,
             transaction.amount,
             `"${transaction.accountFrom}"`,
             `"${transaction.budgetFrom || ""}"`,
-            transaction.category
+            transaction.category,
+            transaction.transactionOccurrence
         ]);
         const csvContent: string = [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
 
@@ -125,7 +125,7 @@ export default function TransactionsPage() {
             return;
         }
         try {
-            await deleteTransaction(id);
+            await deleteTransaction(id, user.sessionUuid || "");
             setTransactions((previousTransactions: Transaction[]) => {
                 return previousTransactions.map((transaction: Transaction) => {
                     if (transaction.id === id) {
@@ -247,6 +247,7 @@ export default function TransactionsPage() {
                                         <th className="p-3 border-x border-gray-200">Account From</th>
                                         <th className="p-3 border-x border-gray-200">Budget From</th>
                                         <th className="p-3 border-x border-gray-200">Category</th>
+                                        <th className="p-3 border-x border-gray-200">Recurrence</th>
                                         <th className="p-3 border-x border-gray-200 text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -263,6 +264,7 @@ export default function TransactionsPage() {
                                                     {transaction.category}
                                                 </span>
                                             </td>
+                                            <td className="p-3 text-gray-700 capitalize">{transaction.transactionOccurrence || "ONCE"}</td>
                                             <td className="p-3 text-center space-x-2">
                                                 <Link
                                                     href={`/transactions/${transaction.id}/update`}
