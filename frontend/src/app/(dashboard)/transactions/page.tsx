@@ -48,7 +48,7 @@ export default function TransactionsPage() {
     }, [user?.id]);
 
     const filteredTransactions: Transaction[] = transactions
-        .filter((transaction) => {
+        .filter((transaction: Transaction) => {
             if (transaction.deletedAt) {
                 return false;
             }
@@ -97,19 +97,19 @@ export default function TransactionsPage() {
         URL.revokeObjectURL(url);
     };
 
-    // if (!user) {
-    //     return (
-    //         <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
-    //             <p className="text-gray-600 mb-4">Please log in to view transactions.</p>
-    //             <button
-    //                 onClick={() => router.push("/")}
-    //                 className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-    //             >
-    //                 Go to home page
-    //             </button>
-    //         </div>
-    //     );
-    // }
+    if (!user) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+                <p className="text-gray-600 mb-4">Please log in to view transactions.</p>
+                <button
+                    onClick={() => router.push("/")}
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                >
+                    Go to home page
+                </button>
+            </div>
+        );
+    }
 
     if (loading) {
         return (
@@ -125,13 +125,14 @@ export default function TransactionsPage() {
             return;
         }
         try {
-            deleteTransaction(id);
+            await deleteTransaction(id);
             setTransactions((previousTransactions: Transaction[]) => {
-                const updatedTransactions: Transaction[] = previousTransactions.filter((transaction: Transaction) => {
-                    const isNotDeletedItem: boolean = transaction.id !== id;
-                    return isNotDeletedItem;
+                return previousTransactions.map((transaction: Transaction) => {
+                    if (transaction.id === id) {
+                        return { ...transaction, deletedAt: new Date().toISOString().split("T")[0] };
+                    }
+                    return transaction;
                 });
-                return updatedTransactions;
             });
         } catch (error) {
             console.error("Error deleting transaction:", error);

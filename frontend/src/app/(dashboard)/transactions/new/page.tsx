@@ -286,7 +286,7 @@ export default function NewTransaction() {
                     onClick={() => router.push("/transactions")}
                     className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
                 >
-                    Back to Transactions
+                    Cancel
                 </button>
             </form>
         </div>

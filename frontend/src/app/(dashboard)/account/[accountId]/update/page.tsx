@@ -50,7 +50,7 @@ function UpdateAccountForm() {
 
         try {
             await updateAccount(accountId, requestData);
-            
+
             setAccountName("");
             setAccountType("");
             router.push("/dashboard");
@@ -110,17 +110,17 @@ function UpdateAccountForm() {
 
                 <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
                     <button
+                        type="submit"
+                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    >
+                        Save Changes
+                    </button>
+                    <button
                         type="button"
                         onClick={() => router.push("/dashboard")}
                         className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
                     >
                         Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-                    >
-                        Save Changes
                     </button>
                 </div>
             </form>

@@ -24,7 +24,6 @@ export default function Dashboard() {
                 setLoading(false);
                 return;
             }
-
             try {
                 setLoading(true);
 
@@ -138,13 +137,13 @@ export default function Dashboard() {
                                 <div className="space-x-2">
                                     <button
                                         onClick={() => router.push(`/account/${account.id}/update`)}
-                                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                                        className="bg-blue-600 text-white text-sm p-2 rounded hover:bg-blue-700"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => handleDeleteAccount(account.id)}
-                                        className="bg-red-600 text-white p-2 rounded hover:bg-red-700"
+                                        className="bg-red-600 text-white text-sm p-2 rounded hover:bg-red-700"
                                     >
                                         Delete
                                     </button>
@@ -156,6 +155,12 @@ export default function Dashboard() {
                 <div className="border border-gray-300 p-4 rounded">
                     <div className="flex justify-between items-center mb-3 border-b pb-2">
                         <h2 className="font-semibold text-gray-700">Budgets</h2>
+                        <button
+                            onClick={() => router.push("/budgets")}
+                            className="bg-green-600 text-white p-2 rounded text-xs hover:bg-green-700"
+                        >
+                            View Budgets
+                        </button>
                         <span className="bg-gray-100 text-gray-600 p-1 rounded">
                             {budgets.length}
                         </span>

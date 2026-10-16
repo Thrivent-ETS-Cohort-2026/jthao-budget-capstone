@@ -98,7 +98,7 @@ export default function NewAccount() {
           onClick={() => router.push("/dashboard")}
           className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
         >
-          Back to the Dashboard
+          Cancel
         </button>
       </form>
     </div>
