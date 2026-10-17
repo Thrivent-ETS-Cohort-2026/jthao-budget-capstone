@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
-import { Transaction } from "@/app/types/transaction";
+import { Transaction, TransactionEvents } from "@/app/types/transaction";
 import { Account } from "@/app/types/account";
 import { deleteTransaction, getTransactions } from "@/app/lib/api/transactions";
 import { getAccounts } from "@/app/lib/api/accounts";
@@ -253,7 +253,7 @@ export default function TransactionsPage() {
                                 </thead>
                                 <tbody>
                                     {currentTransactions.map((transaction) => (
-                                        <tr key={transaction.id} className="border-b border-gray-200 hover:bg-gray-50">
+                                        <tr key={transaction.id} className="border-b border-gray-200">
                                             <td className="p-3 text-gray-700">{transaction.date}</td>
                                             <td className="p-3 text-gray-700 font-medium">{transaction.description}</td>
                                             <td className="p-3 text-gray-700 font-semibold">${transaction.amount.toFixed(2)}</td>

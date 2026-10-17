@@ -93,6 +93,12 @@ export default function Dashboard() {
                 <h1 className="text-2xl font-bold text-gray-800">Financial Dashboard</h1>
                 <div className="flex gap-2">
                     <button
+                        onClick={() => router.push("/report")}
+                        className="bg-slate-700 text-white p-2 rounded text-sm hover:bg-slate-800"
+                    >
+                        View Reports
+                    </button>
+                    <button
                         onClick={() => router.push("/account/new")}
                         className="bg-blue-600 text-white p-2 rounded text-sm hover:bg-blue-700"
                     >
