@@ -32,11 +32,6 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(request));
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-    //     return ResponseEntity.ok(userService.getUserById(id));
-    // }
-
     @PostMapping("/login")
     public ResponseEntity<UserResponse> getUserByEmailAndPassword(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.getUserByEmailAndPassword(request));
