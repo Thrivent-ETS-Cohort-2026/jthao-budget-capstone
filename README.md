@@ -1,4 +1,4 @@
-# jthao-budget-capston
+# jthao-budget-capstone
 
 A full-stack personal finance and budgeting web application built with **Next.js**, **Java Spring Boot**, **PostgreSQL**, and **Docker**.
 
