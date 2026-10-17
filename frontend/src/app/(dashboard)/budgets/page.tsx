@@ -8,6 +8,7 @@ import { Transaction, TransactionEvents } from "@/app/types/transaction";
 import { getBudgets, deleteBudget } from "@/app/lib/api/budgets";
 import { getTransactions } from "@/app/lib/api/transactions";
 import Link from "next/link";
+import { Categories } from "@/app/types/categories";
 
 export default function BudgetsPage() {
     const router = useRouter();
@@ -52,14 +53,18 @@ export default function BudgetsPage() {
         fetchData();
     }, [user?.id, user?.sessionUuid]);
 
-    function calculateActualSpend(budgetCategory: string): number {
+    function calculateActualSpend(budgetId: number): number {
         const start: Date = new Date(startDate);
         const end: Date = new Date(endDate);
         let totalSpend = 0;
 
         for (const transaction of transactions) {
-            if (transaction.deletedAt) continue;
-            if (transaction.category.toLowerCase() !== budgetCategory.toLowerCase()) continue;
+            if (transaction.deletedAt) {
+                continue;
+            }
+            if (transaction.budgetId !== budgetId) {
+                continue;
+            }
 
             const txDate: Date = new Date(transaction.date);
             const amount: number = Number(transaction.amount);
@@ -126,6 +131,23 @@ export default function BudgetsPage() {
         );
     }
 
+    const budgetAlerts: {
+        category: Categories;
+        percentage: number;
+        isOverspent: boolean;
+        isWarning: boolean;
+    }[] = budgets.map((budget) => {
+        const actualSpend = calculateActualSpend(budget.id);
+        const budgetLimit = Number(budget.amount);
+        const percentage = budgetLimit > 0 ? (actualSpend / budgetLimit) * 100 : 0;
+        return {
+            category: budget.category,
+            percentage,
+            isOverspent: percentage >= 100,
+            isWarning: percentage >= 75 && percentage < 100,
+        };
+    }).filter(item => item.isOverspent || item.isWarning);
+
     return (
         <div className="mx-auto p-6 space-y-6">
             <div className="flex justify-between items-center p-6">
@@ -145,11 +167,27 @@ export default function BudgetsPage() {
                     </button>
                 </div>
             </div>
+
             {errorMessage && (
                 <div className="px-6">
                     <p className="text-red-500 text-sm">{errorMessage}</p>
                 </div>
             )}
+            {budgetAlerts.length > 0 && (
+                <div className="mx-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded shadow-sm space-y-2">
+                    <h2 className="text-sm font-bold text-amber-800 uppercase tracking-wide">Budget Threshold Alerts</h2>
+                    <ul className="list-disc list-inside text-sm text-amber-700 space-y-1">
+                        {budgetAlerts.map((alert, idx) => (
+                            <li key={idx}>
+                                <span className="font-semibold">{alert.category.replace(/_/g, " ")}</span> is at{" "}
+                                <span className="font-bold">{alert.percentage.toFixed(0)}%</span> of its limit!{" "}
+                                {alert.isOverspent ? "(Budget Exceeded)" : "(Approaching Limit)"}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
             <div className="border border-gray-300 p-4 rounded">
                 <div className="grid grid-cols-2 gap-3 mb-5">
                     <div>
@@ -199,7 +237,7 @@ export default function BudgetsPage() {
                             </thead>
                             <tbody>
                                 {budgets.map((budget) => {
-                                    const actualSpend = calculateActualSpend(budget.category);
+                                    const actualSpend = calculateActualSpend(budget.id);
                                     const budgetLimit: number = Number(budget.amount);
                                     const percentage: number = budgetLimit > 0 ? (actualSpend / budgetLimit) * 100 : 0;
 
@@ -207,7 +245,7 @@ export default function BudgetsPage() {
                                     const isWarning: boolean = percentage >= 75 && percentage < 100;
 
                                     return (
-                                        <tr key={budget.id} className="border-b border-gray-200 hover:bg-gray-50">
+                                        <tr key={budget.id} className="border-b border-gray-200">
                                             <td className="p-3 font-medium text-gray-800">{budget.description || "—"}</td>
                                             <td className="p-3 text-gray-700">{budget.category}</td>
                                             <td className="p-3 text-gray-700">${budgetLimit.toFixed(2)}</td>
