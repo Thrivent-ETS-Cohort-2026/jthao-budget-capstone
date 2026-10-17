@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 import { Budget } from "@/app/types/budget";
-import { Transaction, TransactionEvents } from "@/app/types/transaction";
+import { Transaction } from "@/app/types/transaction";
 import { getBudgets } from "@/app/lib/api/budgets";
 import { getTransactions } from "@/app/lib/api/transactions";
 import { Categories } from "@/app/types/categories";
+import { getProjectedDates } from "@/app/lib/utils/recurring";
 
 export default function ReportsPage() {
     const router = useRouter();
@@ -74,30 +75,22 @@ export default function ReportsPage() {
     transactions.forEach((transaction: Transaction) => {
         if (transaction.deletedAt) return;
         const amount: number = Number(transaction.amount);
-        const category: Categories = transaction.category;
-        const txDate: Date = new Date(transaction.date);
 
+        const matchedBudget: Budget | undefined = budgets.find((budget: Budget) => budget.id === transaction.budgetId);
+        const category: Categories = matchedBudget?.category || transaction.category;
+
+        // Base transaction spend
         categorySpendMap[category] = (categorySpendMap[category] || 0) + amount;
-
         const yearMonth: string = transaction.date.substring(0, 7);
         monthlySpendMap[yearMonth] = (monthlySpendMap[yearMonth] || 0) + amount;
 
-        const occurrence: TransactionEvents = transaction.transactionOccurrence;
-        if (occurrence && occurrence !== "ONCE") {
-            const nextDate = new Date(txDate);
-
-            for (let i = 0; i < 12; i++) {
-                if (occurrence === "DAILY") nextDate.setDate(nextDate.getDate() + 1);
-                else if (occurrence === "WEEKLY") nextDate.setDate(nextDate.getDate() + 7);
-                else if (occurrence === "MONTHLY") nextDate.setMonth(nextDate.getMonth() + 1);
-                else if (occurrence === "QUARTERLY") nextDate.setMonth(nextDate.getMonth() + 3);
-                else if (occurrence === "YEARLY") nextDate.setFullYear(nextDate.getFullYear() + 1);
-                else break;
-
-                const ym: string = nextDate.toISOString().split("T")[0].substring(0, 7);
-                monthlySpendMap[ym] = (monthlySpendMap[ym] || 0) + amount;
-            }
-        }
+        // Projected recurring future occurrences (12 months forward rolling window)
+        const projectedDates: string[] = getProjectedDates(transaction, 12);
+        projectedDates.forEach((dateStr: string) => {
+            categorySpendMap[category] = (categorySpendMap[category] || 0) + amount;
+            const ym: string = dateStr.substring(0, 7);
+            monthlySpendMap[ym] = (monthlySpendMap[ym] || 0) + amount;
+        });
     });
 
     const topCategories = Object.entries(categorySpendMap)
@@ -138,6 +131,8 @@ export default function ReportsPage() {
                     <p className="text-xs text-gray-500 mt-1">Across all linked accounts</p>
                 </div>
             </div>
+
+            {/* Top 5 Spending Categories */}
             <div className="border border-gray-300 p-5 rounded bg-white shadow-sm space-y-4">
                 <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Top 5 Spending Categories</h2>
                 {topCategories.length === 0 ? (
@@ -178,7 +173,7 @@ export default function ReportsPage() {
 
             {/* Month-by-Month Spending */}
             <div className="border border-gray-300 p-5 rounded bg-white shadow-sm space-y-4">
-                <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Month-by-Month Spending</h2>
+                <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Month-by-Month Spending (12-Month Forecast)</h2>
                 {sortedMonths.length === 0 ? (
                     <p className="text-gray-400 text-center py-4">No monthly data available.</p>
                 ) : (

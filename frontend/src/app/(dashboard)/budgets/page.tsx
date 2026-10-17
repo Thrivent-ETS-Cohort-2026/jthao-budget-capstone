@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 import { Budget } from "@/app/types/budget";
-import { Transaction, TransactionEvents } from "@/app/types/transaction";
+import { Transaction } from "@/app/types/transaction";
 import { getBudgets, deleteBudget } from "@/app/lib/api/budgets";
 import { getTransactions } from "@/app/lib/api/transactions";
 import Link from "next/link";
 import { Categories } from "@/app/types/categories";
+import { getProjectedDates } from "@/app/lib/utils/recurring";
 
 export default function BudgetsPage() {
     const router = useRouter();
@@ -59,34 +60,24 @@ export default function BudgetsPage() {
         let totalSpend = 0;
 
         for (const transaction of transactions) {
-            if (transaction.deletedAt) {
-                continue;
-            }
-            if (transaction.budgetId !== budgetId) {
+            if (transaction.deletedAt || transaction.budgetId !== budgetId) {
                 continue;
             }
 
-            const txDate: Date = new Date(transaction.date);
+            const transactionDate: Date = new Date(transaction.date);
             const amount: number = Number(transaction.amount);
-            if (txDate >= start && txDate <= end) {
+
+            if (transactionDate >= start && transactionDate <= end) {
                 totalSpend += amount;
-                continue;
             }
-            const occurrence: TransactionEvents = transaction.transactionOccurrence;
-            if (occurrence && occurrence !== "ONCE" && txDate <= end) {
-                const nextDate: Date = new Date(txDate);
-                while (nextDate <= end) {
-                    if (occurrence === "DAILY") nextDate.setDate(nextDate.getDate() + 1);
-                    else if (occurrence === "WEEKLY") nextDate.setDate(nextDate.getDate() + 7);
-                    else if (occurrence === "MONTHLY") nextDate.setMonth(nextDate.getMonth() + 1);
-                    else if (occurrence === "QUARTERLY") nextDate.setMonth(nextDate.getMonth() + 3);
-                    else if (occurrence === "YEARLY") nextDate.setFullYear(nextDate.getFullYear() + 1);
-                    else break;
-                    if (nextDate >= start && nextDate <= end) {
-                        totalSpend += amount;
-                    }
+
+            const projectedDates = getProjectedDates(transaction, 24);
+            projectedDates.forEach((dateStr) => {
+                const pDate = new Date(dateStr);
+                if (pDate >= start && pDate <= end) {
+                    totalSpend += amount;
                 }
-            }
+            });
         }
         return totalSpend;
     }

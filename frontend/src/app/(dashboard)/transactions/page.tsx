@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
-import { Transaction, TransactionEvents } from "@/app/types/transaction";
+import { Transaction } from "@/app/types/transaction";
 import { Account } from "@/app/types/account";
 import { deleteTransaction, getTransactions } from "@/app/lib/api/transactions";
 import { getAccounts } from "@/app/lib/api/accounts";
