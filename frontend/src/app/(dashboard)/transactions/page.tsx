@@ -147,19 +147,19 @@ export default function TransactionsPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={handleExportCSV}
-                        className="bg-gray-200 text-gray-800 p-2 rounded hover:bg-gray-300"
+                        className="bg-gray-500 text-white p-2 rounded hover:bg-gray-700"
                     >
                         Export CSV
                     </button>
                     <button
                         onClick={() => router.push("/transactions/new")}
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                        className="bg-gray-500 text-white p-2 rounded hover:bg-gray-700"
                     >
                         Add Transaction
                     </button>
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="bg-gray-600 text-white p-2 rounded hover:bg-gray-700"
+                        className="bg-gray-500 text-white p-2 rounded hover:bg-gray-700"
                     >
                         Back to Dashboard
                     </button>
@@ -268,13 +268,13 @@ export default function TransactionsPage() {
                                             <td className="p-3 text-center space-x-2">
                                                 <Link
                                                     href={`/transactions/${transaction.id}/update`}
-                                                    className="text-blue-600 hover:underline text-xs"
+                                                    className="p-1 text-black bg-gray-200 border border-gray-500 rounded hover:bg-gray-400 text-xs"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(transaction.id)}
-                                                    className="text-red-600 hover:underline text-xs"
+                                                    className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
                                                 >
                                                     Delete
                                                 </button>

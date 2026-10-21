@@ -137,13 +137,13 @@ export default function Dashboard() {
                                 <div className="space-x-2">
                                     <button
                                         onClick={() => router.push(`/account/${account.id}/update`)}
-                                        className="bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded hover:bg-blue-700"
+                                        className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => handleDeleteAccount(account.id)}
-                                        className="bg-red-600 text-white text-xs px-2.5 py-1.5 rounded hover:bg-red-700"
+                                        className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
                                     >
                                         Delete
                                     </button>

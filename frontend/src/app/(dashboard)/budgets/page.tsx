@@ -262,13 +262,13 @@ export default function BudgetsPage() {
                                             <td className="p-3 text-center space-x-2">
                                                 <Link
                                                     href={`/budgets/${budget.id}/update`}
-                                                    className="text-blue-600 hover:underline text-xs"
+                                                    className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(budget.id)}
-                                                    className="text-red-600 hover:underline text-xs"
+                                                    className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
                                                 >
                                                     Delete
                                                 </button>
