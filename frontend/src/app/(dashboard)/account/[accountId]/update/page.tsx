@@ -135,7 +135,7 @@ function UpdateAccountForm() {
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                        className="bg-gray-300 text-white p-2 rounded hover:bg-gray-700"
                     >
                         Save Changes
                     </button>

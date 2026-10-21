@@ -98,7 +98,7 @@ export default function NewTransaction() {
             setErrorMessage("Description, amount, and account are required.");
             return;
         }
-        let budgetFromValue: string | null = null;
+        let budgetFromValue: string = "";
         if (budgetId !== "") {
             const selectedBudget = budgets.find((b) => b.id === Number(budgetId));
             if (selectedBudget) {
@@ -110,7 +110,7 @@ export default function NewTransaction() {
             description,
             amount: parseFloat(amount),
             accountId: Number(accountId),
-            budgetId: budgetId === "" ? null : Number(budgetId),
+            budgetId: Number(budgetId),
             userId: user!.id,
             accountFrom,
             category,

@@ -60,11 +60,10 @@ export default function Dashboard() {
             return;
         }
 
-        setErrorMessage("");
-
         try {
             await deleteAccount(id, user.sessionUuid || "");
             setAccounts((prevAccounts) => prevAccounts.filter((account) => account.id !== id));
+            setErrorMessage("");
         } catch (error) {
             console.error("Error deleting account:", error);
             setErrorMessage((error as Error).message || "Failed to delete account.");

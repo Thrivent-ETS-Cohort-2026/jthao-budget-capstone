@@ -4,7 +4,7 @@ export interface Transaction {
     id: number;
     amount: number;
     description: string;
-    budgetFrom?: string;
+    budgetFrom: string;
     accountFrom: string;
     category: Categories;
     transactionOccurrence: TransactionEvents;
@@ -18,7 +18,7 @@ export interface Transaction {
 export interface CreateTransactionRequest {
     amount: number;
     description: string;
-    budgetFrom?: string;
+    budgetFrom: string;
     accountFrom: string;
     category: Categories;
     transactionOccurrence: TransactionEvents;
@@ -48,7 +48,7 @@ export const TRANSACTIONEVENTS: TransactionEvents[] = [
 export interface UpdateTransactionRequest {
     amount: number;
     description: string;
-    budgetFrom?: string;
+    budgetFrom: string;
     accountFrom: string;
     category: Categories;
     transactionOccurrence: TransactionEvents;
