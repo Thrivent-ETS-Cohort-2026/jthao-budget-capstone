@@ -14,5 +14,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findByUserId(Long id);
 
-    boolean existsByAccountId(Long accountId);
+    boolean existsByAccountIdAndDeletedAtNull(Long accountId);
 }

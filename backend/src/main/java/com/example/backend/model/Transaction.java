@@ -3,6 +3,9 @@ package com.example.backend.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.example.backend.types.Categories;
 import com.example.backend.types.TransactionEvent;
 import com.example.backend.validation.TransactionValidation;
@@ -58,10 +61,12 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "budget_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     Budget budget;
 
     @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
+    @JoinColumn(name = "account_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     Account account;
 
     protected Transaction() {

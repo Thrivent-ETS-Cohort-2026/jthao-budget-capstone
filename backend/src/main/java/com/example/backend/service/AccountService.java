@@ -90,7 +90,7 @@ public class AccountService {
 
         validateSession(sessionUuid, account.getUser().getId());
 
-        boolean hasTransactions = transactionRepository.existsByAccountId(id);
+        boolean hasTransactions = transactionRepository.existsByAccountIdAndDeletedAtNull(id);
 
         if (hasTransactions) {
             throw new IllegalStateException("Cannot delete account because it has active transactions.");

@@ -4,27 +4,27 @@ export interface Transaction {
     id: number;
     amount: number;
     description: string;
-    budgetFrom: string | null;
+    budgetFrom?: string;
     accountFrom: string;
     category: Categories;
     transactionOccurrence: TransactionEvents;
     date: string;
     deletedAt: string | null;
     userId: number;
-    budgetId: number | null;
+    budgetId?: number;
     accountId: number;
 }
 
 export interface CreateTransactionRequest {
     amount: number;
     description: string;
-    budgetFrom: string | null;
+    budgetFrom?: string;
     accountFrom: string;
     category: Categories;
     transactionOccurrence: TransactionEvents;
     date: string;
     userId: number;
-    budgetId: number | null;
+    budgetId?: number;
     accountId: number;
 }
 
@@ -48,12 +48,12 @@ export const TRANSACTIONEVENTS: TransactionEvents[] = [
 export interface UpdateTransactionRequest {
     amount: number;
     description: string;
-    budgetFrom: string | null;
+    budgetFrom?: string;
     accountFrom: string;
     category: Categories;
     transactionOccurrence: TransactionEvents;
     date: string;
     userId: number;
-    budgetId: number | null;
+    budgetId?: number;
     accountId: number;
 }
