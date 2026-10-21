@@ -69,7 +69,7 @@ function UpdateAccountForm() {
                 <p className="text-gray-600 mb-4">Please log in to update an account.</p>
                 <button
                     onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    className="bg-slate-500 text-white p-2 rounded hover:bg-slate-700"
                 >
                     Go to home page
                 </button>
@@ -135,7 +135,7 @@ function UpdateAccountForm() {
                     </button>
                     <button
                         type="submit"
-                        className="bg-gray-300 text-white p-2 rounded hover:bg-gray-700"
+                        className="bg-slate-500 text-white p-2 rounded hover:bg-slate-700"
                     >
                         Save Changes
                     </button>

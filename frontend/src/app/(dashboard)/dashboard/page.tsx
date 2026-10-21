@@ -32,6 +32,7 @@ export default function Dashboard() {
 
                 const budgetRes = await getBudgets(user.id, user.sessionUuid || "");
                 setBudgets(budgetRes);
+                setErrorMessage("");
             } catch (error) {
                 console.error("Failed to fetch dashboard data:", error);
             } finally {

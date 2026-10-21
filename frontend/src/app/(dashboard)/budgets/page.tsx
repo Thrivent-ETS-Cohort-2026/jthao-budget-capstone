@@ -146,13 +146,13 @@ export default function BudgetsPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={() => router.push("/budgets/new")}
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                        className="bg-slate-400 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Create Budget
                     </button>
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="bg-gray-600 text-white p-2 rounded hover:bg-gray-700"
+                        className="bg-slate-400 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Back to Dashboard
                     </button>
