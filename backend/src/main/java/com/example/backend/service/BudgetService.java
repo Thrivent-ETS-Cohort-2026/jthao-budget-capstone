@@ -98,7 +98,7 @@ public class BudgetService {
 
         List<Transaction> transactionList = transactionRepository.findByUserIdAndBudgetId(budget.getUser().getId(), budget.getId());
         for (Transaction transaction : transactionList) {
-            transaction.setBudget(null);
+            transaction.setBudgetFrom(null);
         }
         budgetRepository.delete(budget);
     }
