@@ -88,8 +88,8 @@ export default function ReportsPage() {
         const projectedDates: string[] = getProjectedDates(transaction, 12);
         projectedDates.forEach((dateStr: string) => {
             categorySpendMap[category] = (categorySpendMap[category] || 0) + amount;
-            const ym: string = dateStr.substring(0, 7);
-            monthlySpendMap[ym] = (monthlySpendMap[ym] || 0) + amount;
+            const yearMonth: string = dateStr.substring(0, 7);
+            monthlySpendMap[yearMonth] = (monthlySpendMap[yearMonth] || 0) + amount;
         });
     });
 
