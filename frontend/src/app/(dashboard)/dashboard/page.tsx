@@ -56,7 +56,7 @@ export default function Dashboard() {
         );
     }
 
-    const handleDeleteAccount = async (id: number) => {
+    const handleDeleteAccount = async (id: number): Promise<void> => {
         if (!confirm("Are you sure you want to delete this account?")) {
             return;
         }
@@ -94,19 +94,19 @@ export default function Dashboard() {
                 <div className="flex gap-2">
                     <button
                         onClick={() => router.push("/report")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-slate-50 border border-slate-200 text-black p-2 rounded text-sm hover:bg-slate-200 hover:border-slate-300"
                     >
                         View Reports
                     </button>
                     <button
                         onClick={() => router.push("/account/new")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-emerald-600 text-white p-2 rounded text-sm hover:bg-emerald-700"
                     >
                         Add Account
                     </button>
                     <button
                         onClick={() => router.push("/budgets/new")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-emerald-600 text-white p-2 rounded text-sm hover:bg-emerald-700"
                     >
                         Add Budget
                     </button>
@@ -137,13 +137,13 @@ export default function Dashboard() {
                                 <div className="space-x-2">
                                     <button
                                         onClick={() => router.push(`/account/${account.id}/update`)}
-                                        className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
+                                        className="p-1 text-black bg-gray-200 border border-gray-400 rounded hover:bg-gray-300 text-xs"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => handleDeleteAccount(account.id)}
-                                        className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
+                                        className="p-1 text-black bg-gray-200 border border-gray-400 rounded hover:bg-gray-300 text-xs"
                                     >
                                         Delete
                                     </button>
