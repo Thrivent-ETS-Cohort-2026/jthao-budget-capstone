@@ -146,13 +146,13 @@ export default function BudgetsPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={() => router.push("/budgets/new")}
-                        className="bg-slate-400 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
                     >
                         Create Budget
                     </button>
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="bg-slate-400 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
                     >
                         Back to Dashboard
                     </button>
@@ -236,7 +236,7 @@ export default function BudgetsPage() {
                                     const isWarning: boolean = percentage >= 75 && percentage < 100;
 
                                     return (
-                                        <tr key={budget.id} className="border-b border-gray-200">
+                                        <tr key={budget.id} className="border-b border-gray-200 hover:bg-gray-50">
                                             <td className="p-3 font-medium text-gray-800">{budget.description || "—"}</td>
                                             <td className="p-3 text-gray-700">{budget.category}</td>
                                             <td className="p-3 text-gray-700">${budgetLimit.toFixed(2)}</td>
@@ -262,13 +262,13 @@ export default function BudgetsPage() {
                                             <td className="p-3 text-center space-x-2">
                                                 <Link
                                                     href={`/budgets/${budget.id}/update`}
-                                                    className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
+                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(budget.id)}
-                                                    className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
+                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
                                                 >
                                                     Delete
                                                 </button>
