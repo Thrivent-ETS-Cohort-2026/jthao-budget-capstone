@@ -147,25 +147,25 @@ export default function TransactionsPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={handleExportCSV}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
                     >
                         Export CSV
                     </button>
                     <button
                         onClick={() => router.push("/transactions/new")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
                     >
                         Add Transaction
                     </button>
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
                     >
                         Back to Dashboard
                     </button>
                 </div>
             </div>
-            <div className="border border-gray-300 p-4 rounded">
+            <div className="border border-gray-300 p-4 rounded bg-white">
                 <div className="flex justify-between items-center mb-3 border-b pb-2">
                     <div className="flex items-center gap-2">
                         <h2 className="font-semibold text-gray-700">Filter Transactions</h2>
@@ -253,14 +253,14 @@ export default function TransactionsPage() {
                                 </thead>
                                 <tbody>
                                     {currentTransactions.map((transaction) => (
-                                        <tr key={transaction.id} className="border-b border-gray-200">
+                                        <tr key={transaction.id} className="border-b border-gray-200 hover:bg-gray-50">
                                             <td className="p-3 text-gray-700">{transaction.date}</td>
                                             <td className="p-3 text-gray-700 font-medium">{transaction.description}</td>
                                             <td className="p-3 text-gray-700 font-semibold">${transaction.amount.toFixed(2)}</td>
                                             <td className="p-3 text-gray-700">{transaction.accountFrom}</td>
                                             <td className="p-3 text-gray-700">{transaction.budgetFrom || ""}</td>
                                             <td className="p-3">
-                                                <span className="bg-gray-100 text-gray-800 p-1 rounded">
+                                                <span className="text-gray-600 p-1 rounded">
                                                     {transaction.category}
                                                 </span>
                                             </td>
@@ -268,13 +268,13 @@ export default function TransactionsPage() {
                                             <td className="p-3 text-center space-x-2">
                                                 <Link
                                                     href={`/transactions/${transaction.id}/update`}
-                                                    className="p-1 text-black bg-gray-200 border border-gray-500 rounded hover:bg-gray-400 text-xs"
+                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(transaction.id)}
-                                                    className="p-1 text-black bg-gray-200 border border-gray-500 rounded  hover:bg-gray-400 text-xs"
+                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded  hover:bg-slate-500 hover:text-white text-xs"
                                                 >
                                                     Delete
                                                 </button>

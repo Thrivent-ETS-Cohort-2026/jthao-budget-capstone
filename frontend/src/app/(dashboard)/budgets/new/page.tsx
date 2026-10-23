@@ -140,13 +140,13 @@ export default function NewBudget() {
                     <button
                         type="button"
                         onClick={() => router.push("/dashboard")}
-                        className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
+                        className="bg-slate-400 text-white p-2 rounded text-sm hover:bg-slate-500"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
                     >
                         Save Budget
                     </button>
