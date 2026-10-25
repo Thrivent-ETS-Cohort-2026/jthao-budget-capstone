@@ -237,10 +237,10 @@ export default function TransactionsPage() {
                     <p className="text-gray-400 text-center p-4">No transactions found.</p>
                 ) : (
                     <div>
-                        <div className="border border-gray-200 rounded-lg overflow-hidden">
+                        <div className="border border-gray-200 rounded-lg overflow-scroll">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className="bg-gray-50 border-b border-gray-200 text-gray-700">
+                                    <tr className="bg-gray-100 border-b border-gray-200 text-gray-700">
                                         <th className="p-3 border-x border-gray-200">Date</th>
                                         <th className="p-3 border-x border-gray-200">Description</th>
                                         <th className="p-3 border-x border-gray-200">Amount</th>
