@@ -76,18 +76,31 @@ export default function ReportsPage() {
         (transaction: Transaction) => !transaction.deletedAt,
     );
 
+    const now = new Date();
+    const todayDate: string =
+        `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    const yearStart: string = `${now.getFullYear()}-01-01`;
+
+    const yearToDateTransactions: Transaction[] = activeTransactions.filter(
+        (transaction: Transaction) =>
+            transaction.date >= yearStart && transaction.date <= todayDate,
+    );
+
     const actualCategorySpendMap: { [category: string]: number } = {};
     const actualMonthlySpendMap: { [yearMonth: string]: number } = {};
-    const actualTransactionKeys = new Set<string>();
 
     activeTransactions.forEach((transaction: Transaction) => {
         const amount: number = Number(transaction.amount);
-        const category = transaction.category;
         const yearMonth = transaction.date.substring(0, 7);
 
-        actualCategorySpendMap[category] = (actualCategorySpendMap[category] || 0) + amount;
         actualMonthlySpendMap[yearMonth] = (actualMonthlySpendMap[yearMonth] || 0) + amount;
-        actualTransactionKeys.add(getTransactionMatchKey(transaction.date, transaction));
+    });
+
+    yearToDateTransactions.forEach((transaction: Transaction) => {
+        const amount: number = Number(transaction.amount);
+        const category = transaction.category;
+
+        actualCategorySpendMap[category] = (actualCategorySpendMap[category] || 0) + amount;
     });
 
     const topCategories = Object.entries(actualCategorySpendMap)
@@ -114,7 +127,7 @@ export default function ReportsPage() {
         const projectedDates = getProjectedDates(transaction, forecastStart, forecastEnd);
 
         projectedDates.forEach((dateStr: string) => {
-            
+
             const matchingKey = getTransactionMatchKey(dateStr, transaction);
 
             if (countedProjectedOccurrenceKeys.has(matchingKey)) {
@@ -231,4 +244,3 @@ export default function ReportsPage() {
         </div>
     );
 }
-
