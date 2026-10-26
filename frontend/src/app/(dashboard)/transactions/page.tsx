@@ -141,7 +141,7 @@ export default function TransactionsPage() {
     };
 
     return (
-        <div className="mx-auto p-6 space-y-6">
+        <div className="space-y-6">
             <div className="flex justify-between items-center p-6">
                 <h1 className="text-2xl font-bold text-gray-800">Transactions</h1>
                 <div className="flex gap-2">
@@ -268,13 +268,13 @@ export default function TransactionsPage() {
                                             <td className="p-3 text-center space-x-2">
                                                 <Link
                                                     href={`/transactions/${transaction.id}/update`}
-                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
+                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-sm"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(transaction.id)}
-                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded  hover:bg-slate-500 hover:text-white text-xs"
+                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded  hover:bg-slate-500 hover:text-white text-sm"
                                                 >
                                                     Delete
                                                 </button>

@@ -89,7 +89,7 @@ export default function Dashboard() {
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center p-6">
                 <h1 className="text-2xl font-bold text-gray-800">Financial Dashboard</h1>
                 <div className="flex gap-2">
                     <button
@@ -119,31 +119,31 @@ export default function Dashboard() {
                 </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="border border-gray-300 p-4 rounded bg-white grid grid-rows-2 gap-4">
                 <div className="border border-gray-300 p-4 rounded bg-white shadow-sm">
                     <div className="flex justify-between items-center mb-3 border-b pb-2">
-                        <h2 className="font-semibold text-gray-700">Accounts</h2>
-                        <span className="bg-gray-100 text-gray-600 px-2 py-1 text-xs rounded">
+                        <h2 className="font-bold text-gray-700 text-xl">Accounts</h2>
+                        <span className="font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded">
                             {accounts.length}
                         </span>
                     </div>
-                    <ul className="space-y-3 text-sm text-gray-600">
+                    <ul className="space-y-3 text-gray-600">
                         {accounts.map((account) => (
                             <li key={account.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0 hover:bg-gray-50">
                                 <div>
                                     <span className="font-medium text-gray-800">{account.accountName}</span>{" "}
-                                    <span className="text-gray-400 text-xs">({account.accountType})</span>
+                                    <span className="text-gray-400">({account.accountType})</span>
                                 </div>
                                 <div className="space-x-2">
                                     <button
                                         onClick={() => router.push(`/account/${account.id}/update`)}
-                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
+                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-sm"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => handleDeleteAccount(account.id)}
-                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
+                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-sm"
                                     >
                                         Delete
                                     </button>
@@ -156,16 +156,16 @@ export default function Dashboard() {
                 <div className="border border-gray-300 p-4 rounded bg-white shadow-sm">
                     <div className="flex justify-between items-center mb-3 border-b pb-2">
                         <div className="flex items-center space-x-3">
-                            <h2 className="font-semibold text-gray-700">Budgets</h2>
+                            <h2 className="font-bold text-gray-700 text-xl">Budgets</h2>
                         </div>
-                        <span className="bg-gray-100 text-gray-600 px-2 py-1 text-xs rounded">
+                        <span className="font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded">
                             {budgets.length}
                         </span>
                     </div>
                     {budgets.length === 0 ? (
                         <p className="text-sm text-gray-400">No budgets created yet.</p>
                     ) : (
-                        <ul className="space-y-3 text-sm text-gray-600">
+                        <ul className="space-y-3 text-gray-600">
                             {budgets.map((budget) => (
                                 <li key={budget.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0">
                                     <span className="font-medium text-gray-800">{budget.category}</span>
