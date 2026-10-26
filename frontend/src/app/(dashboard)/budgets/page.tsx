@@ -456,7 +456,7 @@ export default function BudgetsPage() {
                                                             : "Show Details ▼"}
                                                     </button>
                                                     <Link
-                                                        href={`/ budgets / ${budget.id}/update`}
+                                                        href={`/budgets/${budget.id}/update`}
                                                         className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
                                                     >
                                                         Edit
