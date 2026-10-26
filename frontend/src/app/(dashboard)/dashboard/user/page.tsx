@@ -71,17 +71,19 @@ export default function UserProfilePage() {
     }
 
     return (
-        <div className="mx-auto p-6 space-y-6 max-w-xl mt-6 bg-white border border-gray-300 rounded">
-            <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+        <div className="mx-auto p-6 space-y-6 max-w-xl">
+            <div className="flex justify-between items-center p-6 border-b border-gray-300">
                 <h1 className="text-2xl font-bold text-gray-800">Account Settings</h1>
             </div>
 
             {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
             {successMessage && <p className="text-green-600 text-sm">{successMessage}</p>}
 
-            <form onSubmit={handleUpdate} className="space-y-4">
+            <form onSubmit={handleUpdate} className="border border-gray-300 p-6 rounded space-y-4">
                 <div>
-                    <label htmlFor="first-name" className="text-gray-700 mb-1">First Name:</label>
+                    <label htmlFor="first-name" className="text-gray-700 mb-1 block">
+                        First Name:
+                        </label>
                     <input
                         id="first-name"
                         type="text"
@@ -91,7 +93,9 @@ export default function UserProfilePage() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="last-name" className="text-gray-700 mb-1">Last Name:</label>
+                    <label htmlFor="last-name" className="text-gray-700 mb-1 block">
+                        Last Name:
+                        </label>
                     <input
                         id="last-name"
                         type="text"
@@ -101,18 +105,21 @@ export default function UserProfilePage() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="email-text" className="text-gray-700 mb-1">Email:</label>
+                    <label htmlFor="email-text" className="text-gray-700 mb-1 block">
+                        Email:
+                        </label>
                     <input
                         id="email-text"
                         type="email"
                         className="w-full p-2 border border-gray-300 rounded"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required
                     />
                 </div>
                 <div>
-                    <label htmlFor="phone-number" className="text-gray-700 mb-1">Phone Number:</label>
+                    <label htmlFor="phone-number" className="text-gray-700 mb-1 block">
+                        Phone Number:
+                        </label>
                     <input
                         id="phone-number"
                         type="text"
@@ -122,7 +129,9 @@ export default function UserProfilePage() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password-text" className="text-gray-700 mb-1">New Password:</label>
+                    <label htmlFor="password-text" className="text-gray-700 mb-1 block">
+                        New Password:
+                    </label>
                     <input
                         id="password-text"
                         type="password"
@@ -132,18 +141,18 @@ export default function UserProfilePage() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200">
+                <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
                     <button
                         type="button"
                         onClick={() => router.push("/dashboard")}
-                        className="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 "
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={loading}
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         {loading ? "Saving..." : "Save Changes"}
                     </button>

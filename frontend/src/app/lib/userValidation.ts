@@ -58,9 +58,9 @@ export function validateUpdateUser(
     lastName: string,
     phoneNumber: string
 ): string {
-    if (!email) {
-        return "Email is required.";
-    }
+    // if (email) {
+    //     return "Email is required.";
+    // }
     if (firstName && firstName.length < 1) {
         return "First name must be at least 1 character long.";
     }
