@@ -66,7 +66,7 @@ function UpdateTransactionForm() {
         fetchData();
     }, [user?.id, user?.sessionUuid, transactionId]);
 
-        if (!user) {
+    if (!user) {
         return (
             <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
                 <p className="text-gray-600 mb-4">Please log in to update a transaction.</p>
@@ -146,7 +146,7 @@ function UpdateTransactionForm() {
 
     return (
         <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center p-6 border-b border-gray-300">
                 <h1 className="text-2xl font-bold text-gray-800">Edit Transaction</h1>
             </div>
             {errorMessage && (
@@ -156,7 +156,9 @@ function UpdateTransactionForm() {
             )}
             <form onSubmit={handleSubmit} className="border border-gray-300 p-6 rounded space-y-4">
                 <div>
-                    <label className="text-gray-700 mb-1">Description</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Description
+                    </label>
                     <input
                         type="text"
                         value={description}
@@ -166,7 +168,9 @@ function UpdateTransactionForm() {
                     />
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1">Amount</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Amount
+                    </label>
                     <input
                         type="number"
                         step="0.01"
@@ -177,7 +181,9 @@ function UpdateTransactionForm() {
                     />
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1">Date</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Date
+                    </label>
                     <input
                         type="date"
                         value={date}
@@ -187,7 +193,9 @@ function UpdateTransactionForm() {
                     />
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1">Occurrence</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Occurrence
+                    </label>
                     <select
                         value={transactionOccurrence}
                         onChange={(e) => setTransactionOccurrence(e.target.value as TransactionEvents)}
@@ -203,7 +211,9 @@ function UpdateTransactionForm() {
                     </select>
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1">Account</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Account
+                    </label>
                     <select
                         value={accountId}
                         onChange={handleAccountChange}
@@ -219,7 +229,9 @@ function UpdateTransactionForm() {
                     </select>
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1">Budget (Optional)</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Budget (Optional)
+                    </label>
                     <select
                         value={budgetId}
                         onChange={(e) => setBudgetId(e.target.value ? Number(e.target.value) : "")}
@@ -234,7 +246,9 @@ function UpdateTransactionForm() {
                     </select>
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1">Category</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Category
+                    </label>
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value as Categories)}
@@ -253,13 +267,13 @@ function UpdateTransactionForm() {
                     <button
                         type="button"
                         onClick={() => router.push("/transactions")}
-                        className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Save Changes
                     </button>
