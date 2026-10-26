@@ -7,8 +7,8 @@ import { Budget } from "@/app/types/budget";
 import { Transaction } from "@/app/types/transaction";
 import { getBudgets } from "@/app/lib/api/budgets";
 import { getTransactions } from "@/app/lib/api/transactions";
-import { Categories } from "@/app/types/categories";
 import { getProjectedDates } from "@/app/lib/utils/recurring";
+import { getForecastMonthKeys, getEndOfForecastMonth, getTransactionMatchKey, getStartOfCurrentMonth } from "@/app/lib/utils/reportSpending";
 
 export default function ReportsPage() {
     const router = useRouter();
@@ -67,38 +67,71 @@ export default function ReportsPage() {
         );
     }
 
-    const totalBudgetAllocation: number = budgets.reduce((account: number, budget: Budget) => account + Number(budget.amount), 0);
+    const activeBudgets: Budget[] = budgets.filter((budget: Budget) => budget.isEnabled);
+    const totalBudgetAllocation: number = activeBudgets.reduce(
+        (total: number, budget: Budget) => total + Number(budget.amount),
+        0,
+    );
+    const activeTransactions: Transaction[] = transactions.filter(
+        (transaction: Transaction) => !transaction.deletedAt,
+    );
 
-    const categorySpendMap: { [category: string]: number } = {};
-    const monthlySpendMap: { [yearMonth: string]: number } = {};
+    const actualCategorySpendMap: { [category: string]: number } = {};
+    const actualMonthlySpendMap: { [yearMonth: string]: number } = {};
+    const actualTransactionKeys = new Set<string>();
 
-    transactions.forEach((transaction: Transaction) => {
-        if (transaction.deletedAt) return;
+    activeTransactions.forEach((transaction: Transaction) => {
         const amount: number = Number(transaction.amount);
+        const category = transaction.category;
+        const yearMonth = transaction.date.substring(0, 7);
 
-        const matchedBudget: Budget | undefined = budgets.find((budget: Budget) => budget.id === transaction.budgetId);
-        const category: Categories = matchedBudget?.category || transaction.category;
-
-        // Base transaction spend
-        categorySpendMap[category] = (categorySpendMap[category] || 0) + amount;
-        const yearMonth: string = transaction.date.substring(0, 7);
-        monthlySpendMap[yearMonth] = (monthlySpendMap[yearMonth] || 0) + amount;
-
-        // Projected recurring future occurrences (12 months forward rolling window)
-        const projectedDates: string[] = getProjectedDates(transaction, 12);
-        projectedDates.forEach((dateStr: string) => {
-            categorySpendMap[category] = (categorySpendMap[category] || 0) + amount;
-            const yearMonth: string = dateStr.substring(0, 7);
-            monthlySpendMap[yearMonth] = (monthlySpendMap[yearMonth] || 0) + amount;
-        });
+        actualCategorySpendMap[category] = (actualCategorySpendMap[category] || 0) + amount;
+        actualMonthlySpendMap[yearMonth] = (actualMonthlySpendMap[yearMonth] || 0) + amount;
+        actualTransactionKeys.add(getTransactionMatchKey(transaction.date, transaction));
     });
 
-    const topCategories = Object.entries(categorySpendMap)
+    const topCategories = Object.entries(actualCategorySpendMap)
         .sort(([, x], [, y]) => y - x)
         .slice(0, 5);
 
-    const sortedMonths = Object.entries(monthlySpendMap)
-        .sort(([x], [y]) => x.localeCompare(y));
+    const forecastStart = getStartOfCurrentMonth();
+    const forecastEnd = getEndOfForecastMonth(forecastStart, 11);
+    const projectedMonthlySpendMap: { [yearMonth: string]: number } = {};
+    const forecastMonthKeys = getForecastMonthKeys(forecastStart, 12);
+
+    forecastMonthKeys.forEach((yearMonth: string) => {
+        projectedMonthlySpendMap[yearMonth] = 0;
+    });
+
+    const countedProjectedOccurrenceKeys = new Set<string>();
+
+    activeTransactions.forEach((transaction: Transaction) => {
+        if (transaction.transactionOccurrence === "ONCE") {
+            return;
+        }
+
+        const amount = Number(transaction.amount);
+        const projectedDates = getProjectedDates(transaction, forecastStart, forecastEnd);
+
+        projectedDates.forEach((dateStr: string) => {
+            
+            const matchingKey = getTransactionMatchKey(dateStr, transaction);
+
+            if (countedProjectedOccurrenceKeys.has(matchingKey)) {
+                return;
+            }
+            countedProjectedOccurrenceKeys.add(matchingKey);
+
+            const yearMonth = dateStr.substring(0, 7);
+            projectedMonthlySpendMap[yearMonth] = (projectedMonthlySpendMap[yearMonth] || 0) + amount;
+        });
+    });
+
+    const sortedMonths = forecastMonthKeys.map((yearMonth: string) => ({
+        yearMonth,
+        actual: actualMonthlySpendMap[yearMonth] || 0,
+        projected: projectedMonthlySpendMap[yearMonth] || 0,
+    }));
 
     return (
         <div className="mx-auto p-6 space-y-6">
@@ -111,7 +144,6 @@ export default function ReportsPage() {
                     Back to Dashboard
                 </button>
             </div>
-
             {errorMessage && (
                 <div className="px-6">
                     <p className="text-red-500 text-sm">{errorMessage}</p>
@@ -121,20 +153,19 @@ export default function ReportsPage() {
                 <div className="border border-gray-300 p-5 rounded bg-white shadow-sm">
                     <h2 className="text-sm font-bold text-black uppercase tracking-wide">Total Active Budgets</h2>
                     <p className="text-2xl font-bold text-gray-800 mt-1">${totalBudgetAllocation.toFixed(2)}</p>
-                    <p className="text-xs text-gray-500 mt-1">{budgets.length} budget categories configured</p>
+                    <p className="text-xs text-gray-500 mt-1">{activeBudgets.length} budget categories configured</p>
                 </div>
                 <div className="border border-gray-300 p-5 rounded bg-white shadow-sm">
                     <h2 className="text-sm font-bold text-black uppercase tracking-wide">Active Transactions Tracked</h2>
                     <p className="text-2xl font-bold text-gray-800 mt-1">
-                        {transactions.filter(trans => !trans.deletedAt).length}
+                        {activeTransactions.length}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">Across all linked accounts</p>
                 </div>
             </div>
-
-            {/* Top 5 Spending Categories */}
+            {/* Top 5 Actual Spending Categories */}
             <div className="border border-gray-300 p-5 rounded bg-white shadow-sm space-y-4">
-                <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Top 5 Spending Categories</h2>
+                <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Top 5 Actual Spending Categories</h2>
                 {topCategories.length === 0 ? (
                     <p className="text-gray-400 text-center py-4">No spending data available.</p>
                 ) : (
@@ -144,7 +175,7 @@ export default function ReportsPage() {
                                 <tr className="bg-gray-50 border-b border-gray-200 text-gray-700 text-sm">
                                     <th className="p-3">Rank</th>
                                     <th className="p-3">Category</th>
-                                    <th className="p-3 text-right">Total Spend</th>
+                                    <th className="p-3 text-right">Actual Spend</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -170,10 +201,8 @@ export default function ReportsPage() {
                     </div>
                 )}
             </div>
-
-            {/* Month-by-Month Spending */}
             <div className="border border-gray-300 p-5 rounded bg-white shadow-sm space-y-4">
-                <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Month-by-Month Spending (12-Month Forecast)</h2>
+                <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Monthly Spending & Forecast (Next 12 Months)</h2>
                 {sortedMonths.length === 0 ? (
                     <p className="text-gray-400 text-center py-4">No monthly data available.</p>
                 ) : (
@@ -182,14 +211,16 @@ export default function ReportsPage() {
                             <thead>
                                 <tr className="bg-gray-50 border-b border-gray-200 text-gray-700 text-sm">
                                     <th className="p-3">Month</th>
-                                    <th className="p-3 text-right">Total Spend</th>
+                                    <th className="p-3 text-right">Actual Spend</th>
+                                    <th className="p-3 text-right">Projected Spend</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {sortedMonths.map(([yearMonth, amount]) => (
+                                {sortedMonths.map(({ yearMonth, actual, projected }) => (
                                     <tr key={yearMonth} className="border-b border-gray-100">
                                         <td className="p-3 font-medium text-gray-800">{yearMonth}</td>
-                                        <td className="p-3 text-right font-semibold text-gray-700">${amount.toFixed(2)}</td>
+                                        <td className="p-3 text-right font-semibold text-gray-700">${actual.toFixed(2)}</td>
+                                        <td className="p-3 text-right font-semibold text-gray-700">${projected.toFixed(2)}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -200,3 +231,4 @@ export default function ReportsPage() {
         </div>
     );
 }
+
