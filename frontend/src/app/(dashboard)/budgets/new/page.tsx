@@ -52,7 +52,7 @@ export default function NewBudget() {
             setTargetPeriod("MONTHLY");
             setCategory("GROCERIES");
 
-            router.push("/dashboard");
+            router.push("/budgets");
         } catch (error) {
             setErrorMessage((error as Error).message || "Failed to create budget.");
         }
@@ -60,7 +60,7 @@ export default function NewBudget() {
 
     return (
         <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center p-6 border-b border-gray-300">
                 <h1 className="text-2xl font-bold text-gray-800">Create New Budget</h1>
             </div>
             {errorMessage && (
@@ -140,13 +140,13 @@ export default function NewBudget() {
                     <button
                         type="button"
                         onClick={() => router.push("/dashboard")}
-                        className="bg-slate-400 text-white p-2 rounded text-sm hover:bg-slate-500"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Save Budget
                     </button>

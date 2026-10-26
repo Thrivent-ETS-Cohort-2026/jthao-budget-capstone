@@ -87,7 +87,7 @@ function UpdateAccountForm() {
 
     return (
         <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center p-6 border-b border-gray-300">
                 <h1 className="text-2xl font-bold text-gray-800">Edit Account</h1>
             </div>
 
@@ -129,13 +129,13 @@ function UpdateAccountForm() {
                     <button
                         type="button"
                         onClick={() => router.push("/dashboard")}
-                        className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-slate-500 text-white p-2 rounded hover:bg-slate-700"
+                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Save Changes
                     </button>

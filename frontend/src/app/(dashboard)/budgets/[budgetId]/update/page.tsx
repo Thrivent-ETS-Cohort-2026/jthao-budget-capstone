@@ -47,7 +47,7 @@ function UpdateBudgetForm() {
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        if(!user){
+        if (!user) {
             return;
         }
         setErrorMessage("");
@@ -101,7 +101,7 @@ function UpdateBudgetForm() {
 
     return (
         <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center p-6 border-b border-gray-300">
                 <h1 className="text-2xl font-bold text-gray-800">Edit Budget</h1>
             </div>
             {errorMessage && (
@@ -111,7 +111,9 @@ function UpdateBudgetForm() {
             )}
             <form onSubmit={handleSubmit} className="border border-gray-300 p-6 rounded space-y-4">
                 <div>
-                    <label className="text-gray-700 mb-1 block">Description</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Description
+                    </label>
                     <input
                         type="text"
                         value={description}
@@ -121,7 +123,9 @@ function UpdateBudgetForm() {
                     />
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1 block">Category</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Category
+                    </label>
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value as Categories)}
@@ -137,7 +141,9 @@ function UpdateBudgetForm() {
                     </select>
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1 block">Budget Amount</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Budget Amount
+                    </label>
                     <input
                         type="number"
                         step="0.01"
@@ -148,7 +154,10 @@ function UpdateBudgetForm() {
                     />
                 </div>
                 <div>
-                    <label className="text-gray-700 mb-1 block">Target Period:</label>
+                    <label className="text-gray-700 mb-1 block">
+                        Target Period:
+
+                    </label>
                     <select
                         value={targetPeriod}
                         onChange={(e) => setTargetPeriod(e.target.value as TransactionEvents)}
@@ -167,13 +176,13 @@ function UpdateBudgetForm() {
                     <button
                         type="button"
                         onClick={() => router.push("/budgets")}
-                        className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Save Changes
                     </button>

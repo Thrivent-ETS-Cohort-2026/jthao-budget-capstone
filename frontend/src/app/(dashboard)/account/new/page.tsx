@@ -56,14 +56,16 @@ export default function NewAccount() {
   };
 
   return (
-    <div className=" mx-auto p-6 mt-10 border border-gray-300 rounded">
-      <h1 className="text-xl font-bold text-gray-800 mb-4">Create New Account</h1>
+    <div className="mx-auto p-6 space-y-6 max-w-xl">
+      <div className="flex justify-between items-center p-6 border-b border-gray-300">
+        <h1 className="text-xl font-bold text-gray-800 mb-4">Create New Account</h1>
+      </div>
       {errorMessage && (
         <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
       )}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="border border-gray-300 p-6 rounded space-y-4">
         <div>
-          <label htmlFor="accountName" className="text-gray-700">
+          <label htmlFor="accountName" className="text-gray-700 mb-1 block">
             Account Name
           </label>
           <input
@@ -77,7 +79,7 @@ export default function NewAccount() {
           />
         </div>
         <div>
-          <label htmlFor="accountType" className="text-gray-700">
+          <label htmlFor="accountType" className="text-gray-700 mb-1 block">
             Account Type
           </label>
           <select
@@ -93,17 +95,17 @@ export default function NewAccount() {
             <option value="OTHER">Other</option>
           </select>
         </div>
-        <div className="flex gap-2 pt-2">
+        <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+            className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
+            className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
           >
             Save Account
           </button>

@@ -142,14 +142,15 @@ export default function NewTransaction() {
     };
 
     return (
-        <div className="mx-auto p-5 mt-10 border border-gray-300 rounded">
-            <h1 className="text-xl font-bold text-gray-800 mb-4">Add New Transaction</h1>
-
+        <div className="mx-auto p-6 space-y-6 max-w-xl">
+            <div className="flex justify-between items-center p-6 border-b border-gray-300">
+                <h1 className="text-2xl font-bold text-gray-800">Add New Transaction</h1>
+            </div>
             {errorMessage && (
                 <p className="text-red-500 mb-4">{errorMessage}</p>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="border border-gray-300 p-6 rounded space-y-4">
                 <div>
                     <label htmlFor="description" className="text-gray-700 ">
                         Description
@@ -275,17 +276,17 @@ export default function NewTransaction() {
                         required
                     />
                 </div>
-                <div className="flex gap-2 pt-2">
+                <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
                     <button
                         type="button"
                         onClick={() => router.push("/transactions")}
-                        className="bg-gray-600 text-white p-2 m-2 rounded hover:bg-gray-700"
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white p-2 m-2 rounded hover:bg-blue-700"
+                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Save Transaction
                     </button>
