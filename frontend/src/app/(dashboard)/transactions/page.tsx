@@ -149,19 +149,19 @@ export default function TransactionsPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={handleExportCSV}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-slate-500 text-white p-2 rounded hover:bg-slate-600"
                     >
                         Export CSV
                     </button>
                     <button
                         onClick={() => router.push("/transactions/new")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-slate-500 text-white p-2 rounded hover:bg-slate-600"
                     >
                         Add Transaction
                     </button>
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-slate-500 text-white p-2 rounded hover:bg-slate-600"
                     >
                         Back to Dashboard
                     </button>
