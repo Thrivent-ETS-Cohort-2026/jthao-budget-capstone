@@ -144,7 +144,7 @@ export default function UserProfilePage() {
                 <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
                     <button
                         type="button"
-                        onClick={() => router.push("/dashboard")}
+                        onClick={() => router.back()}
                         className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Cancel
