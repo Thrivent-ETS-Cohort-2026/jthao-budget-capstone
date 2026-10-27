@@ -17,9 +17,9 @@ export default function DashboardLayout({
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-orange-100 flex flex-col">
             {user && (
-                <header className="border-b border-gray-200 bg-orange-400">
+                <header className="border-b border-orange-500 bg-orange-400">
                     <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
                         <div className="flex items-center space-x-6">
                             <button
@@ -70,7 +70,7 @@ export default function DashboardLayout({
                     </div>
                 </header>
             )}
-            <main className="flex-1 max-w-7xl w-full mx-auto p-6 bg-gray-50">
+            <main className="flex-1 max-w-7xl w-full mx-auto p-6 bg-orange-100">
                 {children}
             </main>
         </div>

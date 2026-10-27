@@ -88,19 +88,19 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 bg-orange-50">
             <div className="flex justify-between items-center p-6">
                 <h1 className="text-2xl font-bold text-gray-800">Financial Dashboard</h1>
                 <div className="flex gap-2">
                     <button
                         onClick={() => router.push("/report")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-orange-700 text-white p-2 rounded text-sm hover:bg-orange-500"
                     >
                         View Reports
                     </button>
                     <button
                         onClick={() => router.push("/account/new")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-orange-500 text-black p-2 rounded text-sm hover:bg-orange-700"
                     >
                         Add Account
                     </button>
