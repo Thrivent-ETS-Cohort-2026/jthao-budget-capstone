@@ -137,13 +137,13 @@ export default function Dashboard() {
                                 <div className="space-x-2">
                                     <button
                                         onClick={() => router.push(`/account/${account.id}/update`)}
-                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-sm"
+                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => handleDeleteAccount(account.id)}
-                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-sm"
+                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
                                     >
                                         Delete
                                     </button>
@@ -167,7 +167,7 @@ export default function Dashboard() {
                     ) : (
                         <ul className="space-y-3 text-gray-600">
                             {budgets.map((budget) => (
-                                <li key={budget.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0">
+                                <li key={budget.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0 hover:bg-gray-50">
                                     <span className="font-medium text-gray-800">{budget.category}</span>
                                     <span className="text-gray-700 font-semibold">${budget.amount}</span>
                                 </li>
