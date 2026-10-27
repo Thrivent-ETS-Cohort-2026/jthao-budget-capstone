@@ -8,7 +8,7 @@ import { getBudgets } from "@/app/lib/api/budgets";
 import { createTransaction } from "@/app/lib/api/transactions";
 import { Account } from "@/app/types/account";
 import { Budget } from "@/app/types/budget";
-import { CreateTransactionRequest, TransactionEvents } from "@/app/types/transaction";
+import { CreateTransactionRequest, TRANSACTIONEVENTS, TransactionEvents } from "@/app/types/transaction";
 import { CATEGORIES, Categories } from "@/app/types/categories"
 
 export default function NewTransaction() {
@@ -23,8 +23,8 @@ export default function NewTransaction() {
     const [accountId, setAccountId] = useState<number | "">("");
     const [budgetId, setBudgetId] = useState<number | "">("");
     const [accountFrom, setAccountFrom] = useState<string>("");
-    const [category, setCategory] = useState<Categories>("GROCERIES");
-    const [transactionOccurrence, setTransactionOccurrence] = useState<TransactionEvents>("ONCE");
+    const [category, setCategory] = useState<Categories | "">("");
+    const [transactionOccurrence, setTransactionOccurrence] = useState<TransactionEvents | "">("");
     const [date, setDate] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -98,6 +98,13 @@ export default function NewTransaction() {
             setErrorMessage("Description, amount, and account are required.");
             return;
         }
+        if (category === "") {
+            return;
+        }
+        if (transactionOccurrence === "") {
+            return;
+        }
+        
         let budgetFromValue: string | null = null;
         if (budgetId !== "") {
             const selectedBudget = budgets.find((b) => b.id === Number(budgetId));
@@ -131,8 +138,8 @@ export default function NewTransaction() {
             setBudgets([]);
             setAccountId("");
             setBudgetId("");
-            setCategory("GROCERIES");
-            setTransactionOccurrence("ONCE");
+            setCategory("");
+            setTransactionOccurrence("");
             setDate("");
 
             router.push("/transactions");
@@ -233,11 +240,11 @@ export default function NewTransaction() {
                     <label className="text-gray-700 mb-1">Category</label>
                     <select
                         value={category}
-                        onChange={(e) => setCategory(e.target.value as Categories)}
+                        onChange={(e) => setCategory(e.target.value as Categories | "")}
                         className="w-full p-2 border border-gray-300 rounded"
                         required
                     >
-                        <option value="">Select Category</option>
+                        <option value="">Select a Category</option>
                         {CATEGORIES.map((cat) => (
                             <option key={cat} value={cat}>
                                 {cat.replace(/_/g, " ")}
@@ -247,20 +254,21 @@ export default function NewTransaction() {
                 </div>
                 <div>
                     <label htmlFor="transactionOccurrence" className="text-gray-700">
-                        Reoccurrence
+                        Transaction reoccurrence
                     </label>
                     <select
                         id="transactionOccurrence"
                         value={transactionOccurrence}
                         onChange={(e) => setTransactionOccurrence(e.target.value as TransactionEvents)}
                         className="w-full p-2 border border-gray-300 rounded"
+                        required
                     >
-                        <option value="ONCE">Once</option>
-                        <option value="DAILY">Daily</option>
-                        <option value="WEEKLY">Weekly</option>
-                        <option value="MONTHLY">Monthly</option>
-                        <option value="QUARTERLY">Quarterly</option>
-                        <option value="YEARLY">Yearly</option>
+                        <option value="">Select a daily/weekly/monthly event</option>
+                        {TRANSACTIONEVENTS.map((tEvents) => (
+                            <option key={tEvents} value={tEvents}>
+                                {tEvents}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div>

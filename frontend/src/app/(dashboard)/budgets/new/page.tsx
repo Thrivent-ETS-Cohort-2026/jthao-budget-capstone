@@ -12,8 +12,8 @@ export default function NewBudget() {
     const router = useRouter();
     const { user } = useUser();
 
-    const [category, setCategory] = useState<Categories>("GROCERIES");
-    const [targetPeriod, setTargetPeriod] = useState<TransactionEvents>("MONTHLY");
+    const [category, setCategory] = useState<Categories | "">("");
+    const [targetPeriod, setTargetPeriod] = useState<TransactionEvents | "">("");
     const [description, setDescription] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -36,6 +36,13 @@ export default function NewBudget() {
         e.preventDefault();
         setErrorMessage("");
 
+        if (targetPeriod === "") {
+            return;
+        }
+        if (category === "") {
+            return;
+        }
+
         const requestData: BudgetRequest = {
             amount: parseFloat(amount),
             description,
@@ -49,8 +56,8 @@ export default function NewBudget() {
 
             setDescription("");
             setAmount("");
-            setTargetPeriod("MONTHLY");
-            setCategory("GROCERIES");
+            setTargetPeriod("");
+            setCategory("");
 
             router.push("/budgets");
         } catch (error) {
@@ -105,11 +112,11 @@ export default function NewBudget() {
                     <select
                         id="targetPeriod"
                         value={targetPeriod}
-                        onChange={(e) => setTargetPeriod(e.target.value as TransactionEvents)}
+                        onChange={(e) => setTargetPeriod(e.target.value as TransactionEvents | "")}
                         className="w-full p-2 border border-gray-300 rounded"
                         required
                     >
-                        <option value="">Select Target Period</option>
+                        <option value="">Select a Target Period</option>
                         {TRANSACTIONEVENTS.map((tEvents) => (
                             <option key={tEvents} value={tEvents}>
                                 {tEvents}
@@ -124,11 +131,11 @@ export default function NewBudget() {
                     <select
                         id="category"
                         value={category}
-                        onChange={(e) => setCategory(e.target.value as Categories)}
+                        onChange={(e) => setCategory(e.target.value as Categories | "")}
                         className="w-full p-2 border border-gray-300 rounded"
                         required
                     >
-                        <option value="">Select Category</option>
+                        <option value="">Select a Category</option>
                         {CATEGORIES.map((categories) => (
                             <option key={categories} value={categories}>
                                 {categories.replace(/_/g, " ")}
@@ -139,7 +146,7 @@ export default function NewBudget() {
                 <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
                     <button
                         type="button"
-                        onClick={() => router.push("/dashboard")}
+                        onClick={() => router.back()}
                         className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
                     >
                         Cancel
