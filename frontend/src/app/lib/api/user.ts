@@ -12,7 +12,7 @@ export async function validateUserLogin(email: string, password: string): Promis
         },
         body: JSON.stringify({ email, password })
     });
-    handleApiResponse(response);
+    await handleApiResponse(response);
     const user: User = await response.json();
         return user;
 }
@@ -26,7 +26,7 @@ export async function createUser(signUpRequest: UserFormRequest): Promise<User> 
         },
         body: JSON.stringify(signUpRequest)
     });
-    handleApiResponse(response);
+    await handleApiResponse(response);
     const user: User = await response.json();
         return user;
 }
@@ -40,7 +40,7 @@ export async function updateUser(id: number, updateUserRequest: UserFormRequest,
         },
         body: JSON.stringify(updateUserRequest)
     });
-    handleApiResponse(response);
+    await handleApiResponse(response);
     const user: User = await response.json();
         return user;
 }

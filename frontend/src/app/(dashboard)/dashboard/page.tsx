@@ -1,5 +1,6 @@
 "use client";
 
+import { getApiErrorMessage } from "@/app/lib/api/errorHandling";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
@@ -34,7 +35,7 @@ export default function Dashboard() {
                 setBudgets(budgetRes);
                 setErrorMessage("");
             } catch (error) {
-                console.error("Failed to fetch dashboard data:", error);
+                setErrorMessage(getApiErrorMessage(error));
             } finally {
                 setLoading(false);
             }
@@ -65,9 +66,8 @@ export default function Dashboard() {
             await deleteAccount(id, user.sessionUuid || "");
             setAccounts((prevAccounts) => prevAccounts.filter((account) => account.id !== id));
             setErrorMessage("");
-        } catch (error) {
-            console.error("Error deleting account:", error);
-            setErrorMessage((error as Error).message || "Failed to delete account.");
+        } catch (error: unknown) {
+            setErrorMessage(getApiErrorMessage(error));
         }
     };
 

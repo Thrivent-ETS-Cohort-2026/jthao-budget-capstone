@@ -8,6 +8,7 @@ import { Account } from "@/app/types/account";
 import { deleteTransaction, getTransactions } from "@/app/lib/api/transactions";
 import { getAccounts } from "@/app/lib/api/accounts";
 import Link from "next/link";
+import { getApiErrorMessage } from "@/app/lib/api/errorHandling";
 
 export default function TransactionsPage() {
     const router = useRouter();
@@ -16,6 +17,7 @@ export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [startDate, setStartDate] = useState<string>("");
@@ -32,14 +34,15 @@ export default function TransactionsPage() {
             }
 
             try {
+                setErrorMessage("");
                 setLoading(true);
                 const transactionList: Transaction[] = await getTransactions(user.id, user.sessionUuid || "");
                 setTransactions(transactionList);
 
                 const accountRes: Account[] = await getAccounts(user.id, user.sessionUuid || "");
                 setAccounts(accountRes);
-            } catch (error) {
-                console.error("Failed to fetch transactions:", error);
+            } catch (error: unknown) {
+                setErrorMessage(getApiErrorMessage(error));
             } finally {
                 setLoading(false);
             }
@@ -134,9 +137,8 @@ export default function TransactionsPage() {
                     return transaction;
                 });
             });
-        } catch (error) {
-            console.error("Error deleting transaction:", error);
-            alert("Failed to delete transaction.");
+        } catch (error: unknown) {
+            setErrorMessage(getApiErrorMessage(error));
         }
     };
 
@@ -237,6 +239,11 @@ export default function TransactionsPage() {
                     <p className="text-gray-400 text-center p-4">No transactions found.</p>
                 ) : (
                     <div>
+                        {errorMessage && (
+                            <div className="px-6">
+                                <p className="text-red-500 text-sm">{errorMessage}</p>
+                            </div>
+                        )}
                         <div className="border border-gray-200 rounded-lg overflow-scroll">
                             <table className="w-full text-left">
                                 <thead>
