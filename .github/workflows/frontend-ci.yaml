@@ -1,0 +1,18 @@
+name: run Jest Test
+
+on:
+  push:
+    branch: jt-github-actions # this will be the branch that you are working on
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20 # node 20 is depreciated. GH actions will default to node 24
+      - run: npm ci # clean install
+      - run: npm run test
