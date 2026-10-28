@@ -46,6 +46,7 @@ public class TransactionService {
         }
     }
 
+    @Transactional
     public TransactionResponse createTransaction(String sessionUuid, CreateTransactionRequest request) {
         validateSession(sessionUuid, request.getUserId());
 
@@ -75,7 +76,46 @@ public class TransactionService {
                 user,
                 budget,
                 account);
+
         transactionRepository.save(transaction);
+
+        TransactionEvent occurrence = request.getTransactionOccurrence();
+        LocalDate endDate = request.getEndDate();
+
+        if (endDate != null &&
+                (occurrence == TransactionEvent.DAILY
+                        || occurrence == TransactionEvent.WEEKLY
+                        || occurrence == TransactionEvent.MONTHLY
+                        || occurrence == TransactionEvent.QUARTERLY
+                        || occurrence == TransactionEvent.YEARLY)) {
+
+            LocalDate startDate = request.getDate();
+            int originalDay = startDate.getDayOfMonth();
+
+            int occurrenceNumber = 1;
+            LocalDate nextDate = calculateNextDate(occurrence, startDate, occurrenceNumber, originalDay);
+
+            while (!nextDate.isAfter(endDate)) {
+                Transaction generatedTransaction = new Transaction(
+                        request.getAmount(),
+                        request.getDescription(),
+                        request.getBudgetFrom(),
+                        request.getAccountFrom(),
+                        request.getCategory(),
+                        TransactionEvent.ONCE,
+                        nextDate,
+                        null,
+                        user,
+                        budget,
+                        account);
+
+                transactionRepository.save(generatedTransaction);
+
+                occurrenceNumber++;
+
+                nextDate = calculateNextDate(occurrence, startDate, occurrenceNumber, originalDay);
+            }
+        }
 
         return new TransactionResponse(
                 transaction.getId(),
@@ -91,6 +131,49 @@ public class TransactionService {
                 transaction.getBudget() != null ? transaction.getBudget().getId() : null,
                 transaction.getAccount().getId(),
                 transaction.getDeletedAt());
+    }
+
+    private LocalDate calculateNextDate(TransactionEvent occurrence, LocalDate startDate, int occurrenceNumber,
+            int originalDay) {
+
+        LocalDate nextDate;
+
+        switch (occurrence) {
+            case DAILY:
+                nextDate = startDate.plusDays(occurrenceNumber);
+                break;
+            case WEEKLY:
+                nextDate = startDate.plusWeeks(occurrenceNumber);
+                break;
+            case MONTHLY:
+                YearMonth monthlyTarget = YearMonth.from(startDate);
+                monthlyTarget = monthlyTarget.plusMonths(occurrenceNumber);
+
+                int monthlyDay = Math.min(originalDay, monthlyTarget.lengthOfMonth());
+
+                nextDate = monthlyTarget.atDay(monthlyDay);
+                break;
+            case QUARTERLY:
+                YearMonth quarterlyTarget = YearMonth.from(startDate);
+                quarterlyTarget = quarterlyTarget.plusMonths(3L * occurrenceNumber);
+
+                int quarterlyDay = Math.min(originalDay, quarterlyTarget.lengthOfMonth());
+
+                nextDate = quarterlyTarget.atDay(quarterlyDay);
+                break;
+            case YEARLY:
+                YearMonth yearlyTarget = YearMonth.from(startDate);
+                yearlyTarget = yearlyTarget.plusMonths(12L * occurrenceNumber);
+
+                int yearlyDay = Math.min(originalDay, yearlyTarget.lengthOfMonth());
+
+                nextDate = yearlyTarget.atDay(yearlyDay);
+                break;
+            default:
+                throw new IllegalStateException(
+                        "Unsupported recurrence interval: " + occurrence);
+        }
+        return nextDate;
     }
 
     public TransactionResponse getTransaction(Long id, String sessionUuid) {
@@ -125,6 +208,14 @@ public class TransactionService {
 
         validateSession(sessionUuid, transaction.getUser().getId());
 
+        LocalDate updatedDate = request.getDate() != null ? request.getDate() : transaction.getDate();
+
+        if (request.getEndDate() != null
+                && request.getEndDate().isBefore(updatedDate)) {
+            throw new IllegalArgumentException(
+                    "Transaction end date cannot be before the transaction date");
+        }
+
         if (request.getAmount() != null) {
             transaction.setAmount(request.getAmount());
         }
@@ -147,9 +238,7 @@ public class TransactionService {
             transaction.setDate(request.getDate());
         }
 
-        if (request.getEndDate() != null) {
-            transaction.setEndDate(request.getEndDate());
-        }
+        transaction.setEndDate(request.getEndDate());
 
         if (request.getAccountId() != null) {
             Account account = accountRepository.findById(request.getAccountId())
