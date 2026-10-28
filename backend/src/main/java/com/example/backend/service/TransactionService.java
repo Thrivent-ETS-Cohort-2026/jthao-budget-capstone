@@ -1,3 +1,4 @@
+
 package com.example.backend.service;
 
 import java.time.LocalDate;
@@ -6,6 +7,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.YearMonth;
+import com.example.backend.types.TransactionEvent;
 
 import com.example.backend.dto.request.transaction.CreateTransactionRequest;
 import com.example.backend.dto.response.transaction.TransactionResponse;
@@ -58,6 +62,7 @@ public class TransactionService {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(
                         () -> new IllegalArgumentException("Account not found with id: " + request.getAccountId()));
+
         Transaction transaction = new Transaction(
                 request.getAmount(),
                 request.getDescription(),
@@ -66,6 +71,7 @@ public class TransactionService {
                 request.getCategory(),
                 request.getTransactionOccurrence(),
                 request.getDate(),
+                request.getEndDate(),
                 user,
                 budget,
                 account);
@@ -80,6 +86,7 @@ public class TransactionService {
                 transaction.getCategory(),
                 transaction.getTransactionOccurrence(),
                 transaction.getDate(),
+                transaction.getEndDate(),
                 transaction.getUser().getId(),
                 transaction.getBudget() != null ? transaction.getBudget().getId() : null,
                 transaction.getAccount().getId(),
@@ -89,7 +96,7 @@ public class TransactionService {
     public TransactionResponse getTransaction(Long id, String sessionUuid) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + id));
-        
+
         validateSession(sessionUuid, transaction.getUser().getId());
 
         Long budgetId = null;
@@ -105,6 +112,7 @@ public class TransactionService {
                 transaction.getCategory(),
                 transaction.getTransactionOccurrence(),
                 transaction.getDate(),
+                transaction.getEndDate(),
                 transaction.getUser().getId(),
                 budgetId,
                 transaction.getAccount().getId(),
@@ -138,6 +146,11 @@ public class TransactionService {
         if (request.getDate() != null) {
             transaction.setDate(request.getDate());
         }
+
+        if (request.getEndDate() != null) {
+            transaction.setEndDate(request.getEndDate());
+        }
+
         if (request.getAccountId() != null) {
             Account account = accountRepository.findById(request.getAccountId())
                     .orElseThrow(
@@ -170,6 +183,7 @@ public class TransactionService {
                 transaction.getCategory(),
                 transaction.getTransactionOccurrence(),
                 transaction.getDate(),
+                transaction.getEndDate(),
                 transaction.getUser().getId(),
                 budgetId,
                 transaction.getAccount().getId(),
@@ -193,23 +207,24 @@ public class TransactionService {
         List<Transaction> transactionList = transactionRepository.findByUserId(userId);
         List<TransactionResponse> transactionResponseList = new ArrayList<>();
 
-        for (Transaction t : transactionList) {
-            if (t.getDeletedAt() != null) {
+        for (Transaction transaction : transactionList) {
+            if (transaction.getDeletedAt() != null) {
                 continue;
             }
             TransactionResponse response = new TransactionResponse(
-                    t.getId(),
-                    t.getAmount(),
-                    t.getDescription(),
-                    t.getBudgetFrom(),
-                    t.getAccountFrom(),
-                    t.getCategory(),
-                    t.getTransactionOccurrence(),
-                    t.getDate(),
-                    t.getUser().getId(),
-                    t.getBudget() != null ? t.getBudget().getId() : null,
-                    t.getAccount().getId(),
-                    t.getDeletedAt());
+                    transaction.getId(),
+                    transaction.getAmount(),
+                    transaction.getDescription(),
+                    transaction.getBudgetFrom(),
+                    transaction.getAccountFrom(),
+                    transaction.getCategory(),
+                    transaction.getTransactionOccurrence(),
+                    transaction.getDate(),
+                    transaction.getEndDate(),
+                    transaction.getUser().getId(),
+                    transaction.getBudget() != null ? transaction.getBudget().getId() : null,
+                    transaction.getAccount().getId(),
+                    transaction.getDeletedAt());
             transactionResponseList.add(response);
         }
         return transactionResponseList;

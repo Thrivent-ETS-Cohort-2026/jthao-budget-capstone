@@ -8,8 +8,8 @@ import com.example.backend.model.User;
 import com.example.backend.model.Account;
 
 public class TransactionValidation {
-    public static void validate(BigDecimal amount, Categories category, TransactionEvent transactionOccurrence, 
-                                LocalDate date, User user, Account account) {
+    public static void validate(BigDecimal amount, Categories category, TransactionEvent transactionOccurrence,
+            LocalDate date, LocalDate endDate, User user, Account account) {
         if (amount == null) {
             throw new IllegalArgumentException("Transaction amount cannot be null");
         }
@@ -24,6 +24,9 @@ public class TransactionValidation {
         }
         if (date == null) {
             throw new IllegalArgumentException("Transaction date cannot be null");
+        }
+        if (endDate != null && endDate.isBefore(date)) {
+            throw new IllegalArgumentException("Transaction end date cannot be before the transaction date");
         }
         if (user == null) {
             throw new IllegalArgumentException("Transaction must be associated with a user");

@@ -15,6 +15,7 @@ public class CreateTransactionRequest {
     private Categories category;
     private TransactionEvent transactionOccurrence;
     private LocalDate date;
+    private LocalDate endDate;
     private Long userId;
     private Long budgetId;
     private Long accountId;
@@ -47,6 +48,10 @@ public class CreateTransactionRequest {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
     public Long getUserId() {
