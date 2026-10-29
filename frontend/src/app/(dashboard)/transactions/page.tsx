@@ -25,6 +25,13 @@ export default function TransactionsPage() {
     const [categoryFilter, setCategoryFilter] = useState<string>("");
     const [accountFilter, setAccountFilter] = useState<string>("ALL");
     const itemsPerPage = 10;
+    const clearFilters = () => {
+        setStartDate("");
+        setEndDate("");
+        setCategoryFilter("");
+        setAccountFilter("ALL");
+        setCurrentPage(1);
+    };
 
     useEffect(() => {
         async function fetchData(): Promise<void> {
@@ -34,6 +41,11 @@ export default function TransactionsPage() {
             }
 
             try {
+                setStartDate("");
+                setEndDate("");
+                setCategoryFilter("");
+                setAccountFilter("ALL");
+                setCurrentPage(1);
                 setErrorMessage("");
                 setLoading(true);
                 const transactionList: Transaction[] = await getTransactions(user.id, user.sessionUuid || "");
@@ -77,15 +89,15 @@ export default function TransactionsPage() {
 
     const handleExportCSV: () => void = () => {
         if (filteredTransactions.length === 0) return;
-        const headers: string[] = ["Date", "Description", "Amount", "Account From", "Budget From", "Category", "Recurrence"];
+        const headers: string[] = ["Date", "Description", "Amount", "Account From", "Budget From", "Category"];
+        
         const rows: (string | number)[][] = filteredTransactions.map(transaction => [
             transaction.date,
             `"${transaction.description.replace(/"/g, '""')}"`,
             transaction.amount,
             `"${transaction.accountFrom}"`,
             `"${transaction.budgetFrom || ""}"`,
-            transaction.category,
-            transaction.transactionOccurrence
+            transaction.category
         ]);
         const csvContent: string = [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
 
@@ -175,6 +187,14 @@ export default function TransactionsPage() {
                             {filteredTransactions.length} found
                         </span>
                     </div>
+
+                    <button
+                        type="button"
+                        onClick={clearFilters}
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                    >
+                        Clear Filters
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-4 gap-3 mb-5">
@@ -254,7 +274,6 @@ export default function TransactionsPage() {
                                         <th className="p-3 border-x border-gray-200">Account From</th>
                                         <th className="p-3 border-x border-gray-200">Budget From</th>
                                         <th className="p-3 border-x border-gray-200">Category</th>
-                                        <th className="p-3 border-x border-gray-200">Recurrence</th>
                                         <th className="p-3 border-x border-gray-200 text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -271,7 +290,6 @@ export default function TransactionsPage() {
                                                     {transaction.category}
                                                 </span>
                                             </td>
-                                            <td className="p-3 text-gray-700 capitalize">{transaction.transactionOccurrence || "ONCE"}</td>
                                             <td className="p-3 text-center space-x-2">
                                                 <Link
                                                     href={`/transactions/${transaction.id}/update`}
