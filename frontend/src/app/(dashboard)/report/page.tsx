@@ -206,13 +206,15 @@ export default function ReportsPage() {
                                     <tr key={category} className="border-b border-gray-100">
                                         <td className="p-3">
                                             {index === 0 ? (
-                                                <span className="bg-blue-100 text-blue-800 p-2 rounded text-xs font-bold">#1</span>
+                                                <span className="bg-red-100 text-red-800 p-2 rounded text-xs font-bold">#1</span>
                                             ) : index === 1 ? (
-                                                <span className="bg-emerald-100 text-emerald-800 p-2 rounded text-xs font-bold">#2</span>
+                                                <span className="bg-blue-100 text-blue-800 p-2 rounded text-xs font-bold">#2</span>
                                             ) : index === 2 ? (
-                                                <span className="bg-amber-100 text-amber-800 p-2 rounded text-xs font-bold">#3</span>
+                                                <span className="bg-emerald-100 text-emerald-800 p-2 rounded text-xs font-bold">#3</span>
+                                            ) : index === 3 ? (
+                                                <span className="bg-yellow-100 text-yellow-800 p-2 rounded text-xs font-bold">#4</span>
                                             ) : (
-                                                <span className="text-gray-500 p-2 text-xs font-semibold">#{index + 1}</span>
+                                                <span className="bg-gray-100 text-gray-800 p-2 rounded text-xs font-bold">#5</span>
                                             )}
                                         </td>
                                         <td className="p-3 font-medium text-gray-800">{category.replace(/_/g, " ")}</td>
