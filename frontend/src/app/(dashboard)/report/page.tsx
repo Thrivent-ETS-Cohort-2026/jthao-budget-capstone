@@ -8,7 +8,7 @@ import { Transaction } from "@/app/types/transaction";
 import { getBudgets } from "@/app/lib/api/budgets";
 import { getTransactions } from "@/app/lib/api/transactions";
 import { getProjectedDates } from "@/app/lib/utils/recurring";
-import { getForecastMonthKeys, getEndOfForecastMonth, getTransactionMatchKey, getStartOfCurrentMonth } from "@/app/lib/utils/reportSpending";
+import { getForecastMonthKeys, getEndOfForecastMonth, getStartOfCurrentMonth } from "@/app/lib/utils/reportSpending";
 
 export default function ReportsPage() {
     const router = useRouter();
@@ -69,14 +69,30 @@ export default function ReportsPage() {
 
     const activeBudgets: Budget[] = budgets.filter((budget: Budget) => budget.isEnabled);
     const totalBudgetAllocation: number = activeBudgets.reduce(
-        (total: number, budget: Budget) => total + Number(budget.amount),
-        0,
+        (total: number, budget: Budget) => {
+            const amount: number = Number(budget.amount);
+
+            switch (budget.targetPeriod) {
+                case "WEEKLY":
+                    return total + (amount * 52 / 12);
+                case "MONTHLY":
+                    return total + amount;
+                case "QUARTERLY":
+                    return total + (amount / 3);
+                case "YEARLY":
+                    return total + (amount / 12);
+                default:
+                    return total;
+            }
+        },
+        0
     );
+
     const activeTransactions: Transaction[] = transactions.filter(
         (transaction: Transaction) => !transaction.deletedAt,
     );
 
-    const now = new Date();
+    const now: Date = new Date();
     const todayDate: string =
         `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     const yearStart: string = `${now.getFullYear()}-01-01`;
@@ -90,6 +106,10 @@ export default function ReportsPage() {
     const actualMonthlySpendMap: { [yearMonth: string]: number } = {};
 
     activeTransactions.forEach((transaction: Transaction) => {
+        if (transaction.date > todayDate) {
+            return;
+        }
+
         const amount: number = Number(transaction.amount);
         const yearMonth = transaction.date.substring(0, 7);
 
@@ -116,25 +136,15 @@ export default function ReportsPage() {
         projectedMonthlySpendMap[yearMonth] = 0;
     });
 
-    const countedProjectedOccurrenceKeys = new Set<string>();
-
     activeTransactions.forEach((transaction: Transaction) => {
         if (transaction.transactionOccurrence === "ONCE") {
             return;
         }
 
-        const amount = Number(transaction.amount);
-        const projectedDates = getProjectedDates(transaction, forecastStart, forecastEnd);
+        const amount: number = Number(transaction.amount);
+        const projectedDates: string[] = getProjectedDates(transaction, forecastStart, forecastEnd);
 
         projectedDates.forEach((dateStr: string) => {
-
-            const matchingKey = getTransactionMatchKey(dateStr, transaction);
-
-            if (countedProjectedOccurrenceKeys.has(matchingKey)) {
-                return;
-            }
-            countedProjectedOccurrenceKeys.add(matchingKey);
-
             const yearMonth = dateStr.substring(0, 7);
             projectedMonthlySpendMap[yearMonth] = (projectedMonthlySpendMap[yearMonth] || 0) + amount;
         });
@@ -143,7 +153,7 @@ export default function ReportsPage() {
     const sortedMonths = forecastMonthKeys.map((yearMonth: string) => ({
         yearMonth,
         actual: actualMonthlySpendMap[yearMonth] || 0,
-        projected: projectedMonthlySpendMap[yearMonth] || 0,
+        expected: projectedMonthlySpendMap[yearMonth] || 0,
     }));
 
     return (
@@ -164,7 +174,7 @@ export default function ReportsPage() {
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="border border-gray-300 p-5 rounded bg-white shadow-sm">
-                    <h2 className="text-sm font-bold text-black uppercase tracking-wide">Total Active Budgets</h2>
+                    <h2 className="text-sm font-bold text-black uppercase tracking-wide">Total Monthly Budget Allowance</h2>
                     <p className="text-2xl font-bold text-gray-800 mt-1">${totalBudgetAllocation.toFixed(2)}</p>
                     <p className="text-xs text-gray-500 mt-1">{activeBudgets.length} budget categories configured</p>
                 </div>
@@ -214,8 +224,9 @@ export default function ReportsPage() {
                     </div>
                 )}
             </div>
+            {/* Monthly Spending Forecast */}
             <div className="border border-gray-300 p-5 rounded bg-white shadow-sm space-y-4">
-                <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Monthly Spending & Forecast (Next 12 Months)</h2>
+                <h2 className="text-lg font-bold text-gray-800 border-b pb-2">Monthly Spending Forecast (Next 12 Months)</h2>
                 {sortedMonths.length === 0 ? (
                     <p className="text-gray-400 text-center py-4">No monthly data available.</p>
                 ) : (
@@ -225,15 +236,15 @@ export default function ReportsPage() {
                                 <tr className="bg-gray-50 border-b border-gray-200 text-gray-700 text-sm">
                                     <th className="p-3">Month</th>
                                     <th className="p-3 text-right">Actual Spend</th>
-                                    <th className="p-3 text-right">Projected Spend</th>
+                                    <th className="p-3 text-right">Expected Spend</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {sortedMonths.map(({ yearMonth, actual, projected }) => (
+                                {sortedMonths.map(({ yearMonth, actual, expected }) => (
                                     <tr key={yearMonth} className="border-b border-gray-100">
                                         <td className="p-3 font-medium text-gray-800">{yearMonth}</td>
                                         <td className="p-3 text-right font-semibold text-gray-700">${actual.toFixed(2)}</td>
-                                        <td className="p-3 text-right font-semibold text-gray-700">${projected.toFixed(2)}</td>
+                                        <td className="p-3 text-right font-semibold text-gray-700">${expected.toFixed(2)}</td>
                                     </tr>
                                 ))}
                             </tbody>

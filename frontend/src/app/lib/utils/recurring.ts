@@ -13,12 +13,32 @@ export function getProjectedDates(
     const anchor: Date | null = parseDateOnly(transaction.date);
     const start: Date | null = parseDateOnly(windowStart);
     const end: Date | null = parseDateOnly(windowEnd);
+    const recurrenceEnd: Date | null = transaction.endDate
+        ? parseDateOnly(transaction.endDate)
+        : null;
 
     if (!anchor || !start || !end || start.getTime() > end.getTime()) {
         return [];
     }
 
+    if (transaction.endDate && !recurrenceEnd) {
+        return [];
+    }
+
+    const effectiveEnd: Date = recurrenceEnd && recurrenceEnd.getTime() < end.getTime()
+        ? recurrenceEnd
+        : end;
+
+    if (anchor.getTime() > effectiveEnd.getTime()) {
+        return [];
+    }
+
     const dates: string[] = [];
+
+    if (anchor.getTime() >= start.getTime() && anchor.getTime() <= effectiveEnd.getTime()) {
+        dates.push(formatDateOnly(anchor));
+    }
+
     const anchorDay: number = anchor.getUTCDate();
     let cursor: Date = anchor;
     let iterations: number = 0;
@@ -27,15 +47,18 @@ export function getProjectedDates(
     while (iterations < maxIterations) {
         iterations += 1;
         const next: Date | null = getNextOccurrence(cursor, occurrence, anchorDay);
-        if (!next || next.getTime() > end.getTime()) {
+
+        if (!next || next.getTime() > effectiveEnd.getTime()) {
             break;
         }
 
         cursor = next;
+
         if (cursor.getTime() >= start.getTime()) {
             dates.push(formatDateOnly(cursor));
         }
     }
+
     return dates;
 }
 
