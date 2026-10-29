@@ -242,14 +242,14 @@ export default function BudgetsPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={() => router.push("/budgets/new")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-orange-400 text-black p-2 rounded text-sm hover:bg-orange-500"
                     >
                         Create Budget
                     </button>
 
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-orange-400 text-black p-2 rounded text-sm hover:bg-orange-500"
                     >
                         Back to Dashboard
                     </button>
@@ -263,7 +263,7 @@ export default function BudgetsPage() {
                 </div>
             )}
             {validDateRange && budgetAlerts.length > 0 && (
-                <div className="mx-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded shadow-sm space-y-2">
+                <div className="mx-6 bg-amber-100 border-l-4 border-amber-500 p-4 rounded shadow-sm space-y-2">
                     <h2 className="text-sm font-bold text-amber-800 uppercase tracking-wide">
                         Budget Threshold Alerts
                     </h2>
@@ -292,7 +292,7 @@ export default function BudgetsPage() {
                     </ul>
                 </div>
             )}
-            <div className="border border-gray-300 p-4 rounded bg-white">
+            <div className="border border-gray-300 p-4 rounded bg-white shadow-sm">
                 <div className="grid grid-cols-2 gap-3 mb-5">
                     <div>
                         <label className="text-xs text-gray-600 mb-1">
@@ -302,7 +302,7 @@ export default function BudgetsPage() {
                             type="date"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
-                            className="w-full p-1 border border-gray-300"
+                            className="w-full p-1 border border-gray-300 bg-gray-50"
                         />
                     </div>
                     <div>
@@ -313,11 +313,11 @@ export default function BudgetsPage() {
                             type="date"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
-                            className="w-full p-1 border border-gray-300"
+                            className="w-full p-1 border border-gray-300 bg-gray-50"
                         />
                     </div>
                 </div>
-                <div className="flex justify-between items-center mb-3 border-b pb-2">
+                <div className="flex justify-between items-center mb-3 border-b pb-2 border-gray-500">
                     <div className="flex items-center gap-2">
                         <h2 className="font-semibold text-gray-700">
                             Filter Budgets
@@ -330,7 +330,7 @@ export default function BudgetsPage() {
                     <button
                         type="button"
                         onClick={clearFilters}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-amber-500 text-black p-2 rounded text-sm hover:bg-amber-600"
                     >
                         Clear Filters
                     </button>
@@ -418,7 +418,7 @@ export default function BudgetsPage() {
 
                                     return (
                                         <Fragment key={budget.id}>
-                                            <tr className="border-b border-gray-200 hover:bg-gray-50">
+                                            <tr className="border-b border-gray-200 hover:bg-orange-50">
                                                 <td className="p-3 font-medium text-gray-800">
                                                     {budget.description || "—"}
                                                 </td>
@@ -463,7 +463,7 @@ export default function BudgetsPage() {
                                                         </span>
                                                     )}
                                                 </td>
-                                                <td className="p-3 text-center space-x-2">
+                                                <td className="p-3 text-center space-x-2 flex justify-center">
                                                     <button
                                                         onClick={() =>
                                                             toggleBudgetDetails(
@@ -474,7 +474,7 @@ export default function BudgetsPage() {
                                                         aria-expanded={expandedBudgetIds.has(
                                                             budget.id
                                                         )}
-                                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
+                                                        className="p-1 text-black bg-orange-300 border border-orange-400 rounded hover:bg-orange-500 hover:border-orange-600 text-xs"
                                                     >
                                                         {expandedBudgetIds.has(
                                                             budget.id
@@ -484,7 +484,7 @@ export default function BudgetsPage() {
                                                     </button>
                                                     <Link
                                                         href={`/budgets/${budget.id}/update`}
-                                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
+                                                        className="p-1 text-black bg-orange-300 border border-orange-400 rounded hover:bg-orange-500 hover:border-orange-600 text-xs"
                                                     >
                                                         Edit
                                                     </Link >
@@ -494,7 +494,7 @@ export default function BudgetsPage() {
                                                                 budget.id
                                                             )
                                                         }
-                                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
+                                                        className="p-1 text-black bg-orange-300 border border-orange-400 rounded hover:bg-orange-500 hover:border-orange-600 text-xs"
                                                     >
                                                         Delete
                                                     </button>
@@ -525,7 +525,7 @@ export default function BudgetsPage() {
                                                                         return (
                                                                             <div
                                                                                 key={period.key}
-                                                                                className="flex justify-between items-center gap-3 border-b border-slate-300 py-2 last:border-b-0"
+                                                                                className="flex justify-between items-center gap-3 border-b border-slate-300 py-2 last:border-b-0 hover:bg-orange-100"
                                                                             >
                                                                                 <div>
                                                                                     <p className="text-sm font-medium text-gray-800">

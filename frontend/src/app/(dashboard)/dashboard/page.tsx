@@ -94,19 +94,19 @@ export default function Dashboard() {
                 <div className="flex gap-2">
                     <button
                         onClick={() => router.push("/report")}
-                        className="bg-orange-700 text-white p-2 rounded text-sm hover:bg-orange-500"
+                        className="bg-orange-400 border border-orange-500 text-black p-2 rounded text-sm hover:bg-orange-500 hover:border-orange-600"
                     >
                         View Reports
                     </button>
                     <button
                         onClick={() => router.push("/account/new")}
-                        className="bg-orange-500 text-black p-2 rounded text-sm hover:bg-orange-700"
+                        className="bg-orange-400 border border-orange-500 text-black p-2 rounded text-sm hover:bg-orange-500 hover:border-orange-600"
                     >
                         Add Account
                     </button>
                     <button
                         onClick={() => router.push("/budgets/new")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-orange-400 border border-orange-500 text-black p-2 rounded text-sm hover:bg-orange-500 hover:border-orange-600"
                     >
                         Add Budget
                     </button>
@@ -119,7 +119,7 @@ export default function Dashboard() {
                 </div>
             )}
 
-            <div className="border border-gray-300 p-4 rounded bg-white grid grid-rows-2 gap-4">
+            <div className="border border-gray-300 p-4 rounded bg-white grid grid-rows-2 gap-4 shadow-sm">
                 <div className="border border-gray-300 p-4 rounded bg-white shadow-sm">
                     <div className="flex justify-between items-center mb-3 border-b pb-2">
                         <h2 className="font-bold text-gray-700 text-xl">Accounts</h2>
@@ -137,13 +137,13 @@ export default function Dashboard() {
                                 <div className="space-x-2">
                                     <button
                                         onClick={() => router.push(`/account/${account.id}/update`)}
-                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
+                                        className="p-1 text-black bg-orange-300 border border-orange-400 rounded hover:bg-orange-500 hover:border-orange-600 text-xs"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => handleDeleteAccount(account.id)}
-                                        className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-xs"
+                                        className="p-1 text-black bg-orange-300 border border-orange-400 rounded hover:bg-orange-500 hover:border-orange-600 text-xs"
                                     >
                                         Delete
                                     </button>

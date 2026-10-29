@@ -161,25 +161,25 @@ export default function TransactionsPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={handleExportCSV}
-                        className="bg-slate-500 text-white p-2 rounded hover:bg-slate-600"
+                        className="bg-orange-400 border border-orange-500 text-black p-2 rounded text-sm hover:bg-orange-500 hover:border-orange-600"
                     >
                         Export CSV
                     </button>
                     <button
                         onClick={() => router.push("/transactions/new")}
-                        className="bg-slate-500 text-white p-2 rounded hover:bg-slate-600"
+                        className="bg-orange-400 border border-orange-500 text-black p-2 rounded text-sm hover:bg-orange-500 hover:border-orange-600"
                     >
                         Add Transaction
                     </button>
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="bg-slate-500 text-white p-2 rounded hover:bg-slate-600"
+                        className="bg-orange-400 border border-orange-500 text-black p-2 rounded text-sm hover:bg-orange-500 hover:border-orange-600"
                     >
                         Back to Dashboard
                     </button>
                 </div>
             </div>
-            <div className="border border-gray-300 p-4 rounded bg-white">
+            <div className="border border-gray-300 p-4 rounded bg-white shadow-sm">
                 <div className="flex justify-between items-center mb-3 border-b pb-2">
                     <div className="flex items-center gap-2">
                         <h2 className="font-semibold text-gray-700">Filter Transactions</h2>
@@ -191,7 +191,7 @@ export default function TransactionsPage() {
                     <button
                         type="button"
                         onClick={clearFilters}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                        className="bg-amber-500 text-black p-2 rounded text-sm hover:bg-amber-600"
                     >
                         Clear Filters
                     </button>
@@ -279,7 +279,7 @@ export default function TransactionsPage() {
                                 </thead>
                                 <tbody>
                                     {currentTransactions.map((transaction) => (
-                                        <tr key={transaction.id} className="border-b border-gray-200 hover:bg-gray-50">
+                                        <tr key={transaction.id} className="border-b border-gray-200 hover:bg-orange-50">
                                             <td className="p-3 text-gray-700">{transaction.date}</td>
                                             <td className="p-3 text-gray-700 font-medium">{transaction.description}</td>
                                             <td className="p-3 text-gray-700 font-semibold">${transaction.amount.toFixed(2)}</td>
@@ -290,16 +290,16 @@ export default function TransactionsPage() {
                                                     {transaction.category}
                                                 </span>
                                             </td>
-                                            <td className="p-3 text-center space-x-2">
+                                            <td className="p-3 text-center space-x-2 flex justify-center">
                                                 <Link
                                                     href={`/transactions/${transaction.id}/update`}
-                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded hover:bg-slate-500 hover:text-white text-sm"
+                                                    className="p-1 text-black bg-orange-300 border border-orange-400 rounded hover:bg-orange-500 hover:border-orange-600 text-sm"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(transaction.id)}
-                                                    className="p-1 text-black bg-slate-300 border border-slate-500 rounded  hover:bg-slate-500 hover:text-white text-sm"
+                                                    className="p-1 text-black bg-orange-300 border border-orange-400 rounded hover:bg-orange-500 hover:border-orange-600 text-sm"
                                                 >
                                                     Delete
                                                 </button>
