@@ -9,6 +9,7 @@ export interface Transaction {
     category: Categories;
     transactionOccurrence: TransactionEvents;
     date: string;
+    endDate: string | null;
     deletedAt: string | null;
     userId: number;
     budgetId?: number | null;
@@ -23,6 +24,7 @@ export interface CreateTransactionRequest {
     category: Categories;
     transactionOccurrence: TransactionEvents;
     date: string;
+    endDate: string | null;
     userId: number;
     budgetId: number | null;
     accountId: number;
@@ -53,6 +55,7 @@ export interface UpdateTransactionRequest {
     category: Categories;
     transactionOccurrence: TransactionEvents;
     date: string;
+    endDate: string | null;
     userId: number;
     budgetId: number | null;
     accountId: number;

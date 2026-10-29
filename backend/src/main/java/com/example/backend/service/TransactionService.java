@@ -1,3 +1,4 @@
+
 package com.example.backend.service;
 
 import java.time.LocalDate;
@@ -6,6 +7,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.YearMonth;
+import com.example.backend.types.TransactionEvent;
 
 import com.example.backend.dto.request.transaction.CreateTransactionRequest;
 import com.example.backend.dto.response.transaction.TransactionResponse;
@@ -42,6 +46,7 @@ public class TransactionService {
         }
     }
 
+    @Transactional
     public TransactionResponse createTransaction(String sessionUuid, CreateTransactionRequest request) {
         validateSession(sessionUuid, request.getUserId());
 
@@ -58,6 +63,7 @@ public class TransactionService {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(
                         () -> new IllegalArgumentException("Account not found with id: " + request.getAccountId()));
+
         Transaction transaction = new Transaction(
                 request.getAmount(),
                 request.getDescription(),
@@ -66,10 +72,50 @@ public class TransactionService {
                 request.getCategory(),
                 request.getTransactionOccurrence(),
                 request.getDate(),
+                request.getEndDate(),
                 user,
                 budget,
                 account);
+
         transactionRepository.save(transaction);
+
+        TransactionEvent occurrence = request.getTransactionOccurrence();
+        LocalDate endDate = request.getEndDate();
+
+        if (endDate != null &&
+                (occurrence == TransactionEvent.DAILY
+                        || occurrence == TransactionEvent.WEEKLY
+                        || occurrence == TransactionEvent.MONTHLY
+                        || occurrence == TransactionEvent.QUARTERLY
+                        || occurrence == TransactionEvent.YEARLY)) {
+
+            LocalDate startDate = request.getDate();
+            int originalDay = startDate.getDayOfMonth();
+
+            int occurrenceNumber = 1;
+            LocalDate nextDate = calculateNextDate(occurrence, startDate, occurrenceNumber, originalDay);
+
+            while (!nextDate.isAfter(endDate)) {
+                Transaction generatedTransaction = new Transaction(
+                        request.getAmount(),
+                        request.getDescription(),
+                        request.getBudgetFrom(),
+                        request.getAccountFrom(),
+                        request.getCategory(),
+                        TransactionEvent.ONCE,
+                        nextDate,
+                        null,
+                        user,
+                        budget,
+                        account);
+
+                transactionRepository.save(generatedTransaction);
+
+                occurrenceNumber++;
+
+                nextDate = calculateNextDate(occurrence, startDate, occurrenceNumber, originalDay);
+            }
+        }
 
         return new TransactionResponse(
                 transaction.getId(),
@@ -80,16 +126,60 @@ public class TransactionService {
                 transaction.getCategory(),
                 transaction.getTransactionOccurrence(),
                 transaction.getDate(),
+                transaction.getEndDate(),
                 transaction.getUser().getId(),
                 transaction.getBudget() != null ? transaction.getBudget().getId() : null,
                 transaction.getAccount().getId(),
                 transaction.getDeletedAt());
     }
 
+    private LocalDate calculateNextDate(TransactionEvent occurrence, LocalDate startDate, int occurrenceNumber,
+            int originalDay) {
+
+        LocalDate nextDate;
+
+        switch (occurrence) {
+            case DAILY:
+                nextDate = startDate.plusDays(occurrenceNumber);
+                break;
+            case WEEKLY:
+                nextDate = startDate.plusWeeks(occurrenceNumber);
+                break;
+            case MONTHLY:
+                YearMonth monthlyTarget = YearMonth.from(startDate);
+                monthlyTarget = monthlyTarget.plusMonths(occurrenceNumber);
+
+                int monthlyDay = Math.min(originalDay, monthlyTarget.lengthOfMonth());
+
+                nextDate = monthlyTarget.atDay(monthlyDay);
+                break;
+            case QUARTERLY:
+                YearMonth quarterlyTarget = YearMonth.from(startDate);
+                quarterlyTarget = quarterlyTarget.plusMonths(3L * occurrenceNumber);
+
+                int quarterlyDay = Math.min(originalDay, quarterlyTarget.lengthOfMonth());
+
+                nextDate = quarterlyTarget.atDay(quarterlyDay);
+                break;
+            case YEARLY:
+                YearMonth yearlyTarget = YearMonth.from(startDate);
+                yearlyTarget = yearlyTarget.plusMonths(12L * occurrenceNumber);
+
+                int yearlyDay = Math.min(originalDay, yearlyTarget.lengthOfMonth());
+
+                nextDate = yearlyTarget.atDay(yearlyDay);
+                break;
+            default:
+                throw new IllegalStateException(
+                        "Unsupported recurrence interval: " + occurrence);
+        }
+        return nextDate;
+    }
+
     public TransactionResponse getTransaction(Long id, String sessionUuid) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + id));
-        
+
         validateSession(sessionUuid, transaction.getUser().getId());
 
         Long budgetId = null;
@@ -105,6 +195,7 @@ public class TransactionService {
                 transaction.getCategory(),
                 transaction.getTransactionOccurrence(),
                 transaction.getDate(),
+                transaction.getEndDate(),
                 transaction.getUser().getId(),
                 budgetId,
                 transaction.getAccount().getId(),
@@ -116,6 +207,14 @@ public class TransactionService {
                 .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + id));
 
         validateSession(sessionUuid, transaction.getUser().getId());
+
+        LocalDate updatedDate = request.getDate() != null ? request.getDate() : transaction.getDate();
+
+        if (request.getEndDate() != null
+                && request.getEndDate().isBefore(updatedDate)) {
+            throw new IllegalArgumentException(
+                    "Transaction end date cannot be before the transaction date");
+        }
 
         if (request.getAmount() != null) {
             transaction.setAmount(request.getAmount());
@@ -138,6 +237,9 @@ public class TransactionService {
         if (request.getDate() != null) {
             transaction.setDate(request.getDate());
         }
+
+        transaction.setEndDate(request.getEndDate());
+
         if (request.getAccountId() != null) {
             Account account = accountRepository.findById(request.getAccountId())
                     .orElseThrow(
@@ -170,6 +272,7 @@ public class TransactionService {
                 transaction.getCategory(),
                 transaction.getTransactionOccurrence(),
                 transaction.getDate(),
+                transaction.getEndDate(),
                 transaction.getUser().getId(),
                 budgetId,
                 transaction.getAccount().getId(),
@@ -193,23 +296,24 @@ public class TransactionService {
         List<Transaction> transactionList = transactionRepository.findByUserId(userId);
         List<TransactionResponse> transactionResponseList = new ArrayList<>();
 
-        for (Transaction t : transactionList) {
-            if (t.getDeletedAt() != null) {
+        for (Transaction transaction : transactionList) {
+            if (transaction.getDeletedAt() != null) {
                 continue;
             }
             TransactionResponse response = new TransactionResponse(
-                    t.getId(),
-                    t.getAmount(),
-                    t.getDescription(),
-                    t.getBudgetFrom(),
-                    t.getAccountFrom(),
-                    t.getCategory(),
-                    t.getTransactionOccurrence(),
-                    t.getDate(),
-                    t.getUser().getId(),
-                    t.getBudget() != null ? t.getBudget().getId() : null,
-                    t.getAccount().getId(),
-                    t.getDeletedAt());
+                    transaction.getId(),
+                    transaction.getAmount(),
+                    transaction.getDescription(),
+                    transaction.getBudgetFrom(),
+                    transaction.getAccountFrom(),
+                    transaction.getCategory(),
+                    transaction.getTransactionOccurrence(),
+                    transaction.getDate(),
+                    transaction.getEndDate(),
+                    transaction.getUser().getId(),
+                    transaction.getBudget() != null ? transaction.getBudget().getId() : null,
+                    transaction.getAccount().getId(),
+                    transaction.getDeletedAt());
             transactionResponseList.add(response);
         }
         return transactionResponseList;

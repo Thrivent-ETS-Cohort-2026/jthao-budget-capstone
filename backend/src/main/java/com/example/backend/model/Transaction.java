@@ -52,6 +52,9 @@ public class Transaction {
     @Column(name = "date", nullable = false)
     LocalDate date;
 
+    @Column(name = "end_date", nullable = true)
+    private LocalDate endDate;
+
     @Column(name = "deleted_at", nullable = true)
     LocalDate deletedAt;
 
@@ -72,10 +75,8 @@ public class Transaction {
     protected Transaction() {
     }
 
-    public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom,
-            Categories category, TransactionEvent transactionOccurrence, LocalDate date, User user, Budget budget,
-            Account account) {
-        TransactionValidation.validate(amount, category, transactionOccurrence, date, user, account);
+    public Transaction(BigDecimal amount, String description, String budgetFrom, String accountFrom, Categories category, TransactionEvent transactionOccurrence, LocalDate date, LocalDate endDate, User user, Budget budget, Account account) {
+        TransactionValidation.validate(amount, category, transactionOccurrence, date, endDate, user, account);
 
         this.amount = amount;
         this.description = description;
@@ -84,6 +85,7 @@ public class Transaction {
         this.category = category;
         this.transactionOccurrence = transactionOccurrence;
         this.date = date;
+        this.endDate = endDate;
         this.user = user;
         this.budget = budget;
         this.account = account;
@@ -150,6 +152,14 @@ public class Transaction {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public User getUser() {

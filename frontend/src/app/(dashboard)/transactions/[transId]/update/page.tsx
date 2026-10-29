@@ -20,6 +20,7 @@ function UpdateTransactionForm() {
     const [description, setDescription] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
     const [date, setDate] = useState<string>("");
+    const [endDate, setEndDate] = useState<string>("");
     const [category, setCategory] = useState<Categories>("GROCERIES");
     const [transactionOccurrence, setTransactionOccurrence] = useState<TransactionEvents>("ONCE");
     const [accountId, setAccountId] = useState<number | "">("");
@@ -39,6 +40,7 @@ function UpdateTransactionForm() {
             }
             try {
                 setLoading(true);
+                setErrorMessage("");
 
                 const accountRes: Account[] = await getAccounts(user.id, user.sessionUuid || "");
                 setAccounts(accountRes);
@@ -51,6 +53,7 @@ function UpdateTransactionForm() {
                 setDescription(transactionResp.description);
                 setAmount(transactionResp.amount.toString());
                 setDate(transactionResp.date);
+                setEndDate(transactionResp.endDate ?? "");
                 setCategory(transactionResp.category);
                 setTransactionOccurrence(transactionResp.transactionOccurrence);
                 setAccountId(transactionResp.accountId);
@@ -102,6 +105,10 @@ function UpdateTransactionForm() {
                 budgetFromValue = selectedBudget.description || selectedBudget.category;
             }
         }
+        if (endDate !== "" && endDate < date) {
+            setErrorMessage("End date cannot be before the transaction date.");
+            return;
+        }
 
         const requestData: UpdateTransactionRequest = {
             amount: parseFloat(amount),
@@ -111,6 +118,7 @@ function UpdateTransactionForm() {
             category,
             transactionOccurrence,
             date,
+            endDate: endDate === "" ? null : endDate,
             userId: user?.id as number,
             budgetId: budgetId === "" ? null : Number(budgetId),
             accountId: Number(accountId),
@@ -122,6 +130,7 @@ function UpdateTransactionForm() {
             setDescription("");
             setAmount("");
             setDate("");
+            setEndDate("");
             setCategory("GROCERIES");
             setTransactionOccurrence("ONCE");
             setAccountId("");
@@ -182,6 +191,24 @@ function UpdateTransactionForm() {
                 </div>
                 <div>
                     <label className="text-gray-700 mb-1 block">
+                        Account
+                    </label>
+                    <select
+                        value={accountId}
+                        onChange={handleAccountChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                        required
+                    >
+                        <option value="">Select Account</option>
+                        {accounts.map((account) => (
+                            <option key={account.id} value={account.id}>
+                                {account.accountName} ({account.accountType})
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label className="text-gray-700 mb-1 block">
                         Date
                     </label>
                     <input
@@ -190,6 +217,19 @@ function UpdateTransactionForm() {
                         onChange={(e) => setDate(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded"
                         required
+                    />
+                </div>
+                <div>
+                    <label className="text-gray-700 mb-1 block">
+                        End date
+                        <span className="text-sm text-gray-500">(Optional)</span>
+                    </label>
+                    <input
+                        type="date"
+                        value={endDate}
+                        min={date}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
                     />
                 </div>
                 <div>
@@ -210,24 +250,7 @@ function UpdateTransactionForm() {
                         ))}
                     </select>
                 </div>
-                <div>
-                    <label className="text-gray-700 mb-1 block">
-                        Account
-                    </label>
-                    <select
-                        value={accountId}
-                        onChange={handleAccountChange}
-                        className="w-full p-2 border border-gray-300 rounded"
-                        required
-                    >
-                        <option value="">Select Account</option>
-                        {accounts.map((account) => (
-                            <option key={account.id} value={account.id}>
-                                {account.accountName} ({account.accountType})
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                
                 <div>
                     <label className="text-gray-700 mb-1 block">
                         Budget (Optional)
