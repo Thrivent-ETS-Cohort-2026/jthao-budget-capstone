@@ -10,7 +10,7 @@ export interface BudgetPeriodSpending {
     actualSpend: number;
     budgetAmount: number;
     percentage: number;
-    isOverspent: boolean;
+    isOverSpent: boolean;
     isWarning: boolean;
 }
 
@@ -197,7 +197,7 @@ export function getBudgetPeriodSpending(
             actualSpend: 0,
             budgetAmount,
             percentage: 0,
-            isOverspent: false,
+            isOverSpent: false,
             isWarning: false,
         };
 
@@ -247,7 +247,7 @@ export function getBudgetPeriodSpending(
                     ? 100
                     : 0;
 
-        period.isOverspent = period.percentage > 100;
+        period.isOverSpent = period.percentage > 100;
         period.isWarning =
             period.percentage >= 75 && period.percentage < 100;
     }

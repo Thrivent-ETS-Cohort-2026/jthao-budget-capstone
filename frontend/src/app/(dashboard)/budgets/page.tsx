@@ -33,6 +33,7 @@ export default function BudgetsPage() {
             try {
                 setLoading(true);
                 setErrorMessage("");
+                setExpandedBudgetIds(new Set());
 
                 const budgetList: Budget[] = await getBudgets(
                     user.id,
@@ -140,6 +141,26 @@ export default function BudgetsPage() {
         });
     }
 
+    function clearFilters(): void {
+        const date = new Date();
+
+        const firstDay = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            1
+        );
+
+        const lastDay = new Date(
+            date.getFullYear(),
+            date.getMonth() + 1,
+            0
+        );
+
+        setStartDate(formatLocalDate(firstDay));
+        setEndDate(formatLocalDate(lastDay));
+        setExpandedBudgetIds(new Set());
+    }
+
     if (!user) {
         return (
             <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
@@ -175,7 +196,7 @@ export default function BudgetsPage() {
         category: Categories;
         periodLabel: string;
         percentage: number;
-        isOverspent: boolean;
+        isOverSpent: boolean;
         isWarning: boolean;
         isFullyUsed: boolean;
     }[] = budgets.flatMap((budget) => {
@@ -195,7 +216,7 @@ export default function BudgetsPage() {
                 category: budget.category,
                 periodLabel: period.label,
                 percentage: period.percentage,
-                isOverspent: period.isOverspent,
+                isOverSpent: period.isOverSpent,
                 isWarning: period.isWarning,
                 isFullyUsed:
                     period.budgetAmount > 0 &&
@@ -206,7 +227,7 @@ export default function BudgetsPage() {
             }))
             .filter(
                 (period) =>
-                    period.isOverspent ||
+                    period.isOverSpent ||
                     period.isWarning ||
                     period.isFullyUsed
             );
@@ -261,7 +282,7 @@ export default function BudgetsPage() {
                                     {alert.percentage.toFixed(0)}%
                                 </span>
                                 {" of its limit! "}
-                                {alert.isOverspent
+                                {alert.isOverSpent
                                     ? "(Over Budget)"
                                     : alert.isFullyUsed
                                         ? "(Budget Fully Used)"
@@ -305,6 +326,14 @@ export default function BudgetsPage() {
                             {budgets.length} found
                         </span>
                     </div>
+
+                    <button
+                        type="button"
+                        onClick={clearFilters}
+                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-600"
+                    >
+                        Clear Filters
+                    </button>
                 </div>
                 {!validDateRange && (
                     <p className="text-red-500 text-sm mb-3">
@@ -334,7 +363,7 @@ export default function BudgetsPage() {
                                         Target Period
                                     </th>
                                     <th className="p-3 border-x border-gray-200">
-                                        Actual Spend
+                                        Actual Spend vs Filtered Budget
                                     </th>
                                     <th className="p-3 border-x border-gray-200">
                                         Status
@@ -372,7 +401,7 @@ export default function BudgetsPage() {
                                             100
                                             : 0;
 
-                                    const isOverspent =
+                                    const isOverSpent =
                                         totalBudgetAllowance > 0 &&
                                         percentage > 100;
 
@@ -402,20 +431,18 @@ export default function BudgetsPage() {
                                                 <td className="p-3 text-gray-700 capitalize">
                                                     {budget.targetPeriod.toLowerCase()}
                                                 </td>
-                                                <td
-                                                    className={`p - 3 font - semibold ${isOverspent
-                                                        ? "text-red-600"
-                                                        : isFullyUsed
-                                                            ? "text-orange-600"
-                                                            : isWarning
-                                                                ? "text-yellow-600"
-                                                                : "text-gray-700"
-                                                        } `}
-                                                >
-                                                    ${actualSpend.toFixed(2)}
+
+                                                <td className="p-3 font-semibold">
+                                                    <div>
+                                                        <p>${actualSpend.toFixed(2)}</p>
+                                                        <p className="text-xs font-normal text-gray-600">
+                                                            of ${totalBudgetAllowance.toFixed(2)}
+                                                        </p>
+                                                    </div>
                                                 </td>
+
                                                 <td className="p-3">
-                                                    {isOverspent ? (
+                                                    {isOverSpent ? (
                                                         <span className="bg-red-100 text-red-700 p-1 rounded text-xs font-bold">
                                                             Over Budget (
                                                             {percentage.toFixed(0)}%)
@@ -514,7 +541,7 @@ export default function BudgetsPage() {
                                                                                         ${period.actualSpend.toFixed(2)}
                                                                                     </p>
                                                                                     <p
-                                                                                        className={`text-xs font-semibold ${period.isOverspent
+                                                                                        className={`text-xs font-semibold ${period.isOverSpent
                                                                                             ? "text-red-600"
                                                                                             : isFullyUsed
                                                                                                 ? "text-orange-600"
@@ -523,7 +550,7 @@ export default function BudgetsPage() {
                                                                                                     : "text-green-600"
                                                                                             }`}
                                                                                     >
-                                                                                        {period.isOverspent
+                                                                                        {period.isOverSpent
                                                                                             ? `${period.percentage.toFixed(0)}% — Over Budget`
                                                                                             : isFullyUsed
                                                                                                 ? "100% — Budget Fully Used"
