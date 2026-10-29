@@ -51,7 +51,7 @@ export default function DashboardLayout({
                         </div>
 
                         <div className="flex items-center space-x-4">
-                            <span className="text-black text-xl font-medium">
+                            <span className="text-black text-xl font-medium mx-4">
                                 Hello, {user.firstName}
                             </span>
                             <button

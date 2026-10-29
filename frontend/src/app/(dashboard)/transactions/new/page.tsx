@@ -26,6 +26,7 @@ export default function NewTransaction() {
     const [category, setCategory] = useState<Categories | "">("");
     const [transactionOccurrence, setTransactionOccurrence] = useState<TransactionEvents | "">("");
     const [date, setDate] = useState<string>("");
+    const [endDate, setEndDate] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     useEffect(() => {
@@ -104,6 +105,10 @@ export default function NewTransaction() {
         if (transactionOccurrence === "") {
             return;
         }
+        if (endDate !== "" && endDate < date) {
+            setErrorMessage("End date cannot be before the transaction date.");
+            return;
+        }
         
         let budgetFromValue: string | null = null;
         if (budgetId !== "") {
@@ -123,6 +128,7 @@ export default function NewTransaction() {
             category,
             transactionOccurrence,
             date,
+            endDate: endDate === "" ? null : endDate,
             budgetFrom: budgetFromValue,
         };
 
@@ -141,6 +147,7 @@ export default function NewTransaction() {
             setCategory("");
             setTransactionOccurrence("");
             setDate("");
+            setEndDate("");
 
             router.push("/transactions");
         } catch (error) {
@@ -206,6 +213,19 @@ export default function NewTransaction() {
                     </select>
                 </div>
                 <div>
+                    <label htmlFor="accountFrom" className="text-gray-700">
+                        Account From
+                    </label>
+                    <input
+                        id="accountFrom"
+                        type="text"
+                        value={accountFrom}
+                        onChange={(e) => setAccountFrom(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                        placeholder="e.g., Checking"
+                    />
+                </div>
+                <div>
                     <label htmlFor="budget" className="text-gray-700">
                         Budget (Optional)
                     </label>
@@ -222,19 +242,6 @@ export default function NewTransaction() {
                             </option>
                         ))}
                     </select>
-                </div>
-                <div>
-                    <label htmlFor="accountFrom" className="text-gray-700">
-                        Account From
-                    </label>
-                    <input
-                        id="accountFrom"
-                        type="text"
-                        value={accountFrom}
-                        onChange={(e) => setAccountFrom(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
-                        placeholder="e.g., Checking"
-                    />
                 </div>
                 <div>
                     <label className="text-gray-700 mb-1">Category</label>
@@ -283,6 +290,23 @@ export default function NewTransaction() {
                         className="w-full p-2 border border-gray-300 rounded"
                         required
                     />
+                </div>
+                <div>
+                    <label htmlFor="endDate" className="text-gray-700">
+                        End date
+                        <span className="text-sm text-gray-500">(Optional)</span>
+                    </label>
+                    <input
+                        id="endDate"
+                        type="date"
+                        value={endDate}
+                        min={date}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                    <p className="text-sm text-gray-500 mt-1">
+                        Leave blank to create only the original transaction.
+                    </p>
                 </div>
                 <div className="flex justify-end space-x-2 p-4 border-t border-gray-200">
                     <button
