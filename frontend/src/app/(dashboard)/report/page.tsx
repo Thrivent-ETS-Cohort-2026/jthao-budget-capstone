@@ -162,7 +162,7 @@ export default function ReportsPage() {
                 <h1 className="text-2xl font-bold text-gray-800">Financial Reports & Analytics</h1>
                 <button
                     onClick={() => router.push("/dashboard")}
-                    className="bg-gray-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                    className="bg-orange-400 text-black p-2 rounded text-sm hover:bg-orange-500"
                 >
                     Back to Dashboard
                 </button>

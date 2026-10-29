@@ -17,7 +17,7 @@ export default function EmptyStateDashboard({
       </p>
       <button
         onClick={onCreateAccount}
-        className="bg-blue-600 text-white p-3 rounded"
+        className="bg-orange-400 text-black p-2 rounded text-sm hover:bg-orange-500"
       >
         Add Account
       </button>
