@@ -206,15 +206,15 @@ export default function ReportsPage() {
                                     <tr key={category} className="border-b border-gray-100">
                                         <td className="p-3">
                                             {index === 0 ? (
-                                                <span className="bg-red-100 text-red-800 p-2 rounded text-xs font-bold">#1</span>
+                                                <span className="bg-red-200 text-red-800 p-2 rounded text-xs font-bold">#1</span>
                                             ) : index === 1 ? (
-                                                <span className="bg-blue-100 text-blue-800 p-2 rounded text-xs font-bold">#2</span>
+                                                <span className="bg-pink-200 text-pink-800 p-2 rounded text-xs font-bold">#2</span>
                                             ) : index === 2 ? (
-                                                <span className="bg-emerald-100 text-emerald-800 p-2 rounded text-xs font-bold">#3</span>
+                                                <span className="bg-orange-200 text-orange-800 p-2 rounded text-xs font-bold">#3</span>
                                             ) : index === 3 ? (
-                                                <span className="bg-yellow-100 text-yellow-800 p-2 rounded text-xs font-bold">#4</span>
+                                                <span className="bg-yellow-200 text-yellow-800 p-2 rounded text-xs font-bold">#4</span>
                                             ) : (
-                                                <span className="bg-gray-100 text-gray-800 p-2 rounded text-xs font-bold">#5</span>
+                                                <span className="bg-purple-200 text-purple-800 p-2 rounded text-xs font-bold">#5</span>
                                             )}
                                         </td>
                                         <td className="p-3 font-medium text-gray-800">{category.replace(/_/g, " ")}</td>
