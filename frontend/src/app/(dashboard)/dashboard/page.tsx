@@ -45,11 +45,11 @@ export default function Dashboard() {
 
     if (!user) {
         return (
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+            <div className="flex flex-col justify-center items-center h-screen bg-orange-50 text-center">
                 <p className="text-gray-600 mb-4">Please log in to view your dashboard.</p>
                 <button
                     onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    className="bg-orange-400 text-black p-2 rounded hover:bg-orange-500"
                 >
                     Go to home page
                 </button>
@@ -129,7 +129,7 @@ export default function Dashboard() {
                     </div>
                     <ul className="space-y-3 text-gray-600">
                         {accounts.map((account) => (
-                            <li key={account.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0 hover:bg-gray-50">
+                            <li key={account.id} className="flex justify-between items-center border-b border-gray-100 bg-white pb-2 last:border-0 hover:bg-orange-50">
                                 <div>
                                     <span className="font-medium text-gray-800">{account.accountName}</span>{" "}
                                     <span className="text-gray-400">({account.accountType})</span>
@@ -167,7 +167,7 @@ export default function Dashboard() {
                     ) : (
                         <ul className="space-y-3 text-gray-600">
                             {budgets.map((budget) => (
-                                <li key={budget.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0 hover:bg-gray-50">
+                                <li key={budget.id} className="flex justify-between items-center border-b border-gray-100 pb-2 last:border-0 hover:bg-orange-50">
                                     <span className="font-medium text-gray-800">{budget.category}</span>
                                     <span className="text-gray-700 font-semibold">${budget.amount}</span>
                                 </li>

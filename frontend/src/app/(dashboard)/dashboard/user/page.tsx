@@ -22,11 +22,11 @@ export default function UserProfilePage() {
     
     if (!user) {
         return (
-            <div className="flex flex-col justify-center items-center h-64 text-center">
+            <div className="flex flex-col justify-center items-center h-screen bg-orange-50 text-center">
                 <p className="text-gray-600 mb-4">Please log in to view your profile.</p>
                 <button
                     onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    className="bg-orange-400 text-black p-2 rounded hover:bg-orange-500"
                 >
                     Go to home page
                 </button>
@@ -71,8 +71,8 @@ export default function UserProfilePage() {
     }
 
     return (
-        <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-between items-center p-6 border-b border-gray-300">
+        <div className="mx-auto p-6 space-y-6 max-w-xl bg-white border border-orange-400">
+            <div className="flex justify-between items-center p-6 border-b border-orange-300">
                 <h1 className="text-2xl font-bold text-gray-800">Account Settings</h1>
             </div>
 
@@ -87,7 +87,7 @@ export default function UserProfilePage() {
                     <input
                         id="first-name"
                         type="text"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                     />
@@ -99,7 +99,7 @@ export default function UserProfilePage() {
                     <input
                         id="last-name"
                         type="text"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
@@ -111,7 +111,7 @@ export default function UserProfilePage() {
                     <input
                         id="email-text"
                         type="email"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -123,7 +123,7 @@ export default function UserProfilePage() {
                     <input
                         id="phone-number"
                         type="text"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                     />
@@ -135,7 +135,7 @@ export default function UserProfilePage() {
                     <input
                         id="password-text"
                         type="password"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         placeholder="Leave blank to keep current password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -145,14 +145,14 @@ export default function UserProfilePage() {
                     <button
                         type="button"
                         onClick={() => router.back()}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-orange-100 border border-orange-200 text-black p-2 rounded hover:bg-orange-200 hover:border-orange-300"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={loading}
-                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-orange-400 border border-orange-400 text-black p-2 rounded hover:bg-orange-500 hover:border-orange-600"
                     >
                         {loading ? "Saving..." : "Save Changes"}
                     </button>

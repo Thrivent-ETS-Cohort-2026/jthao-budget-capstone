@@ -163,13 +163,13 @@ export default function BudgetsPage() {
 
     if (!user) {
         return (
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+            <div className="flex flex-col justify-center items-center h-screen bg-orange-50 text-center">
                 <p className="text-gray-600 mb-4">
                     Please log in to view budgets.
                 </p>
                 <button
                     onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    className="bg-orange-400 text-black p-2 rounded hover:bg-orange-500"
                 >
                     Go to home page
                 </button>

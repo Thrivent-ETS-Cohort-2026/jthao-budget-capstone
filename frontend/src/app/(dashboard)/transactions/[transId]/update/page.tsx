@@ -71,11 +71,11 @@ function UpdateTransactionForm() {
 
     if (!user) {
         return (
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+            <div className="flex flex-col justify-center items-center h-screen bg-orange-50 text-center">
                 <p className="text-gray-600 mb-4">Please log in to update a transaction.</p>
                 <button
                     onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    className="bg-orange-400 text-black p-2 rounded hover:bg-orange-500"
                 >
                     Go to home page
                 </button>
@@ -154,8 +154,8 @@ function UpdateTransactionForm() {
     }
 
     return (
-        <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-between items-center p-6 border-b border-gray-300">
+        <div className="mx-auto p-6 space-y-6 max-w-xl bg-white border border-orange-400">
+            <div className="flex justify-between items-center p-6 border-b border-orange-300">
                 <h1 className="text-2xl font-bold text-gray-800">Edit Transaction</h1>
             </div>
             {errorMessage && (
@@ -172,7 +172,7 @@ function UpdateTransactionForm() {
                         type="text"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     />
                 </div>
@@ -185,7 +185,7 @@ function UpdateTransactionForm() {
                         step="0.01"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     />
                 </div>
@@ -196,7 +196,7 @@ function UpdateTransactionForm() {
                     <select
                         value={accountId}
                         onChange={handleAccountChange}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     >
                         <option value="">Select Account</option>
@@ -215,7 +215,7 @@ function UpdateTransactionForm() {
                         type="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     />
                 </div>
@@ -229,7 +229,7 @@ function UpdateTransactionForm() {
                         value={endDate}
                         min={date}
                         onChange={(e) => setEndDate(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                     />
                 </div>
                 <div>
@@ -239,7 +239,7 @@ function UpdateTransactionForm() {
                     <select
                         value={transactionOccurrence}
                         onChange={(e) => setTransactionOccurrence(e.target.value as TransactionEvents)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     >
                         <option value="">Select Reoccurrence</option>
@@ -250,7 +250,7 @@ function UpdateTransactionForm() {
                         ))}
                     </select>
                 </div>
-                
+
                 <div>
                     <label className="text-gray-700 mb-1 block">
                         Budget (Optional)
@@ -258,7 +258,7 @@ function UpdateTransactionForm() {
                     <select
                         value={budgetId}
                         onChange={(e) => setBudgetId(e.target.value ? Number(e.target.value) : "")}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                     >
                         <option value="">No Budget</option>
                         {budgets.map((budget) => (
@@ -275,7 +275,7 @@ function UpdateTransactionForm() {
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value as Categories)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     >
                         <option value="">Select Category</option>
@@ -290,13 +290,13 @@ function UpdateTransactionForm() {
                     <button
                         type="button"
                         onClick={() => router.push("/transactions")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-orange-100 border border-orange-200 text-black p-2 rounded hover:bg-orange-200 hover:border-orange-300"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-orange-400 border border-orange-400 text-black p-2 rounded hover:bg-orange-500 hover:border-orange-600"
                     >
                         Save Changes
                     </button>

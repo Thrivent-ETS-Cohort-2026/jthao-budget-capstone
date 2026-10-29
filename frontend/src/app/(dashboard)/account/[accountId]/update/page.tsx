@@ -65,11 +65,11 @@ function UpdateAccountForm() {
 
     if (!user) {
         return (
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+            <div className="flex flex-col justify-center items-center h-screen bg-orange-50 text-center">
                 <p className="text-gray-600 mb-4">Please log in to update an account.</p>
                 <button
                     onClick={() => router.push("/")}
-                    className="bg-slate-500 text-white p-2 rounded hover:bg-slate-700"
+                    className="bg-orange-400 text-black p-2 rounded hover:bg-orange-500"
                 >
                     Go to home page
                 </button>
@@ -86,8 +86,8 @@ function UpdateAccountForm() {
     }
 
     return (
-        <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-between items-center p-6 border-b border-gray-300">
+        <div className="mx-auto p-6 space-y-6 max-w-xl bg-white border border-orange-400">
+            <div className="flex justify-between items-center p-6 border-b border-orange-300">
                 <h1 className="text-2xl font-bold text-gray-800">Edit Account</h1>
             </div>
 
@@ -103,7 +103,7 @@ function UpdateAccountForm() {
                         type="text"
                         value={accountName}
                         onChange={(e) => setAccountName(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     />
                 </div>
@@ -113,7 +113,7 @@ function UpdateAccountForm() {
                     <select
                         value={accountType}
                         onChange={(e) => setAccountType(e.target.value as AccountType)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     >
                         <option value="">Select Account Type</option>
@@ -129,13 +129,13 @@ function UpdateAccountForm() {
                     <button
                         type="button"
                         onClick={() => router.push("/dashboard")}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-orange-100 border border-orange-200 text-black p-2 rounded hover:bg-orange-200 hover:border-orange-300"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-orange-400 border border-orange-400 text-black p-2 rounded hover:bg-orange-500 hover:border-orange-600"
                     >
                         Save Changes
                     </button>

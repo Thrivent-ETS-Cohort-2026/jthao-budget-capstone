@@ -36,8 +36,8 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="mx-auto p-6 space-y-6 max-w-xl mt-10">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+        <div className="mx-auto p-6 space-y-6 max-w-xl mt-10 bg-white border border-orange-400">
+            <div className="flex justify-between items-center p-6 border-b border-orange-300">
                 <h1 className="text-2xl font-bold text-gray-800">Log In</h1>
             </div>
             {errorMessage && (
@@ -45,13 +45,14 @@ export default function LoginPage() {
                     <p className="text-red-500 text-sm">{errorMessage}</p>
                 </div>
             )}
-            <form onSubmit={handleLogin} className="border border-gray-300 p-6 rounded space-y-4">
+            <form onSubmit={handleLogin} className="border border-gray-300 p-6 rounded space-y-4 bg-white">
                 <div>
                     <label htmlFor="email-text" className="text-gray-700 mb-1 block">Email:</label>
                     <input
                         id="email-text"
                         type="email"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
+                        placeholder="example@email.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -61,22 +62,22 @@ export default function LoginPage() {
                     <input
                         id="password-text"
                         type="password"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200">
+                <div className="flex justify-end space-x-2 pt-4 border-t border-gray-300">
                     <button
                         type="button"
                         onClick={() => router.push("/")}
-                        className="bg-gray-100 text-gray-700 p-2 rounded hover:bg-gray-200"
+                        className="bg-orange-100 border border-orange-200 text-black p-2 rounded hover:bg-orange-200 hover:border-orange-300"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                        className="bg-orange-400 border border-orange-400 text-black p-2 rounded hover:bg-orange-500 hover:border-orange-600"
                     >
                         Log In
                     </button>

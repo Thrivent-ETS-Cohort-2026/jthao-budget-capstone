@@ -20,11 +20,11 @@ export default function NewBudget() {
 
     if (!user) {
         return (
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-50 text-center">
+            <div className="flex flex-col justify-center items-center h-screen bg-orange-50 text-center">
                 <p className="text-gray-600 mb-4">Please log in to create a budget.</p>
                 <button
                     onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    className="bg-orange-400 text-black p-2 rounded hover:bg-orange-500"
                 >
                     Go to home page
                 </button>
@@ -66,8 +66,8 @@ export default function NewBudget() {
     };
 
     return (
-        <div className="mx-auto p-6 space-y-6 max-w-xl">
-            <div className="flex justify-between items-center p-6 border-b border-gray-300">
+        <div className="mx-auto p-6 space-y-6 max-w-xl bg-white border border-orange-400">
+            <div className="flex justify-between items-center p-6 border-b border-orange-300">
                 <h1 className="text-2xl font-bold text-gray-800">Create New Budget</h1>
             </div>
             {errorMessage && (
@@ -85,7 +85,7 @@ export default function NewBudget() {
                         type="text"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         placeholder="e.g., Monthly Groceries"
                         required
                     />
@@ -100,7 +100,7 @@ export default function NewBudget() {
                         step="0.01"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         placeholder="45.50"
                         required
                     />
@@ -113,7 +113,7 @@ export default function NewBudget() {
                         id="targetPeriod"
                         value={targetPeriod}
                         onChange={(e) => setTargetPeriod(e.target.value as TransactionEvents | "")}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     >
                         <option value="">Select a Target Period</option>
@@ -132,7 +132,7 @@ export default function NewBudget() {
                         id="category"
                         value={category}
                         onChange={(e) => setCategory(e.target.value as Categories | "")}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-gray-200 rounded bg-gray-50"
                         required
                     >
                         <option value="">Select a Category</option>
@@ -147,13 +147,13 @@ export default function NewBudget() {
                     <button
                         type="button"
                         onClick={() => router.back()}
-                        className="bg-slate-500 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-orange-100 border border-orange-200 text-black p-2 rounded hover:bg-orange-200 hover:border-orange-300"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-slate-600 text-white p-2 rounded text-sm hover:bg-slate-700"
+                        className="bg-orange-400 border border-orange-400 text-black p-2 rounded hover:bg-orange-500 hover:border-orange-600"
                     >
                         Save Budget
                     </button>
